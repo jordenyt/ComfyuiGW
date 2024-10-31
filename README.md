@@ -2,8 +2,8 @@
 The is a Restful API Gateway for ComfyUI which is designed for running [ComfyUI version of Stable Diffusion Sketch](https://github.com/jordenyt/stable_diffusion_sketch/tree/comfyui).
 
 ## Installation on Windows
-1. Install ComfyUI.
-2. Install ComfyUI Manager and custom nodes.
+1. Install [ComfyUI](https://github.com/comfyanonymous/ComfyUI).
+2. Install [ComfyUI Manager](https://github.com/ltdrdata/ComfyUI-Manager) and custom nodes.
 3. Clone this repo.
 4. Update the path of your ComfyUI installation in **ComfyUI.bat** by updating the value of `COMFYUIPATH`.
 5. Update the path of your ComfyUI installation in **comfyui_server.py** by updating the value of `comfyui_output_dir` and `comfyui_server`
