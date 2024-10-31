@@ -18,7 +18,7 @@ import random
 app = FastAPI()
 ws = None
 comfyui_process = None
-local_path = "E:/Workspace/dflAPI/"
+local_path = os.path.dirname(__file__) + "\\"
 comfyui_output_dir = os.path.join('E:\\', 'Workspace', 'ComfyUI', 'output')
 workflows_config_path = 'workflows_config.json'
 mode_config_path = "mode_config.json"
