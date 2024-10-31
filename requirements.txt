@@ -1,0 +1,7 @@
+fastapi>=0.95.0
+uvicorn>=0.21.1
+psutil==6.1.0
+websocket-client>=1.8.0
+websockets>=11.0
+requests>=2.32.3
+Pillow>=9.5.0

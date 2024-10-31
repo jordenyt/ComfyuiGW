@@ -1,0 +1,78 @@
+{
+    "caption_api": {
+        "prompt_workflow": "workflows/caption_joycaption_a2_api.json",
+        "fields": {
+			"background": "6.inputs.image"
+        }
+    },
+	
+	"tag_api": {
+        "prompt_workflow": "workflows/caption_api.json",
+        "fields": {
+			"seed": "1.inputs.seed",
+			"task":"1.inputs.task",
+			"background": "6.inputs.image"
+        }
+    },
+	
+	"upscale_api": {
+        "prompt_workflow": "workflows/upscale_api.json",
+        "fields": {
+			"background": "36.inputs.image",
+			"size": ["35.inputs.width", "35.inputs.height"]
+        }
+    },
+	
+	"sdxl_txt2img_api": {
+        "prompt_workflow": "workflows/sdxl_lora_txt2img_api.json",
+        "fields": {
+            "positive": "6.inputs.text",
+            "negative": "7.inputs.text",
+            "width": "43.inputs.width",
+            "height": "43.inputs.height",
+            "batch_size": "38.inputs.amount",
+            "steps": "3.inputs.steps",
+            "cfg": "3.inputs.cfg",
+            "seed": "3.inputs.seed",
+			"lora": "44.inputs.lora_name",
+			"loraStrength": ["44.inputs.strength_model","44.inputs.strength_clip"]
+        }
+    },
+	
+	"sdxl_inpaint_api": {
+        "prompt_workflow": "workflows/sdxl_inpaint_api.json",
+        "fields": {
+            "background": "27.inputs.image",
+            "paint": "28.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "7.inputs.text",
+            "size": ["27.inputs.width", "27.inputs.height", "28.inputs.width", "28.inputs.height"],
+            "batch_size": "38.inputs.amount",
+            "steps": "3.inputs.steps",
+            "cfg": "3.inputs.cfg",
+            "denoise": "3.inputs.denoise",
+            "seed": "3.inputs.seed",
+			"maskBlur": "42.inputs.expand"
+        }
+    },
+	
+	"sdxl_img2img_controlnet_api": {
+        "prompt_workflow": "workflows/sdxl_i2i_controlnet_api.json",
+        "fields": {
+            "background": "41.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "29.inputs.text",
+            "size": ["41.inputs.width", "41.inputs.height"],
+            "batch_size": "55.inputs.batch_size",
+            "steps": "50.inputs.steps",
+            "cfg": "50.inputs.cfg",
+            "denoise": "50.inputs.denoise",
+            "seed": "50.inputs.seed",
+			"cnPreprocessor":"53.inputs.preprocessor",
+			"cnModel":"51.inputs.control_net_name",
+			"cnStrength":"52.inputs.strength",
+			"cnStart":"52.inputs.start_percent",
+			"cnEnd":"52.inputs.end_percent"
+        }
+    }
+}

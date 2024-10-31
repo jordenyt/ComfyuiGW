@@ -1,0 +1,88 @@
+[
+	{
+		"name": "SDXLtxt2img",
+		"title": "SDXL txt2img",
+		"showT2I": true,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"txt2img", "cfgScale":2.0, "steps":6, "sdSize":1024},
+		"fields": {
+			"workflow": "sdxl_txt2img",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"width": "$width",
+			"height": "$height",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"loraStrength": 0.0
+		}
+	},
+	
+	{
+		"name": "SDXLInpaint",
+		"title": "SDXL Inpainting",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":1.0, "cfgScale":2, "steps":6, "baseImage":"background", "sdSize":1024},
+		"fields": {
+			"workflow": "sdxl_inpaint",
+			"paint": "$mask",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"maskBlur": 0
+		}
+	},
+	
+	{
+		"name": "SDXLInpaintSketch",
+		"title": "SDXL Inpainting with Sketch",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.65, "cfgScale":2, "steps":6, "baseImage":"sketch", "sdSize":1024},
+		"fields": {
+			"workflow": "sdxl_inpaint",
+			"paint": "$mask",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"maskBlur": 0
+		}
+	},
+	
+	{
+		"name": "SDXLImg2imgPose",
+		"title": "SDXL DensePose img2img",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"img2img", "denoise":1.0, "cfgScale":2, "steps":6, "baseImage":"background", "sdSize":1024},
+		"fields": {
+			"workflow": "sdxl_img2img_controlnet",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": 1,
+			"cnStrength":0.9,
+			"cnStart":0,
+			"cnEnd":1
+		}
+	}
+]

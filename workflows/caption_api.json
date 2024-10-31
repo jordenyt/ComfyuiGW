@@ -1,0 +1,77 @@
+{
+  "1": {
+    "inputs": {
+      "text_input": "",
+      "task": "prompt_gen_tags",
+      "fill_mask": true,
+      "keep_model_loaded": false,
+      "max_new_tokens": 1024,
+      "num_beams": 20,
+      "do_sample": true,
+      "output_mask_select": "",
+      "seed": 132049239933176,
+      "image": [
+        "6",
+        0
+      ],
+      "florence2_model": [
+        "2",
+        0
+      ]
+    },
+    "class_type": "Florence2Run",
+    "_meta": {
+      "title": "Florence2Run"
+    }
+  },
+  "2": {
+    "inputs": {
+      "model": "MiaoshouAI/Florence-2-large-PromptGen-v1.5",
+      "precision": "fp16",
+      "attention": "eager"
+    },
+    "class_type": "DownloadAndLoadFlorence2Model",
+    "_meta": {
+      "title": "DownloadAndLoadFlorence2Model"
+    }
+  },
+  "6": {
+    "inputs": {
+      "image": "background (32).jpg",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "7": {
+    "inputs": {
+      "text": [
+        "1",
+        2
+      ],
+      "text2": ""
+    },
+    "class_type": "ShowText|pysssss",
+    "_meta": {
+      "title": "Show Text 🐍"
+    }
+  },
+  "9": {
+    "inputs": {
+      "root_dir": "output",
+      "file": "caption.txt",
+      "append": "new only",
+      "insert": false,
+      "text": [
+        "1",
+        2
+      ]
+    },
+    "class_type": "SaveText|pysssss",
+    "_meta": {
+      "title": "Save Text 🐍"
+    }
+  }
+}
