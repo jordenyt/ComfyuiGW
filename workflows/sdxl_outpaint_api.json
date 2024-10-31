@@ -1,0 +1,507 @@
+{
+  "3": {
+    "inputs": {
+      "seed": 1077505742343646,
+      "steps": 8,
+      "cfg": 2,
+      "sampler_name": "dpmpp_sde",
+      "scheduler": "normal",
+      "denoise": 1,
+      "model": [
+        "4",
+        0
+      ],
+      "positive": [
+        "40",
+        0
+      ],
+      "negative": [
+        "40",
+        1
+      ],
+      "latent_image": [
+        "38",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "4": {
+    "inputs": {
+      "ckpt_name": "sdxlTurboInpaint\\dreamshaperXL_lightningInpaint.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "6": {
+    "inputs": {
+      "text": "Young Korean woman with brown hair\n\nhighly detailed, profession photography",
+      "token_normalization": "none",
+      "weight_interpretation": "A1111",
+      "clip": [
+        "4",
+        1
+      ]
+    },
+    "class_type": "BNK_CLIPTextEncodeAdvanced",
+    "_meta": {
+      "title": "CLIP Text Encode (Positive)"
+    }
+  },
+  "7": {
+    "inputs": {
+      "text": "blurry, illustration, horror, bangs",
+      "token_normalization": "none",
+      "weight_interpretation": "A1111",
+      "clip": [
+        "4",
+        1
+      ]
+    },
+    "class_type": "BNK_CLIPTextEncodeAdvanced",
+    "_meta": {
+      "title": "CLIP Text Encode (Negative)"
+    }
+  },
+  "8": {
+    "inputs": {
+      "samples": [
+        "3",
+        0
+      ],
+      "vae": [
+        "4",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "27": {
+    "inputs": {
+      "image": "background (30).jpg",
+      "resize": false,
+      "width": 1024,
+      "height": 1024,
+      "repeat": 1,
+      "keep_proportion": true,
+      "divisible_by": 1,
+      "mask_channel": "alpha",
+      "background_color": "black",
+      "upload": "image"
+    },
+    "class_type": "LoadAndResizeImage",
+    "_meta": {
+      "title": "Load & Resize Image"
+    }
+  },
+  "38": {
+    "inputs": {
+      "amount": 1,
+      "samples": [
+        "40",
+        2
+      ]
+    },
+    "class_type": "RepeatLatentBatch",
+    "_meta": {
+      "title": "Repeat Latent Batch"
+    }
+  },
+  "39": {
+    "inputs": {
+      "output_path": "",
+      "filename_prefix": "api",
+      "filename_delimiter": "_",
+      "filename_number_padding": 4,
+      "filename_number_start": "false",
+      "extension": "jpg",
+      "dpi": 300,
+      "quality": 95,
+      "optimize_image": "true",
+      "lossless_webp": "false",
+      "overwrite_mode": "false",
+      "show_history": "false",
+      "show_history_by_prefix": "true",
+      "embed_workflow": "true",
+      "show_previews": "true",
+      "images": [
+        "46",
+        0
+      ]
+    },
+    "class_type": "Image Save",
+    "_meta": {
+      "title": "Image Save"
+    }
+  },
+  "40": {
+    "inputs": {
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "vae": [
+        "4",
+        2
+      ],
+      "pixels": [
+        "44",
+        0
+      ],
+      "mask": [
+        "51",
+        0
+      ]
+    },
+    "class_type": "InpaintModelConditioning",
+    "_meta": {
+      "title": "InpaintModelConditioning"
+    }
+  },
+  "43": {
+    "inputs": {
+      "left": [
+        "56",
+        0
+      ],
+      "top": [
+        "59",
+        0
+      ],
+      "right": [
+        "61",
+        0
+      ],
+      "bottom": [
+        "63",
+        0
+      ],
+      "feathering": [
+        "65",
+        0
+      ],
+      "image": [
+        "27",
+        0
+      ]
+    },
+    "class_type": "ImagePadForOutpaint",
+    "_meta": {
+      "title": "Pad Image for Outpainting"
+    }
+  },
+  "44": {
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "upscale_method": "lanczos",
+      "keep_proportion": true,
+      "divisible_by": 1,
+      "crop": "disabled",
+      "image": [
+        "43",
+        0
+      ]
+    },
+    "class_type": "ImageResizeKJ",
+    "_meta": {
+      "title": "Resize Image"
+    }
+  },
+  "46": {
+    "inputs": {
+      "blend_percentage": 1,
+      "image_a": [
+        "66",
+        0
+      ],
+      "image_b": [
+        "48",
+        0
+      ],
+      "mask": [
+        "50",
+        0
+      ]
+    },
+    "class_type": "Image Blend by Mask",
+    "_meta": {
+      "title": "Image Blend by Mask"
+    }
+  },
+  "47": {
+    "inputs": {
+      "width": [
+        "48",
+        1
+      ],
+      "height": [
+        "48",
+        2
+      ],
+      "upscale_method": "lanczos",
+      "keep_proportion": false,
+      "divisible_by": 1,
+      "crop": "disabled",
+      "image": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "ImageResizeKJ",
+    "_meta": {
+      "title": "Resize Image"
+    }
+  },
+  "48": {
+    "inputs": {
+      "image": [
+        "43",
+        0
+      ]
+    },
+    "class_type": "GetImageSizeAndCount",
+    "_meta": {
+      "title": "Get Image Size & Count"
+    }
+  },
+  "50": {
+    "inputs": {
+      "mask": [
+        "52",
+        0
+      ]
+    },
+    "class_type": "MaskToImage",
+    "_meta": {
+      "title": "Convert Mask to Image"
+    }
+  },
+  "51": {
+    "inputs": {
+      "height": [
+        "44",
+        2
+      ],
+      "width": [
+        "44",
+        1
+      ],
+      "interpolation_mode": "nearest exact",
+      "mask": [
+        "43",
+        1
+      ]
+    },
+    "class_type": "JWMaskResize",
+    "_meta": {
+      "title": "Mask Resize"
+    }
+  },
+  "52": {
+    "inputs": {
+      "mask": [
+        "43",
+        1
+      ]
+    },
+    "class_type": "InvertMask",
+    "_meta": {
+      "title": "InvertMask"
+    }
+  },
+  "55": {
+    "inputs": {
+      "a": [
+        "69",
+        0
+      ],
+      "b": 0.2
+    },
+    "class_type": "JWFloatMul",
+    "_meta": {
+      "title": "Left"
+    }
+  },
+  "56": {
+    "inputs": {
+      "value": [
+        "55",
+        0
+      ],
+      "mode": "round"
+    },
+    "class_type": "JWFloatToInteger",
+    "_meta": {
+      "title": "Float to Integer"
+    }
+  },
+  "58": {
+    "inputs": {
+      "a": [
+        "70",
+        0
+      ],
+      "b": 0
+    },
+    "class_type": "JWFloatMul",
+    "_meta": {
+      "title": "Top"
+    }
+  },
+  "59": {
+    "inputs": {
+      "value": [
+        "58",
+        0
+      ],
+      "mode": "round"
+    },
+    "class_type": "JWFloatToInteger",
+    "_meta": {
+      "title": "Float to Integer"
+    }
+  },
+  "60": {
+    "inputs": {
+      "a": [
+        "69",
+        0
+      ],
+      "b": 0.2
+    },
+    "class_type": "JWFloatMul",
+    "_meta": {
+      "title": "Right"
+    }
+  },
+  "61": {
+    "inputs": {
+      "value": [
+        "60",
+        0
+      ],
+      "mode": "round"
+    },
+    "class_type": "JWFloatToInteger",
+    "_meta": {
+      "title": "Float to Integer"
+    }
+  },
+  "62": {
+    "inputs": {
+      "a": [
+        "70",
+        0
+      ],
+      "b": 0
+    },
+    "class_type": "JWFloatMul",
+    "_meta": {
+      "title": "Bottom"
+    }
+  },
+  "63": {
+    "inputs": {
+      "value": [
+        "62",
+        0
+      ],
+      "mode": "round"
+    },
+    "class_type": "JWFloatToInteger",
+    "_meta": {
+      "title": "Float to Integer"
+    }
+  },
+  "64": {
+    "inputs": {
+      "a": [
+        "71",
+        0
+      ],
+      "b": 0.1
+    },
+    "class_type": "JWFloatMul",
+    "_meta": {
+      "title": "Feathering"
+    }
+  },
+  "65": {
+    "inputs": {
+      "value": [
+        "64",
+        0
+      ],
+      "mode": "round"
+    },
+    "class_type": "JWFloatToInteger",
+    "_meta": {
+      "title": "Float to Integer"
+    }
+  },
+  "66": {
+    "inputs": {
+      "image": [
+        "47",
+        0
+      ]
+    },
+    "class_type": "ImpactImageBatchToImageList",
+    "_meta": {
+      "title": "Image Batch to Image List"
+    }
+  },
+  "69": {
+    "inputs": {
+      "value": [
+        "27",
+        2
+      ]
+    },
+    "class_type": "JWIntegerToFloat",
+    "_meta": {
+      "title": "Integer to Float"
+    }
+  },
+  "70": {
+    "inputs": {
+      "value": [
+        "27",
+        3
+      ]
+    },
+    "class_type": "JWIntegerToFloat",
+    "_meta": {
+      "title": "Integer to Float"
+    }
+  },
+  "71": {
+    "inputs": {
+      "a": [
+        "69",
+        0
+      ],
+      "b": [
+        "70",
+        0
+      ]
+    },
+    "class_type": "JWFloatMax",
+    "_meta": {
+      "title": "Float Maximum"
+    }
+  }
+}

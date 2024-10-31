@@ -1,0 +1,170 @@
+{
+  "3": {
+    "inputs": {
+      "seed": 115437803151008,
+      "steps": 30,
+      "cfg": 5,
+      "sampler_name": "dpmpp_sde",
+      "scheduler": "sgm_uniform",
+      "denoise": 1,
+      "model": [
+        "12",
+        0
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "latent_image": [
+        "11",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "6": {
+    "inputs": {
+      "text": "3d  animation of a small  , round, fluffy funny creature with big expressive eyes and big head explorer a vibrant,mystical enchanted forest.The creature , a whimsical blend of rabbit and squirrel,has soft blue fur and a bushy , striped tail.it hops along a sparkling stream, its eyes wides with wonder. Flowers that glow and change colors, tree with leaves in shade of Purple and silver, And small floating lights that resemble fireflies. The creature stops to interact playfully with group of tiny fairy dancing around him. ",
+      "clip": [
+        "15",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "7": {
+    "inputs": {
+      "text": "",
+      "clip": [
+        "15",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "8": {
+    "inputs": {
+      "samples": [
+        "3",
+        0
+      ],
+      "vae": [
+        "17",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "11": {
+    "inputs": {
+      "width": [
+        "13",
+        0
+      ],
+      "height": [
+        "13",
+        1
+      ],
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Empty Latent Image"
+    }
+  },
+  "12": {
+    "inputs": {
+      "ckpt_name": "pixartSigma\\PixArt-Sigma-XL-2-1024-MS.pth",
+      "model": "PixArtMS_Sigma_XL_2"
+    },
+    "class_type": "PixArtCheckpointLoader",
+    "_meta": {
+      "title": "PixArt Checkpoint Loader"
+    }
+  },
+  "13": {
+    "inputs": {
+      "model": "PixArtMS_Sigma_XL_2",
+      "ratio": "0.88"
+    },
+    "class_type": "PixArtResolutionSelect",
+    "_meta": {
+      "title": "PixArt Resolution Select"
+    }
+  },
+  "15": {
+    "inputs": {
+      "padding": 1,
+      "sd3_clip": [
+        "16",
+        0
+      ]
+    },
+    "class_type": "PixArtT5FromSD3CLIP",
+    "_meta": {
+      "title": "PixArt T5 from SD3 CLIP"
+    }
+  },
+  "16": {
+    "inputs": {
+      "clip_name": "t5xxl_fp8_e4m3fn.safetensors",
+      "type": "sd3"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP"
+    }
+  },
+  "17": {
+    "inputs": {
+      "vae_name": "sdxl_vae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "29": {
+    "inputs": {
+      "output_path": "",
+      "filename_prefix": "api",
+      "filename_delimiter": "_",
+      "filename_number_padding": 4,
+      "filename_number_start": "false",
+      "extension": "jpg",
+      "dpi": 300,
+      "quality": 95,
+      "optimize_image": "true",
+      "lossless_webp": "false",
+      "overwrite_mode": "false",
+      "show_history": "false",
+      "show_history_by_prefix": "true",
+      "embed_workflow": "true",
+      "show_previews": "true",
+      "images": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "Image Save",
+    "_meta": {
+      "title": "Image Save"
+    }
+  }
+}

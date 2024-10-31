@@ -23,19 +23,191 @@
         }
     },
 	
-	"sdxl_txt2img_api": {
-        "prompt_workflow": "workflows/sdxl_lora_txt2img_api.json",
+	"supir_api": {
+        "prompt_workflow": "workflows/supir_api.json",
+        "fields": {
+			"seed": "7.inputs.seed",
+            "background": "27.inputs.image",
+            "size": ["27.inputs.width", "27.inputs.height"],
+            "positive": "9.inputs.positive_prompt",
+            "negative": "9.inputs.negative_prompt"
+        }
+    },
+	
+    "iclight_text_api": {
+        "prompt_workflow": "workflows/iclight_txt_api.json",
+        "fields": {
+            "seed": "16.inputs.seed",
+            "background": "54.inputs.image",
+            "batch_size": "58.inputs.batch_size",
+            "positive": "8.inputs.text",
+            "negative": "9.inputs.text"
+        }
+    },
+    "iclight_relight_api": {
+        "prompt_workflow": "workflows/iclight_relight_api.json",
+        "fields": {
+            "seed": "16.inputs.seed",
+            "background": "54.inputs.image",
+            "paint": "55.inputs.image",
+            "positive": "8.inputs.text",
+            "negative": "9.inputs.text"
+        }
+    },
+    "iclight_bg_api": {
+        "prompt_workflow": "workflows/iclight_bg_api.json",
+        "fields": {
+            "seed": "16.inputs.seed",
+            "background": "70.inputs.image",
+            "reference": "5.inputs.image",
+            "positive": "8.inputs.text",
+            "negative": "9.inputs.text"
+        }
+    },
+    "idm_vtron_api": {
+        "prompt_workflow": "workflows/idm_vton_api.json",
+        "fields": {
+            "seed": "32.inputs.seed",
+            "background": "12.inputs.image",
+            "reference": "13.inputs.image",
+            "paint": "14.inputs.image",
+            "positive": "32.inputs.garment_description",
+            "negative": "32.inputs.negative_prompt",
+            "denoise": "32.inputs.strength",
+            "steps": "32.inputs.num_inference_steps",
+            "cfg": "32.inputs.guidance_scale"
+        }
+    },
+    "sd35L_txt2img_api": {
+        "prompt_workflow": "workflows/sd35L_txt2img_api.json",
         "fields": {
             "positive": "6.inputs.text",
-            "negative": "7.inputs.text",
-            "width": "43.inputs.width",
-            "height": "43.inputs.height",
-            "batch_size": "38.inputs.amount",
-            "steps": "3.inputs.steps",
-            "cfg": "3.inputs.cfg",
-            "seed": "3.inputs.seed",
-			"lora": "44.inputs.lora_name",
-			"loraStrength": ["44.inputs.strength_model","44.inputs.strength_clip"]
+            "negative": "71.inputs.text",
+            "width": "135.inputs.width",
+            "height": "135.inputs.height",
+            "batch_size": "135.inputs.batch_size",
+            "steps": "294.inputs.steps",
+            "cfg": "294.inputs.cfg",
+            "seed": "294.inputs.seed"
+        }
+    },
+	"sd35LT_txt2img_api": {
+        "prompt_workflow": "workflows/sd35LT_txt2img_api.json",
+        "fields": {
+            "positive": "6.inputs.text",
+            "negative": "71.inputs.text",
+            "width": "135.inputs.width",
+            "height": "135.inputs.height",
+            "batch_size": "135.inputs.batch_size",
+            "steps": "294.inputs.steps",
+            "cfg": "294.inputs.cfg",
+            "seed": "294.inputs.seed"
+        }
+    },
+    "flux_gguf_txt2img_api": {
+        "prompt_workflow": "workflows/flux_gguf_txt2img_api.json",
+        "fields": {
+            "flux_unet_gguf": "47.inputs.unet_name",
+            "positive": "6.inputs.text",
+            "negative": "29.inputs.text",
+            "width": "44.inputs.value",
+            "height": "46.inputs.value",
+            "batch_size": "45.inputs.batch_size",
+            "steps": "17.inputs.steps",
+            "cfg": "31.inputs.cfg",
+            "seed": "25.inputs.noise_seed",
+			"guidance": ["41.inputs.guidance", "42.inputs.guidance"]
+        }
+    },
+	"flux_lora_txt2img_api": {
+        "prompt_workflow": "workflows/flux_lora_txt2img_api.json",
+        "fields": {
+            "flux_unet": "12.inputs.unet_name",
+            "positive": "6.inputs.text",
+            "negative": "29.inputs.text",
+            "width": "44.inputs.value",
+            "height": "46.inputs.value",
+            "batch_size": "45.inputs.batch_size",
+            "steps": "17.inputs.steps",
+            "cfg": "31.inputs.cfg",
+            "seed": "25.inputs.noise_seed",
+			"guidance": ["41.inputs.guidance", "42.inputs.guidance"],
+			"lora": "49.inputs.lora_name",
+			"loraStrength": ["49.inputs.strength_model","49.inputs.strength_clip"]
+        }
+    },
+	"flux_lora_jorden_txt2img_api": {
+        "prompt_workflow": "workflows/flux_lora_jorden_txt2img_api.json",
+        "fields": {
+            "flux_unet": "12.inputs.unet_name",
+            "positive": "6.inputs.text",
+            "negative": "29.inputs.text",
+            "width": "44.inputs.value",
+            "height": "46.inputs.value",
+            "batch_size": "45.inputs.batch_size",
+            "steps": "17.inputs.steps",
+            "cfg": "31.inputs.cfg",
+            "seed": "25.inputs.noise_seed",
+			"guidance": ["41.inputs.guidance", "42.inputs.guidance"],
+			"lora": "49.inputs.lora_name",
+			"loraStrength": ["49.inputs.strength_model", "49.inputs.strength_clip"]
+        }
+    },
+    "flux_img2img_api": {
+        "prompt_workflow": "workflows/flux_dev_img2img_api.json",
+        "fields": {
+            "flux_unet": "12.inputs.unet_name",
+            "background": "41.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "29.inputs.text",
+            "size": ["41.inputs.width", "41.inputs.height"],
+            "batch_size": "43.inputs.amount",
+            "steps": "17.inputs.steps",
+            "cfg": "31.inputs.cfg",
+            "denoise": "17.inputs.denoise",
+            "seed": "25.inputs.noise_seed",
+			"guidance": ["45.inputs.guidance", "46.inputs.guidance"],
+			"lora": "48.inputs.lora_name",
+			"loraStrength": ["48.inputs.strength_model","48.inputs.strength_clip"]
+        }
+    },
+    "flux_inpaint_api": {
+        "prompt_workflow": "workflows/flux_dev_inpaint_api.json",
+        "fields": {
+            "flux_unet": "12.inputs.unet_name",
+            "background": "35.inputs.image",
+            "paint": "53.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "55.inputs.text",
+            "size": ["35.inputs.width", "35.inputs.height", "53.inputs.width", "53.inputs.height"],
+            "batch_size": "56.inputs.amount",
+            "steps": "17.inputs.steps",
+            "cfg": "58.inputs.cfg",
+            "denoise": "17.inputs.denoise",
+            "seed": "25.inputs.noise_seed",
+			"guidance": ["39.inputs.guidance", "59.inputs.guidance"],
+			"maskBlur": ["63.inputs.blur_radius", "63.inputs.expand"],
+			"lora": "65.inputs.lora_name",
+			"loraStrength": ["65.inputs.strength_model","65.inputs.strength_clip"]
+        }
+    },
+	"sdxl_img2img_controlnet_api": {
+        "prompt_workflow": "workflows/sdxl_i2i_controlnet_api.json",
+        "fields": {
+            "background": "41.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "29.inputs.text",
+            "size": ["41.inputs.width", "41.inputs.height"],
+            "batch_size": "55.inputs.batch_size",
+            "steps": "50.inputs.steps",
+            "cfg": "50.inputs.cfg",
+            "denoise": "50.inputs.denoise",
+            "seed": "50.inputs.seed",
+			"cnPreprocessor":"53.inputs.preprocessor",
+			"cnModel":"51.inputs.control_net_name",
+			"cnStrength":"52.inputs.strength",
+			"cnStart":"52.inputs.start_percent",
+			"cnEnd":"52.inputs.end_percent"
         }
     },
 	
@@ -56,23 +228,110 @@
         }
     },
 	
-	"sdxl_img2img_controlnet_api": {
-        "prompt_workflow": "workflows/sdxl_i2i_controlnet_api.json",
+	"sdxl_outpaint_api": {
+        "prompt_workflow": "workflows/sdxl_outpaint_api.json",
         "fields": {
-            "background": "41.inputs.image",
+            "background": "27.inputs.image",
             "positive": "6.inputs.text",
-            "negative": "29.inputs.text",
-            "size": ["41.inputs.width", "41.inputs.height"],
-            "batch_size": "55.inputs.batch_size",
-            "steps": "50.inputs.steps",
-            "cfg": "50.inputs.cfg",
-            "denoise": "50.inputs.denoise",
-            "seed": "50.inputs.seed",
-			"cnPreprocessor":"53.inputs.preprocessor",
-			"cnModel":"51.inputs.control_net_name",
-			"cnStrength":"52.inputs.strength",
-			"cnStart":"52.inputs.start_percent",
-			"cnEnd":"52.inputs.end_percent"
+            "negative": "7.inputs.text",
+            "size": ["44.inputs.width","44.inputs.height"],
+            "batch_size": "38.inputs.amount",
+            "steps": "3.inputs.steps",
+            "cfg": "3.inputs.cfg",
+            "seed": "3.inputs.seed",
+			"left": "55.inputs.b",
+			"right": "60.inputs.b",
+			"top": "58.inputs.b",
+			"bottom": "62.inputs.b",
+			"feathering": "64.inputs.b"
         }
-    }
+    },
+	
+	"sdxl_txt2img_api": {
+        "prompt_workflow": "workflows/sdxl_lora_txt2img_api.json",
+        "fields": {
+            "positive": "6.inputs.text",
+            "negative": "7.inputs.text",
+            "width": "43.inputs.width",
+            "height": "43.inputs.height",
+            "batch_size": "38.inputs.amount",
+            "steps": "3.inputs.steps",
+            "cfg": "3.inputs.cfg",
+            "seed": "3.inputs.seed",
+			"lora": "44.inputs.lora_name",
+			"loraStrength": ["44.inputs.strength_model","44.inputs.strength_clip"]
+        }
+    },
+	
+	"sdxl_inpaint_faceid_pose_api": {
+        "prompt_workflow": "workflows/sdxl_inpaint_faceid_pose_api.json",
+        "fields": {
+            "background": "27.inputs.image",
+            "paint": "28.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "7.inputs.text",
+            "size": ["27.inputs.width", "27.inputs.height", "28.inputs.width", "28.inputs.height", "55.inputs.resolution"],
+            "batch_size": "38.inputs.amount",
+            "steps": "3.inputs.steps",
+            "cfg": "3.inputs.cfg",
+            "denoise": "3.inputs.denoise",
+            "seed": "3.inputs.seed",
+			"maskBlur": "51.inputs.blur_radius",
+			"reference": "47.inputs.image",
+			"loraStrength": "45.inputs.strength_model",
+			"faceIDWeight": ["40.inputs.weight_faceidv2","40.inputs.weight"],
+			"poseStrength": "53.inputs.strength"
+        }
+    },
+	
+	"sdxl_inpaint_faceid_api": {
+        "prompt_workflow": "workflows/sdxl_inpaint_faceid_api.json",
+        "fields": {
+            "background": "27.inputs.image",
+            "paint": "28.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "7.inputs.text",
+            "size": ["27.inputs.width", "27.inputs.height", "28.inputs.width", "28.inputs.height"],
+            "batch_size": "38.inputs.amount",
+            "steps": "3.inputs.steps",
+            "cfg": "3.inputs.cfg",
+            "denoise": "3.inputs.denoise",
+            "seed": "3.inputs.seed",
+			"maskBlur": "51.inputs.blur_radius",
+			"reference": "47.inputs.image",
+			"loraStrength": "45.inputs.strength_model",
+			"faceIDWeight": ["40.inputs.weight_faceidv2","40.inputs.weight"]
+        }
+    },
+	
+	"livePortrait_inpaint_api": {
+		"prompt_workflow": "workflows/advLivePortrait_img2img_api.json",
+		"fields": {
+			"background": "20.inputs.image",
+			"reference": "19.inputs.image",
+			"blink": "21.inputs.blink",
+			"eyebrow": "21.inputs.eyebrow",
+			"wink": "21.inputs.wink",
+			"pupil_x": "21.inputs.pupil_x",
+			"pupil_y": "21.inputs.pupil_y",
+			"aaa": "21.inputs.aaa",
+			"eee": "21.inputs.eee",
+			"woo": "21.inputs.woo",
+			"smile": "21.inputs.smile",
+			"src_ratio": "21.inputs.src_ratio",
+			"sample_ratio": "21.inputs.sample_ratio"
+		}
+	},
+	
+	"img_sharpen_api": {
+		"prompt_workflow": "workflows/image_sharpen_api.json",
+        "fields": {
+            "background": "1.inputs.image",
+			"noise_radius": "2.inputs.noise_radius",
+			"preserve_edges": "2.inputs.preserve_edges",
+			"sharpen": "2.inputs.sharpen",
+			"ratio": "2.inputs.ratio"
+		}
+	}
+	
 }

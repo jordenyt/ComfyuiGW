@@ -1,21 +1,25 @@
 [
 	{
-		"name": "SDXLtxt2img",
-		"title": "SDXL txt2img",
-		"showT2I": true,
+		"name": "SDXLOutpaint",
+		"title": "SDXL Outpainting",
+		"showT2I": false,
 		"show": true,
 		"configurable": true,
-		"default": {"type":"txt2img", "cfgScale":2.0, "steps":6, "sdSize":1024},
+		"default": {"type":"img2img", "cfgScale":1, "steps":8, "baseImage":"background", "left":0.0, "right":0.0, "top":0.0, "bottom":0.0, "feathering":0.1, "sdSize":1024},
 		"fields": {
-			"workflow": "sdxl_txt2img",
+			"workflow": "sdxl_outpaint",
+			"background": "$background",
 			"positive": "$positive",
 			"negative": "$negative",
 			"batch_size": "$batchSize",
-			"width": "$width",
-			"height": "$height",
+			"size": "$size",
 			"steps": "$steps",
 			"cfg": "$cfg",
-			"loraStrength": 0.0
+			"left": 0.0,
+			"right": 0.0,
+			"top": 0.0,
+			"bottom": 0.0,
+			"feathering": 0.1
 		}
 	},
 	
@@ -64,6 +68,198 @@
 	},
 	
 	{
+		"name": "SDXLInpaintFaceID",
+		"title": "SDXL FaceID+Pose Inpaint",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.6, "cfgScale":2, "steps":6, "maskBlur":20, "baseImage":"sketch", "sdSize":1024},
+		"fields": {
+			"workflow": "sdxl_inpaint_faceid_pose",
+			"paint": "$mask",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"maskBlur": "$maskBlur",
+			"reference": "$reference",
+			"loraStrength": 0.8,
+			"faceIDWeight": 0.8,
+			"poseStrength": 0.6
+		}
+	},
+	
+	{
+		"name": "SDXLInpaintFaceIDRefine",
+		"title": "SDXL FaceID Refine",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.05, "cfgScale":2, "steps":6, "maskBlur":20, "baseImage":"background", "sdSize":1024},
+		"fields": {
+			"workflow": "sdxl_inpaint_faceid",
+			"paint": "$mask",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"maskBlur": "$maskBlur",
+			"reference": "$reference",
+			"loraStrength": 0.8,
+			"faceIDWeight": 1.0
+		}
+	},
+	
+	{
+		"name": "Supir",
+		"title": "SUPIR",
+		"showT2I": false,
+		"show": true,
+		"configurable": false,
+		"default": {"type":"img2img", "sdSize":2560},
+		"fields": {
+			"workflow": "supir",
+			"positive": "$positive",
+			"negative": "$negative",
+			"background": "$background",
+			"size": "$size"
+		}
+	},
+	
+	{
+		"name": "SupirInpaint",
+		"title": "Partial SUPIR",
+		"showT2I": false,
+		"show": true,
+		"configurable": false,
+		"default": {"baseImage":"background", "inpaintPartial":1, "type":"inpaint", "sdSize":2560},
+		"fields": {
+			"workflow": "supir",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"size": "$size"
+		}
+	},
+	
+	{
+		"name": "IdmVton",
+		"title": "IDM-VTON Inpainting",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"baseImage":"sketch", "cfgScale":3, "steps":30, "denoise":0.7, "inpaintFill":2, "inpaintPartial":1, "type":"inpaint", "sdSize":1280},
+		"fields": {
+			"workflow": "idm_vtron",
+			"paint": "$mask",
+			"background": "$background",
+			"reference": "$reference",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise"
+		}
+	},
+	
+	{
+		"name": "ICLightText",
+		"title": "IC-Light Text",
+		"showT2I": false,
+		"show": true,
+		"configurable": false,
+		"default": {"type":"img2img", "baseImage":"background", "sdSize":1024},
+		"fields": {
+			"workflow": "iclight_text",
+			"background": "$background",
+			"paint": "$paint",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize"
+		}
+	},
+	
+	{
+		"name": "ICLightRelight",
+		"title": "IC-Light Relight",
+		"showT2I": false,
+		"show": true,
+		"configurable": false,
+		"default": {"type":"img2img", "baseImage":"background", "sdSize":1024},
+		"fields": {
+			"workflow": "iclight_relight",
+			"background": "$background",
+			"paint": "$paint",
+			"positive": "$positive",
+			"negative": "$negative"
+		}
+	},
+	
+	{
+		"name": "ICLightBG",
+		"title": "IC-Light Merge Background",
+		"showT2I": false,
+		"show": true,
+		"configurable": false,
+		"default": {"type":"img2img", "baseImage":"background", "sdSize":1024},
+		"fields": {
+			"workflow": "iclight_bg",
+			"background": "$background",
+			"paint": "$paint",
+			"reference": "$reference",
+			"positive": "$positive",
+			"negative": "$negative"
+		}
+	},
+	
+	{
+		"name": "sd35L",
+		"title": "SD3.5L txt2img",
+		"showT2I": true,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"txt2img", "cfgScale":4.5, "steps":40, "sdSize":1024},
+		"fields": {
+			"workflow": "sd35L_txt2img",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"width": "$width",
+			"height": "$height",
+			"steps": "$steps",
+			"cfg": "$cfg"
+		}
+	},
+	
+	{
+		"name": "sd35LT",
+		"title": "SD3.5L Turbo txt2img",
+		"showT2I": true,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"txt2img", "cfgScale":1, "steps":4, "sdSize":1024},
+		"fields": {
+			"workflow": "sd35LT_txt2img",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"width": "$width",
+			"height": "$height",
+			"steps": "$steps",
+			"cfg": "$cfg"
+		}
+	},
+	
+	{
 		"name": "SDXLImg2imgPose",
 		"title": "SDXL DensePose img2img",
 		"showT2I": false,
@@ -83,6 +279,394 @@
 			"cnStrength":0.9,
 			"cnStart":0,
 			"cnEnd":1
+		}
+	},
+	
+	{
+		"name": "SDXLtxt2img",
+		"title": "SDXL txt2img",
+		"showT2I": true,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"txt2img", "cfgScale":2.0, "steps":6, "sdSize":1024},
+		"fields": {
+			"workflow": "sdxl_txt2img",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"width": "$width",
+			"height": "$height",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"loraStrength": 0.0
+		}
+	},
+	
+	{
+		"name": "Flux",
+		"title": "Flux txt2img",
+		"showT2I": true,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"txt2img", "cfgScale":1, "guidance":3.5, "steps":20, "sdSize":1024},
+		"fields": {
+			"workflow": "flux_lora_txt2img",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"width": "$width",
+			"height": "$height",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"guidance": 3.5,
+			"loraStrength": 0.0
+		}
+	},
+	
+	{
+		"name": "FluxS",
+		"title": "Flux Schnell txt2img",
+		"showT2I": true,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"txt2img", "cfgScale":1, "guidance":3.5, "steps":8, "sdSize":1024},
+		"fields": {
+			"workflow": "flux_lora_txt2img",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"width": "$width",
+			"height": "$height",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"guidance": 3.5,
+			"loraStrength": 0.0
+		}
+	},
+	
+	{
+		"name": "FluxQ8",
+		"title": "Flux Q8 txt2img",
+		"showT2I": false,
+		"show": false,
+		"configurable": false,
+		"default": {"type":"txt2img", "cfgScale":1, "guidance":3.5, "steps":20, "sdSize":1024},
+		"fields": {
+			"workflow": "flux_gguf_txt2img",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"width": "$width",
+			"height": "$height",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"guidance": 3.5
+		}
+	},
+	
+	{
+		"name": "FluxLoraJorden",
+		"title": "Flux Jorden txt2img",
+		"showT2I": true,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"txt2img", "cfgScale":1, "guidance":3.5, "steps":20, "sdSize":1024, "lora": "Flux\\JordenFlux.safetensors", "loraStrength": 1.0},
+		"fields": {
+			"workflow": "flux_lora_txt2img",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"width": "$width",
+			"height": "$height",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"guidance": 3.5,
+			"lora": "Flux\\JordenFlux.safetensors",
+			"loraStrength": 1.0
+		}
+	},
+	
+	{
+		"name": "FluxImg2img",
+		"title": "Flux img2img",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"img2img", "denoise":0.6, "cfgScale":1, "guidance": 3.5, "steps":20, "baseImage":"background", "sdSize":1024},
+		"fields": {
+			"workflow": "flux_img2img",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"guidance": 3.5,
+			"lora": "Flux\\style\\amateurphoto_v4.safetensors",
+			"loraStrength": 0.0
+		}
+	},
+	
+	{
+		"name": "FluxLoraImg2img",
+		"title": "Flux LORA img2img",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"img2img", "denoise":0.6, "cfgScale":1, "guidance": 3.5, "steps":20, "baseImage":"background", "sdSize":1024, "lora": "Flux\\style\\amateurphoto_v4.safetensors", "loraStrength": 0.7},
+		"fields": {
+			"workflow": "flux_img2img",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"guidance": 3.5,
+			"lora": "Flux\\style\\amateurphoto_v4.safetensors",
+			"loraStrength": 0.7
+		}
+	},
+	
+	{
+		"name": "FluxJordenImg2img",
+		"title": "Flux Jorden img2img",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"img2img", "denoise":0.6, "cfgScale":1, "guidance": 3.5, "steps":20, "baseImage":"background", "sdSize":1024, "lora": "Flux\\JordenFlux.safetensors", "loraStrength": 1.2},
+		"fields": {
+			"workflow": "flux_img2img",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"guidance": 3.5,
+			"lora": "Flux\\JordenFlux.safetensors",
+			"loraStrength": 1.2
+		}
+	},
+	
+	{
+		"name": "FluxJordenImg2imgSketch",
+		"title": "Flux Jorden img2img (Sketch)",
+		"showT2I": false,
+		"show": false,
+		"configurable": false,
+		"default": {"type":"img2img", "denoise":0.6, "cfgScale":1, "guidance": 3.5, "steps":20, "baseImage":"sketch", "sdSize":1024, "lora": "Flux\\JordenFlux.safetensors", "loraStrength": 1.2},
+		"fields": {
+			"workflow": "flux_img2img",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"guidance": 3.5,
+			"lora": "Flux\\JordenFlux.safetensors",
+			"loraStrength": 1.2
+		}
+	},
+	
+	{
+		"name": "FluxInpaint",
+		"title": "Flux Inpaint",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.75, "cfgScale":1, "guidance":3.5, "steps":20, "maskBlur": 20, "baseImage":"background", "sdSize":1024},
+		"fields": {
+			"workflow": "flux_inpaint",
+			"paint": "$mask",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"guidance": 3.5,
+			"maskBlur": "$maskBlur",
+			"lora": "Flux\\style\\amateurphoto_v4.safetensors",
+			"loraStrength": 0.0
+		}
+	},
+	
+	{
+		"name": "FluxInpaintSketch",
+		"title": "Flux Inpaint with Sketch",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.75, "cfgScale":1, "guidance":3.5, "steps":20, "maskBlur": 20, "baseImage":"sketch", "sdSize":1024},
+		"fields": {
+			"workflow": "flux_inpaint",
+			"paint": "$mask",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"guidance": 3.5,
+			"maskBlur": "$maskBlur",
+			"lora": "Flux\\style\\amateurphoto_v4.safetensors",
+			"loraStrength": 0.0
+		}
+	},
+	
+	{
+		"name": "FluxLoraInpaint",
+		"title": "Flux LORA Inpaint",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.75, "cfgScale":1, "guidance":3.5, "steps":20, "maskBlur": 20, "baseImage":"background", "sdSize":1024, "lora": "Flux\\style\\amateurphoto_v4.safetensors", "loraStrength": 1.0},
+		"fields": {
+			"workflow": "flux_inpaint",
+			"paint": "$mask",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"guidance": 3.5,
+			"maskBlur": "$maskBlur",
+			"lora": "Flux\\style\\amateurphoto_v4.safetensors",
+			"loraStrength": 0.7
+		}
+	},
+	
+	{
+		"name": "FluxLoraInpaintSketch",
+		"title": "Flux LORA Inpaint with Sketch",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.75, "cfgScale":1, "guidance":3.5, "steps":20, "maskBlur": 20, "baseImage":"sketch", "sdSize":1024, "lora": "Flux\\style\\amateurphoto_v4.safetensors", "loraStrength": 1.0},
+		"fields": {
+			"workflow": "flux_inpaint",
+			"paint": "$mask",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"guidance": 3.5,
+			"maskBlur": "$maskBlur",
+			"lora": "Flux\\style\\amateurphoto_v4.safetensors",
+			"loraStrength": 0.7
+		}
+	},
+	
+	{
+		"name": "FluxJordenInpaint",
+		"title": "Flux Jorden Inpaint",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.75, "cfgScale":1, "guidance":3.5, "steps":20, "maskBlur": 20, "baseImage":"background", "sdSize":1024, "lora": "Flux\\JordenFlux.safetensors", "loraStrength": 1.2},
+		"fields": {
+			"workflow": "flux_inpaint",
+			"paint": "$mask",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"guidance": 3.5,
+			"maskBlur": "$maskBlur",
+			"lora": "Flux\\JordenFlux.safetensors",
+			"loraStrength": 1.2
+		}
+	},
+	
+	{
+		"name": "FluxJordenInpaintSketch",
+		"title": "Flux Jorden Inpaint (Sketch)",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.75, "cfgScale":1, "guidance":3.5, "steps":20, "maskBlur": 20, "baseImage":"sketch", "sdSize":1024, "lora": "Flux\\JordenFlux.safetensors", "loraStrength": 1.2},
+		"fields": {
+			"workflow": "flux_inpaint",
+			"paint": "$mask",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"guidance": 3.5,
+			"maskBlur": "$maskBlur",
+			"lora": "Flux\\JordenFlux.safetensors",
+			"loraStrength": 1.2
+		}
+	},
+	
+	{
+		"name": "livePortraitInpaint",
+		"title": "LivePortrait Advanced Inpaint",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"inpaint", "inpaintPartial":1, "baseImage":"background", "blink": 0, "eyebrow": 0, "wink": 0, "pupil_x": 0, "pupil_y": 0, "aaa": 0, "eee": 0, "woo": 0, "smile": 0, "src_ratio": 0,"sample_ratio": 0.7, "sdSize":1024},
+		"fields": {
+			"workflow": "livePortrait_inpaint",
+			"background": "$background",
+			"reference": "$reference",
+			"blink": 0,
+			"eyebrow": 0,
+			"wink": 0,
+			"pupil_x": 0,
+			"pupil_y": 0,
+			"aaa": 0,
+			"eee": 0,
+			"woo": 0,
+			"smile": 0,
+			"src_ratio": 0,
+			"sample_ratio": 0.7
+		}
+	},
+	
+	{
+		"name": "ImgSharpenPartial",
+		"title": "Partial Sharpen",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"inpaint", "inpaintPartial":1, "baseImage":"background", "sdSize":1024, "noise_radius": 10, "preserve_edges": 1, "sharpen": 15, "ratio": 0.5},
+		"fields": {
+			"workflow": "img_sharpen",
+			"background": "$background",
+			"noise_radius": 10,
+			"preserve_edges": 1,
+			"sharpen": 15,
+			"ratio": 0.5
 		}
 	}
 ]

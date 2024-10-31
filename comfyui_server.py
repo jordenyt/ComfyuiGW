@@ -17,8 +17,11 @@ import random
 
 app = FastAPI()
 ws = None
+a1111_process = None
+dfl_process = None
 comfyui_process = None
 local_path = "E:/Workspace/dflAPI/"
+dflapi_output_dir = os.path.dirname(local_path)
 comfyui_output_dir = os.path.join('E:\\', 'Workspace', 'ComfyUI', 'output')
 workflows_config_path = 'workflows_config.json'
 mode_config_path = "mode_config.json"
@@ -39,6 +42,73 @@ async def get_mode_config():
         return mode_config
     else:
         raise HTTPException(status_code=404, detail="Config file not found")
+
+@app.get("/stop_a1111")
+def stop_a1111():
+    global a1111_process
+    if a1111_process:
+        parent = psutil.Process(a1111_process.pid)
+        children = parent.children(recursive=True)
+        for child in children:
+            child.kill()
+        a1111_process.kill()
+        a1111_process = None
+        return {"message": "A1111 stopped"}
+    else:
+        return {"message": "A1111 not started"}
+
+@app.get("/start_a1111")        
+def start_a1111():
+    global a1111_process
+    if a1111_process:
+        return {"message": "A1111 already started"}
+    else:
+        a1111_process = subprocess.Popen(local_path + "AUTOMATIC1111.bat", shell=True)
+        return {"message": "A1111 started"}
+
+@app.get("/restart_a1111")
+def restart_a1111():
+    global a1111_process
+    if a1111_process:
+        stop_a1111()
+        start_a1111()
+        return {"message": "Restarted A1111."}
+    else:
+        start_a1111()
+        return {"message": "Started A1111."}
+
+def imageprocess(data, batch_path):
+    global dfl_process
+    if dfl_process:
+        return {"message": "DFL is busy now."}
+    else:
+        for f in os.listdir(dflapi_output_dir):
+            if f.endswith("jpg"):
+                del_file_path = os.path.join(dflapi_output_dir, f)
+                os.remove(del_file_path)
+        base64_image_data = data['image']
+        decoded_data = base64.b64decode(base64_image_data)
+        temp_image_path = local_path + "temp.jpg"
+        img_file = open(temp_image_path, 'wb')
+        img_file.write(decoded_data)
+        img_file.close()
+        dfl_process = subprocess.Popen([batch_path, data['model']])
+        while dfl_process.poll() is None:
+            time.sleep(1)
+        dfl_process = None
+        out_image_path = local_path + "restored_imgs/temp.jpg"
+        with open(out_image_path, 'rb') as f:
+            processed_image_bytes = f.read()
+        processed_images_data = []
+        processed_image_data = base64.b64encode(processed_image_bytes).decode()
+        processed_images_data.append(processed_image_data)
+        response = {'processed_image': processed_images_data}
+        return response
+        
+@app.post('/processimage')
+async def process_image(request: Request):
+    data = await request.json()
+    return imageprocess(data, local_path + "dfl_gfpgan.bat")
 
 def ws_message(ws, msg):
     def run(*args):
@@ -137,6 +207,12 @@ def set_workflow_value(d, path, key, data):
         d[path[-1]] = reference_image_path
     elif key == "paint":
         d[path[-1]] = paint_image_path
+    elif key == "flux_unet":
+        if data['steps'] <= 10:
+            d[path[-1]] = "flux1-schnell-fp8.sft"
+    elif key == "flux_unet_gguf":
+        if data['steps'] <= 10:
+            d[path[-1]] = "flux1-schnell-Q8_0.gguf"
     else:
         if key in data:
             d[path[-1]] = data[key]
@@ -270,5 +346,5 @@ if __name__ == '__main__':
     uvicorn.run('comfyui_server:app', host='0.0.0.0', port=5000, log_level="warning")
 
 websocket.enableTrace(False)
-
+# start_a1111()
 start_comfyui()
