@@ -1,16 +1,16 @@
 {
     "caption_api": {
-        "prompt_workflow": "workflows/caption_joycaption_a2_api.json",
+        "prompt_workflow": "workflows/caption_api.json",
         "fields": {
+			"seed": "1.inputs.seed",
 			"background": "6.inputs.image"
         }
     },
 	
 	"tag_api": {
-        "prompt_workflow": "workflows/caption_api.json",
+        "prompt_workflow": "workflows/tag_api.json",
         "fields": {
 			"seed": "1.inputs.seed",
-			"task":"1.inputs.task",
 			"background": "6.inputs.image"
         }
     },
