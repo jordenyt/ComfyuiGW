@@ -130,7 +130,7 @@
 			"positive": "$positive",
 			"negative": "$negative",
 			"background": "$background",
-			"size": "$size"
+			"size": 2560
 		}
 	},
 	
@@ -140,13 +140,13 @@
 		"showT2I": false,
 		"show": true,
 		"configurable": false,
-		"default": {"baseImage":"background", "inpaintPartial":1, "type":"inpaint", "sdSize":2560},
+		"default": {"type":"inpaint", "baseImage":"background", "inpaintPartial":1, "sdSize":2560},
 		"fields": {
 			"workflow": "supir",
 			"background": "$background",
 			"positive": "$positive",
 			"negative": "$negative",
-			"size": "$size"
+			"size": 2560
 		}
 	},
 	
@@ -156,11 +156,12 @@
 		"showT2I": false,
 		"show": true,
 		"configurable": true,
-		"default": {"baseImage":"sketch", "cfgScale":3, "steps":30, "denoise":0.7, "inpaintFill":2, "inpaintPartial":1, "type":"inpaint", "sdSize":1280},
+		"default": {"type":"inpaint", "baseImage":"sketch", "cfgScale":3, "steps":30, "denoise":0.7, "inpaintPartial":1, "sdSize":1280},
 		"fields": {
 			"workflow": "idm_vtron",
 			"paint": "$mask",
 			"background": "$background",
+			"size": "$size",
 			"reference": "$reference",
 			"positive": "$positive",
 			"negative": "$negative",
@@ -223,20 +224,41 @@
 	
 	{
 		"name": "sd35L",
-		"title": "SD3.5L txt2img",
+		"title": "SD3.5 Large txt2img",
 		"showT2I": true,
 		"show": true,
 		"configurable": true,
-		"default": {"type":"txt2img", "cfgScale":4.5, "steps":40, "sdSize":1024},
+		"default": {"type":"txt2img", "cfgScale":4.0, "steps":40, "sdSize":1024},
 		"fields": {
-			"workflow": "sd35L_txt2img",
+			"workflow": "sd35_txt2img",
 			"positive": "$positive",
 			"negative": "$negative",
 			"batch_size": "$batchSize",
 			"width": "$width",
 			"height": "$height",
 			"steps": "$steps",
-			"cfg": "$cfg"
+			"cfg": "$cfg",
+			"checkpoint": "sd3\\sd3.5_large_fp8_scaled.safetensors"
+		}
+	},
+	
+	{
+		"name": "sd35M",
+		"title": "SD3.5 Medium txt2img",
+		"showT2I": true,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"txt2img", "cfgScale":4.0, "steps":40, "sdSize":1024},
+		"fields": {
+			"workflow": "sd35_txt2img",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"width": "$width",
+			"height": "$height",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"checkpoint": "sd3\\sd3.5_medium_incl_clips_t5xxlfp8scaled.safetensors"
 		}
 	},
 	
@@ -246,16 +268,17 @@
 		"showT2I": true,
 		"show": true,
 		"configurable": true,
-		"default": {"type":"txt2img", "cfgScale":1, "steps":4, "sdSize":1024},
+		"default": {"type":"txt2img", "cfgScale":1, "steps":10, "sdSize":1024},
 		"fields": {
-			"workflow": "sd35LT_txt2img",
+			"workflow": "sd35_txt2img",
 			"positive": "$positive",
 			"negative": "$negative",
 			"batch_size": "$batchSize",
 			"width": "$width",
 			"height": "$height",
 			"steps": "$steps",
-			"cfg": "$cfg"
+			"cfg": "$cfg",
+			"checkpoint": "sd3\\sd3.5_large_turbo.safetensors"
 		}
 	},
 	
@@ -303,14 +326,14 @@
 	},
 	
 	{
-		"name": "Flux",
-		"title": "Flux txt2img",
+		"name": "PixelWave",
+		"title": "PixelWave txt2img",
 		"showT2I": true,
 		"show": true,
 		"configurable": true,
 		"default": {"type":"txt2img", "cfgScale":1, "guidance":3.5, "steps":20, "sdSize":1024},
 		"fields": {
-			"workflow": "flux_lora_txt2img",
+			"workflow": "pixelwave_txt2img",
 			"positive": "$positive",
 			"negative": "$negative",
 			"batch_size": "$batchSize",
@@ -318,18 +341,17 @@
 			"height": "$height",
 			"steps": "$steps",
 			"cfg": "$cfg",
-			"guidance": 3.5,
-			"loraStrength": 0.0
+			"guidance": 3.5
 		}
 	},
 	
 	{
-		"name": "FluxS",
-		"title": "Flux Schnell txt2img",
+		"name": "Flux",
+		"title": "Flux txt2img",
 		"showT2I": true,
 		"show": true,
 		"configurable": true,
-		"default": {"type":"txt2img", "cfgScale":1, "guidance":3.5, "steps":8, "sdSize":1024},
+		"default": {"type":"txt2img", "cfgScale":1, "guidance":3.5, "steps":20, "sdSize":1024},
 		"fields": {
 			"workflow": "flux_lora_txt2img",
 			"positive": "$positive",
@@ -361,6 +383,28 @@
 			"steps": "$steps",
 			"cfg": "$cfg",
 			"guidance": 3.5
+		}
+	},
+	
+	{
+		"name": "FluxLora",
+		"title": "Flux LORA txt2img",
+		"showT2I": true,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"txt2img", "cfgScale":1, "guidance":3.5, "steps":20, "sdSize":1024, "lora": "Flux\\style\\UltraRealPhoto.safetensors", "loraStrength": 1.0},
+		"fields": {
+			"workflow": "flux_lora_txt2img",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"width": "$width",
+			"height": "$height",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"guidance": 3.5,
+			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
+			"loraStrength": 1.0
 		}
 	},
 	
@@ -404,7 +448,7 @@
 			"cfg": "$cfg",
 			"denoise": "$denoise",
 			"guidance": 3.5,
-			"lora": "Flux\\style\\amateurphoto_v4.safetensors",
+			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
 			"loraStrength": 0.0
 		}
 	},
@@ -415,7 +459,7 @@
 		"showT2I": false,
 		"show": true,
 		"configurable": true,
-		"default": {"type":"img2img", "denoise":0.6, "cfgScale":1, "guidance": 3.5, "steps":20, "baseImage":"background", "sdSize":1024, "lora": "Flux\\style\\amateurphoto_v4.safetensors", "loraStrength": 0.7},
+		"default": {"type":"img2img", "denoise":0.6, "cfgScale":1, "guidance": 3.5, "steps":20, "baseImage":"background", "sdSize":1024, "lora": "Flux\\style\\UltraRealPhoto.safetensors", "loraStrength": 1.0},
 		"fields": {
 			"workflow": "flux_img2img",
 			"background": "$background",
@@ -427,8 +471,8 @@
 			"cfg": "$cfg",
 			"denoise": "$denoise",
 			"guidance": 3.5,
-			"lora": "Flux\\style\\amateurphoto_v4.safetensors",
-			"loraStrength": 0.7
+			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
+			"loraStrength": 1.0
 		}
 	},
 	
@@ -498,7 +542,7 @@
 			"denoise": "$denoise",
 			"guidance": 3.5,
 			"maskBlur": "$maskBlur",
-			"lora": "Flux\\style\\amateurphoto_v4.safetensors",
+			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
 			"loraStrength": 0.0
 		}
 	},
@@ -523,7 +567,7 @@
 			"denoise": "$denoise",
 			"guidance": 3.5,
 			"maskBlur": "$maskBlur",
-			"lora": "Flux\\style\\amateurphoto_v4.safetensors",
+			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
 			"loraStrength": 0.0
 		}
 	},
@@ -534,7 +578,7 @@
 		"showT2I": false,
 		"show": true,
 		"configurable": true,
-		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.75, "cfgScale":1, "guidance":3.5, "steps":20, "maskBlur": 20, "baseImage":"background", "sdSize":1024, "lora": "Flux\\style\\amateurphoto_v4.safetensors", "loraStrength": 1.0},
+		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.75, "cfgScale":1, "guidance":3.5, "steps":20, "maskBlur": 20, "baseImage":"background", "sdSize":1024, "lora": "Flux\\style\\UltraRealPhoto.safetensors", "loraStrength": 1.0},
 		"fields": {
 			"workflow": "flux_inpaint",
 			"paint": "$mask",
@@ -548,8 +592,8 @@
 			"denoise": "$denoise",
 			"guidance": 3.5,
 			"maskBlur": "$maskBlur",
-			"lora": "Flux\\style\\amateurphoto_v4.safetensors",
-			"loraStrength": 0.7
+			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
+			"loraStrength": 1.0
 		}
 	},
 	
@@ -559,7 +603,7 @@
 		"showT2I": false,
 		"show": true,
 		"configurable": true,
-		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.75, "cfgScale":1, "guidance":3.5, "steps":20, "maskBlur": 20, "baseImage":"sketch", "sdSize":1024, "lora": "Flux\\style\\amateurphoto_v4.safetensors", "loraStrength": 1.0},
+		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.75, "cfgScale":1, "guidance":3.5, "steps":20, "maskBlur": 20, "baseImage":"sketch", "sdSize":1024, "lora": "Flux\\style\\UltraRealPhoto.safetensors", "loraStrength": 1.0},
 		"fields": {
 			"workflow": "flux_inpaint",
 			"paint": "$mask",
@@ -573,8 +617,8 @@
 			"denoise": "$denoise",
 			"guidance": 3.5,
 			"maskBlur": "$maskBlur",
-			"lora": "Flux\\style\\amateurphoto_v4.safetensors",
-			"loraStrength": 0.7
+			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
+			"loraStrength": 1.0
 		}
 	},
 	
@@ -650,6 +694,35 @@
 			"smile": 0,
 			"src_ratio": 0,
 			"sample_ratio": 0.7
+		}
+	},
+	
+	{
+		"name": "FitImage",
+		"title": "Fit to Reference",
+		"showT2I": false,
+		"show": true,
+		"configurable": false,
+		"default": {"type":"img2img", "baseImage":"background"},
+		"fields": {
+			"workflow": "fit_to_reference",
+			"background": "$background",
+			"reference": "$reference"
+		}
+	},
+	
+	{
+		"name": "ConcatImage",
+		"title": "Concat Images",
+		"showT2I": false,
+		"show": true,
+		"configurable": false,
+		"default": {"type":"img2img", "baseImage":"background"},
+		"fields": {
+			"workflow": "concat_image",
+			"background": "$background",
+			"reference": "$reference",
+			"direction": "right"
 		}
 	},
 	

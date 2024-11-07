@@ -10,7 +10,7 @@
         1
       ],
       "image": [
-        "27",
+        "31",
         0
       ]
     },
@@ -21,7 +21,7 @@
   },
   "7": {
     "inputs": {
-      "seed": 603356460794577,
+      "seed": 658759448590371,
       "steps": 10,
       "cfg_scale_start": 1,
       "cfg_scale_end": 1,
@@ -117,7 +117,7 @@
       "method": "mkl",
       "strength": 1,
       "image_ref": [
-        "27",
+        "31",
         0
       ],
       "image_target": [
@@ -166,15 +166,15 @@
   "27": {
     "inputs": {
       "image": "background (7).jpg",
-      "resize": true,
+      "resize": false,
       "width": 2560,
       "height": 2560,
       "repeat": 1,
       "keep_proportion": true,
       "divisible_by": 1,
       "mask_channel": "alpha",
-      "upload": "image",
-	  "background_color": "black"
+      "background_color": "black",
+      "upload": "image"
     },
     "class_type": "LoadAndResizeImage",
     "_meta": {
@@ -206,6 +206,60 @@
     "class_type": "Image Save",
     "_meta": {
       "title": "Image Save"
+    }
+  },
+  "31": {
+    "inputs": {
+      "width": [
+        "35",
+        0
+      ],
+      "height": [
+        "35",
+        0
+      ],
+      "upscale_method": "lanczos",
+      "keep_proportion": true,
+      "divisible_by": 1,
+      "crop": "disabled",
+      "image": [
+        "27",
+        0
+      ]
+    },
+    "class_type": "ImageResizeKJ",
+    "_meta": {
+      "title": "Resize Image"
+    }
+  },
+  "35": {
+    "inputs": {
+      "expression": "sqrt(max(a,b)/min(a,b)) * c",
+      "a": [
+        "27",
+        2
+      ],
+      "b": [
+        "27",
+        3
+      ],
+      "c": [
+        "36",
+        0
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "36": {
+    "inputs": {
+      "value": 2560
+    },
+    "class_type": "JWInteger",
+    "_meta": {
+      "title": "Integer"
     }
   }
 }

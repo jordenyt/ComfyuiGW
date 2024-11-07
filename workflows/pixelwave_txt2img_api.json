@@ -1,10 +1,10 @@
 {
   "6": {
     "inputs": {
-      "text": "Young Taiwanese girl with long brown hair, sitting in cafe. She is showing sexy collarbone",
+      "text": "Young Taiwanese girl with long brown hair, sitting in cafe. She is showing sexy collarbone and cleavage. She is wearing a green dress, which expose her long legs with heels.",
       "clip": [
-        "50",
-        1
+        "11",
+        0
       ]
     },
     "class_type": "CLIPTextEncode",
@@ -50,7 +50,7 @@
   },
   "12": {
     "inputs": {
-      "unet_name": "flux1-dev-fp8.sft",
+      "unet_name": "pixelwave_flux1Dev03.safetensors",
       "weight_dtype": "fp8_e4m3fn"
     },
     "class_type": "UNETLoader",
@@ -97,11 +97,11 @@
   },
   "17": {
     "inputs": {
-      "scheduler": "ddim_uniform",
+      "scheduler": "normal",
       "steps": 20,
       "denoise": 1,
       "model": [
-        "43",
+        "12",
         0
       ]
     },
@@ -112,7 +112,7 @@
   },
   "25": {
     "inputs": {
-      "noise_seed": 842444665176207
+      "noise_seed": 452933158574908
     },
     "class_type": "RandomNoise",
     "_meta": {
@@ -123,8 +123,8 @@
     "inputs": {
       "text": "smile, thin, fat, lamp, necklace",
       "clip": [
-        "50",
-        1
+        "11",
+        0
       ]
     },
     "class_type": "CLIPTextEncode",
@@ -136,7 +136,7 @@
     "inputs": {
       "cfg": 1,
       "model": [
-        "43",
+        "12",
         0
       ],
       "positive": [
@@ -206,28 +206,6 @@
       "title": "FluxGuidance"
     }
   },
-  "43": {
-    "inputs": {
-      "max_shift": 1.1500000000000001,
-      "base_shift": 0.5,
-      "width": [
-        "44",
-        0
-      ],
-      "height": [
-        "46",
-        0
-      ],
-      "model": [
-        "50",
-        0
-      ]
-    },
-    "class_type": "ModelSamplingFlux",
-    "_meta": {
-      "title": "ModelSamplingFlux"
-    }
-  },
   "44": {
     "inputs": {
       "value": 768
@@ -261,44 +239,6 @@
     "class_type": "INTConstant",
     "_meta": {
       "title": "height"
-    }
-  },
-  "49": {
-    "inputs": {
-      "lora_name": "Flux\\amateurphoto_v3.5.safetensors",
-      "strength_model": 0.8,
-      "strength_clip": 0,
-      "model": [
-        "12",
-        0
-      ],
-      "clip": [
-        "11",
-        0
-      ]
-    },
-    "class_type": "LoraLoader",
-    "_meta": {
-      "title": "Load LoRA"
-    }
-  },
-  "50": {
-    "inputs": {
-      "lora_name": "Flux\\JordenFlux.safetensors",
-      "strength_model": 0.5,
-      "strength_clip": 0,
-      "model": [
-        "49",
-        0
-      ],
-      "clip": [
-        "49",
-        1
-      ]
-    },
-    "class_type": "LoraLoader",
-    "_meta": {
-      "title": "Load LoRA"
     }
   }
 }

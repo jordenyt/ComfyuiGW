@@ -19,7 +19,7 @@
         "prompt_workflow": "workflows/upscale_api.json",
         "fields": {
 			"background": "36.inputs.image",
-			"size": ["35.inputs.width", "35.inputs.height"]
+			"size": ["45.inputs.width", "45.inputs.height"]
         }
     },
 	
@@ -28,7 +28,7 @@
         "fields": {
 			"seed": "7.inputs.seed",
             "background": "27.inputs.image",
-            "size": ["27.inputs.width", "27.inputs.height"],
+            "size": "36.inputs.value",
             "positive": "9.inputs.positive_prompt",
             "negative": "9.inputs.negative_prompt"
         }
@@ -71,6 +71,7 @@
             "background": "12.inputs.image",
             "reference": "13.inputs.image",
             "paint": "14.inputs.image",
+			"size": ["12.inputs.width","12.inputs.height", "1.inputs.resolution", "13.inputs.width", "13.inputs.height", "14.inputs.width","14.inputs.height"],
             "positive": "32.inputs.garment_description",
             "negative": "32.inputs.negative_prompt",
             "denoise": "32.inputs.strength",
@@ -78,8 +79,8 @@
             "cfg": "32.inputs.guidance_scale"
         }
     },
-    "sd35L_txt2img_api": {
-        "prompt_workflow": "workflows/sd35L_txt2img_api.json",
+    "sd35_txt2img_api": {
+        "prompt_workflow": "workflows/sd35_txt2img_api.json",
         "fields": {
             "positive": "6.inputs.text",
             "negative": "71.inputs.text",
@@ -88,22 +89,26 @@
             "batch_size": "135.inputs.batch_size",
             "steps": "294.inputs.steps",
             "cfg": "294.inputs.cfg",
-            "seed": "294.inputs.seed"
+            "seed": "294.inputs.seed",
+			"checkpoint": "4.inputs.ckpt_name"
         }
     },
-	"sd35LT_txt2img_api": {
-        "prompt_workflow": "workflows/sd35LT_txt2img_api.json",
+	
+	"pixelwave_txt2img_api": {
+        "prompt_workflow": "workflows/pixelwave_txt2img_api.json",
         "fields": {
             "positive": "6.inputs.text",
-            "negative": "71.inputs.text",
-            "width": "135.inputs.width",
-            "height": "135.inputs.height",
-            "batch_size": "135.inputs.batch_size",
-            "steps": "294.inputs.steps",
-            "cfg": "294.inputs.cfg",
-            "seed": "294.inputs.seed"
+            "negative": "29.inputs.text",
+            "width": "44.inputs.value",
+            "height": "46.inputs.value",
+            "batch_size": "45.inputs.batch_size",
+            "steps": "17.inputs.steps",
+            "cfg": "31.inputs.cfg",
+            "seed": "25.inputs.noise_seed",
+			"guidance": ["41.inputs.guidance", "42.inputs.guidance"]
         }
     },
+	
     "flux_gguf_txt2img_api": {
         "prompt_workflow": "workflows/flux_gguf_txt2img_api.json",
         "fields": {
@@ -320,6 +325,23 @@
 			"smile": "21.inputs.smile",
 			"src_ratio": "21.inputs.src_ratio",
 			"sample_ratio": "21.inputs.sample_ratio"
+		}
+	},
+	
+	"fit_to_reference_api": {
+		"prompt_workflow": "workflows/fit_to_reference_api.json",
+		"fields": {
+			"background": "2.inputs.image",
+			"reference": "1.inputs.image"
+		}
+	},
+	
+	"concat_image_api": {
+		"prompt_workflow": "workflows/concat_image_api.json",
+		"fields": {
+			"background": "1.inputs.image",
+			"reference": "2.inputs.image",
+			"direction": "3.inputs.direction"
 		}
 	},
 	

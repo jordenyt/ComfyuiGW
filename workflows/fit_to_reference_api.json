@@ -1,0 +1,71 @@
+{
+  "1": {
+    "inputs": {
+      "image": "sdsketch_6717_240815135600.jpg",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "2": {
+    "inputs": {
+      "image": "sdsketch_6717_240815135600_cropped (1).jpg",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "6": {
+    "inputs": {
+      "min_scale": 0.25,
+      "max_scale": 4,
+      "scale_steps": 20,
+      "overlay_opacity": 1,
+      "matching_method": "TM_CCOEFF_NORMED",
+      "score_threshold": 0.1,
+      "original_image": [
+        "1",
+        0
+      ],
+      "modified_crop": [
+        "2",
+        0
+      ]
+    },
+    "class_type": "ImageMatchVisualizerNode",
+    "_meta": {
+      "title": "Image Match Visualizer"
+    }
+  },
+  "10": {
+    "inputs": {
+      "output_path": "",
+      "filename_prefix": "api",
+      "filename_delimiter": "_",
+      "filename_number_padding": 4,
+      "filename_number_start": "false",
+      "extension": "jpg",
+      "dpi": 300,
+      "quality": 95,
+      "optimize_image": "true",
+      "lossless_webp": "false",
+      "overwrite_mode": "false",
+      "show_history": "false",
+      "show_history_by_prefix": "true",
+      "embed_workflow": "true",
+      "show_previews": "true",
+      "images": [
+        "6",
+        0
+      ]
+    },
+    "class_type": "Image Save",
+    "_meta": {
+      "title": "Image Save"
+    }
+  }
+}

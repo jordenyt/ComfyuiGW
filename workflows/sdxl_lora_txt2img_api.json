@@ -31,7 +31,7 @@
   },
   "4": {
     "inputs": {
-      "ckpt_name": "sdxlTurbo\\dreamshaperXL_lightningDPMSDE.safetensors"
+      "ckpt_name": "sdxlTurbo\\juggernautXL_XI_Lightning.safetensors"
     },
     "class_type": "CheckpointLoaderSimple",
     "_meta": {

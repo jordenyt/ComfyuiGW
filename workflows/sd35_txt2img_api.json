@@ -1,7 +1,7 @@
 {
   "4": {
     "inputs": {
-      "ckpt_name": "sd3\\sd3.5_large_turbo.safetensors"
+      "ckpt_name": "sd3\\sd3.5_large_fp8_scaled.safetensors"
     },
     "class_type": "CheckpointLoaderSimple",
     "_meta": {
@@ -12,7 +12,7 @@
     "inputs": {
       "text": "beautiful scenery nature glass bottle landscape, purple galaxy bottle,",
       "clip": [
-        "11",
+        "303",
         0
       ]
     },
@@ -37,91 +37,11 @@
       "title": "VAE Decode"
     }
   },
-  "11": {
-    "inputs": {
-      "clip_name1": "clip_g_sdxl.fp16.safetensors",
-      "clip_name2": "clip_l.safetensors",
-      "clip_name3": "t5xxl_fp8_e4m3fn.safetensors"
-    },
-    "class_type": "TripleCLIPLoader",
-    "_meta": {
-      "title": "TripleCLIPLoader"
-    }
-  },
-  "13": {
-    "inputs": {
-      "shift": 3,
-      "model": [
-        "4",
-        0
-      ]
-    },
-    "class_type": "ModelSamplingSD3",
-    "_meta": {
-      "title": "ModelSamplingSD3"
-    }
-  },
-  "67": {
-    "inputs": {
-      "conditioning": [
-        "71",
-        0
-      ]
-    },
-    "class_type": "ConditioningZeroOut",
-    "_meta": {
-      "title": "ConditioningZeroOut"
-    }
-  },
-  "68": {
-    "inputs": {
-      "start": 0.1,
-      "end": 1,
-      "conditioning": [
-        "67",
-        0
-      ]
-    },
-    "class_type": "ConditioningSetTimestepRange",
-    "_meta": {
-      "title": "ConditioningSetTimestepRange"
-    }
-  },
-  "69": {
-    "inputs": {
-      "conditioning_1": [
-        "68",
-        0
-      ],
-      "conditioning_2": [
-        "70",
-        0
-      ]
-    },
-    "class_type": "ConditioningCombine",
-    "_meta": {
-      "title": "Conditioning (Combine)"
-    }
-  },
-  "70": {
-    "inputs": {
-      "start": 0,
-      "end": 0.1,
-      "conditioning": [
-        "71",
-        0
-      ]
-    },
-    "class_type": "ConditioningSetTimestepRange",
-    "_meta": {
-      "title": "ConditioningSetTimestepRange"
-    }
-  },
   "71": {
     "inputs": {
       "text": "",
       "clip": [
-        "11",
+        "303",
         0
       ]
     },
@@ -143,14 +63,14 @@
   },
   "294": {
     "inputs": {
-      "seed": 877783126634289,
-      "steps": 4,
-      "cfg": 1,
-      "sampler_name": "dpmpp_2m",
+      "seed": 584170102367011,
+      "steps": 40,
+      "cfg": 4.5,
+      "sampler_name": "euler",
       "scheduler": "sgm_uniform",
       "denoise": 1,
       "model": [
-        "13",
+        "4",
         0
       ],
       "positive": [
@@ -158,7 +78,7 @@
         0
       ],
       "negative": [
-        "69",
+        "71",
         0
       ],
       "latent_image": [
@@ -196,6 +116,17 @@
     "class_type": "Image Save",
     "_meta": {
       "title": "Image Save"
+    }
+  },
+  "303": {
+    "inputs": {
+      "clip_name1": "clip_g.safetensors",
+      "clip_name2": "clip_l.safetensors",
+      "clip_name3": "t5xxl_fp8_e4m3fn.safetensors"
+    },
+    "class_type": "TripleCLIPLoader",
+    "_meta": {
+      "title": "TripleCLIPLoader"
     }
   }
 }

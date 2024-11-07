@@ -207,12 +207,6 @@ def set_workflow_value(d, path, key, data):
         d[path[-1]] = reference_image_path
     elif key == "paint":
         d[path[-1]] = paint_image_path
-    elif key == "flux_unet":
-        if data['steps'] <= 10:
-            d[path[-1]] = "flux1-schnell-fp8.sft"
-    elif key == "flux_unet_gguf":
-        if data['steps'] <= 10:
-            d[path[-1]] = "flux1-schnell-Q8_0.gguf"
     else:
         if key in data:
             d[path[-1]] = data[key]

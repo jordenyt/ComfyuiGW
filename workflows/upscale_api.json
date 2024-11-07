@@ -17,7 +17,7 @@
       "embed_workflow": "true",
       "show_previews": "false",
       "images": [
-        "35",
+        "45",
         0
       ]
     },
@@ -26,10 +26,137 @@
       "title": "Image Save"
     }
   },
-  "35": {
+  "36": {
+    "inputs": {
+      "image": "2005_02.jpg",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "39": {
+    "inputs": {
+      "image": [
+        "36",
+        0
+      ]
+    },
+    "class_type": "GetImageSize+",
+    "_meta": {
+      "title": "🔧 Get Image Size"
+    }
+  },
+  "41": {
+    "inputs": {
+      "a": [
+        "39",
+        0
+      ],
+      "b": [
+        "39",
+        1
+      ]
+    },
+    "class_type": "JWIntegerMul",
+    "_meta": {
+      "title": "Integer Multiply"
+    }
+  },
+  "43": {
+    "inputs": {
+      "model_name": "4xNomos8kSCHAT-L.pth"
+    },
+    "class_type": "UpscaleModelLoader",
+    "_meta": {
+      "title": "Load Upscale Model"
+    }
+  },
+  "44": {
+    "inputs": {
+      "upscale_model": [
+        "43",
+        0
+      ],
+      "image": [
+        "47",
+        0
+      ]
+    },
+    "class_type": "ImageUpscaleWithModel",
+    "_meta": {
+      "title": "Upscale Image (using Model)"
+    }
+  },
+  "45": {
     "inputs": {
       "width": 4096,
       "height": 4096,
+      "upscale_method": "lanczos",
+      "keep_proportion": true,
+      "divisible_by": 1,
+      "crop": "disabled",
+      "image": [
+        "53",
+        0
+      ]
+    },
+    "class_type": "ImageResizeKJ",
+    "_meta": {
+      "title": "Resize Image"
+    }
+  },
+  "47": {
+    "inputs": {
+      "boolean": [
+        "48",
+        0
+      ],
+      "on_true": [
+        "36",
+        0
+      ],
+      "on_false": [
+        "52",
+        0
+      ]
+    },
+    "class_type": "easy ifElse",
+    "_meta": {
+      "title": "If else"
+    }
+  },
+  "48": {
+    "inputs": {
+      "comparison": "a > b",
+      "a": [
+        "50",
+        0
+      ],
+      "b": [
+        "41",
+        0
+      ]
+    },
+    "class_type": "easy compare",
+    "_meta": {
+      "title": "Compare"
+    }
+  },
+  "50": {
+    "inputs": {
+      "value": 2250000
+    },
+    "class_type": "JWInteger",
+    "_meta": {
+      "title": "Integer"
+    }
+  },
+  "52": {
+    "inputs": {
+      "width": 128,
+      "height": 128,
       "upscale_method": "lanczos",
       "keep_proportion": true,
       "divisible_by": 1,
@@ -44,14 +171,24 @@
       "title": "Resize Image"
     }
   },
-  "36": {
+  "53": {
     "inputs": {
-      "image": "00001.jpg",
-      "upload": "image"
+      "boolean": [
+        "48",
+        0
+      ],
+      "on_true": [
+        "44",
+        0
+      ],
+      "on_false": [
+        "36",
+        0
+      ]
     },
-    "class_type": "LoadImage",
+    "class_type": "easy ifElse",
     "_meta": {
-      "title": "Load Image"
+      "title": "If else"
     }
   }
 }
