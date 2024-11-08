@@ -1,13 +1,13 @@
 {
     "caption_api": {
-        "prompt_workflow": "workflows/caption_joycaption_a2_api.json",
+        "prompt_workflow": "workflows/tools/caption_joycaption_a2_api.json",
         "fields": {
 			"background": "6.inputs.image"
         }
     },
 	
 	"tag_api": {
-        "prompt_workflow": "workflows/caption_api.json",
+        "prompt_workflow": "workflows/tools/caption_api.json",
         "fields": {
 			"seed": "1.inputs.seed",
 			"task":"1.inputs.task",
@@ -16,7 +16,7 @@
     },
 	
 	"upscale_api": {
-        "prompt_workflow": "workflows/upscale_api.json",
+        "prompt_workflow": "workflows/tools/upscale_api.json",
         "fields": {
 			"background": "36.inputs.image",
 			"size": ["45.inputs.width", "45.inputs.height"]
@@ -329,7 +329,7 @@
 	},
 	
 	"fit_to_reference_api": {
-		"prompt_workflow": "workflows/fit_to_reference_api.json",
+		"prompt_workflow": "workflows/tools/fit_to_reference_api.json",
 		"fields": {
 			"background": "2.inputs.image",
 			"reference": "1.inputs.image"
@@ -337,7 +337,7 @@
 	},
 	
 	"concat_image_api": {
-		"prompt_workflow": "workflows/concat_image_api.json",
+		"prompt_workflow": "workflows/tools/concat_image_api.json",
 		"fields": {
 			"background": "1.inputs.image",
 			"reference": "2.inputs.image",
@@ -346,7 +346,7 @@
 	},
 	
 	"img_sharpen_api": {
-		"prompt_workflow": "workflows/image_sharpen_api.json",
+		"prompt_workflow": "workflows/tools/image_sharpen_api.json",
         "fields": {
             "background": "1.inputs.image",
 			"noise_radius": "2.inputs.noise_radius",

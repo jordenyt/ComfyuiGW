@@ -362,6 +362,7 @@
 			"steps": "$steps",
 			"cfg": "$cfg",
 			"guidance": 3.5,
+			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
 			"loraStrength": 0.0
 		}
 	},
