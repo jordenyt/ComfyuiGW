@@ -24,6 +24,9 @@ else
     source venv/bin/activate
 fi
 
+# Use provided path or default
+COMFYUI_PATH=~/Workspace/ComfyUI
+
 # Run the Python script
 echo "Starting comfyui_server.py..."
 python comfyui_server.py

@@ -26,5 +26,6 @@ if not exist "venv\" (
 )
 
 REM Run the Python script
+set COMFYUI_PATH=E:\Workspace\ComfyUI
 echo Starting comfyui_server.py...
 python comfyui_server.py
