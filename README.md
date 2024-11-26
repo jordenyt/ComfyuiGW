@@ -13,7 +13,7 @@ The is a Restful API Gateway for ComfyUI which is designed for running [ComfyUI 
    * [jamesWalker55/comfyui-various](https://github.com/jamesWalker55/comfyui-various)
    * [Fannovel16/comfyui_controlnet_aux](https://github.com/Fannovel16/comfyui_controlnet_aux)
 4. Clone this repo.
-5. Update the path of your ComfyUI installation in **ComfyUI.bat**(Windows) or **Comfyui.sh**(Linux) by updating the value of `COMFYUI_PATH`.
+5. Update the path of your ComfyUI installation in **run.bat**(Windows) or **run.sh**(Linux) by updating the value of `COMFYUI_PATH`.
 7. Execute **run.bat**(Windows) or **run.sh**(Linux) in a python available console such as Anaconda Prompt.
 
 ## Add a workflow
