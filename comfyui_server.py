@@ -9,20 +9,26 @@ import websocket
 from threading import Thread
 import uuid
 import requests
+import platform
+import shlex
+import sys
 
 from urllib import request
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from PIL import Image
 import random
+
+# Read ComfyUI path from environment variable or use default
+COMFYUI_PATH = os.environ.get('COMFYUI_PATH', os.path.join(os.path.expanduser('~'), 'Workspace', 'ComfyUI'))
 
 app = FastAPI()
 ws = None
 a1111_process = None
 dfl_process = None
 comfyui_process = None
-local_path = os.path.dirname(__file__) + "\\"
 dflapi_output_dir = os.path.dirname(local_path)
-comfyui_output_dir = os.path.join('E:\\', 'Workspace', 'ComfyUI', 'output')
+local_path = os.path.dirname(__file__) + os.path.sep
+comfyui_output_dir = os.path.join(COMFYUI_PATH, 'output')
 workflows_config_path = 'workflows_config.json'
 mode_config_path = "mode_config.json"
 comfyui_server = "127.0.0.1:8188"
@@ -30,6 +36,9 @@ promptID = None
 client_id = str(uuid.uuid4())
 msg_progress = ""
 msg_step = ""
+
+# Detect the operating system
+is_windows = platform.system() == 'Windows'
 
 @app.get("/mode_config")
 async def get_mode_config():
@@ -309,7 +318,6 @@ async def comfyui_workflow_handler(request: Request):
     else:
         return {"message": "ComfyUI is not started."}
             
-
 @app.get("/stop_comfyui")
 def stop_comfyui():
     global comfyui_process, ws
@@ -317,11 +325,21 @@ def stop_comfyui():
         if ws is not None:
             ws.close()
             ws = None
-        parent = psutil.Process(comfyui_process.pid)
-        children = parent.children(recursive=True)
-        for child in children:
-            child.kill()
-        comfyui_process.kill()
+        
+        # Cross-platform process termination
+        if is_windows:
+            # On Windows, use taskkill for more robust termination
+            subprocess.run(f"taskkill /F /T /PID {comfyui_process.pid}", shell=True)
+        else:
+            # On Linux, use process group termination
+            try:
+                parent = psutil.Process(comfyui_process.pid)
+                for child in parent.children(recursive=True):
+                    child.terminate()
+                parent.terminate()
+            except psutil.NoSuchProcess:
+                pass
+        
         comfyui_process = None
         return {"message": "ComfyUI Stopped."}
     else:
@@ -333,9 +351,33 @@ def start_comfyui():
     if comfyui_process:
         return {"message": "ComfyUI already started"}
     else:
-        comfyui_process = subprocess.Popen(local_path + "ComfyUI.bat", shell=True)
-        return {"message": "ComfyUI started"}
+        # Use platform-specific launch script
+        if is_windows:
+            launch_script = os.path.join(local_path, "ComfyUI.bat")
+        else:
+            launch_script = os.path.join(local_path, "ComfyUI.sh")
         
+        # Environment for subprocess to pass ComfyUI path
+        env = os.environ.copy()
+        env['COMFYUI_PATH'] = COMFYUI_PATH
+
+        if is_windows:
+            # For Windows, use shell=True
+            comfyui_process = subprocess.Popen(launch_script, shell=True, env=env)
+        else:
+            # Make sure the script is executable
+            os.chmod(launch_script, 0o755)
+            
+            # For Linux, use shell=False and shlex.split()
+            comfyui_process = subprocess.Popen(
+                shlex.split(launch_script), 
+                shell=False, 
+                start_new_session=True,  # Important for Linux to prevent process termination
+                env=env
+            )
+        
+        return {"message": "ComfyUI started"}
+
 if __name__ == '__main__':
     uvicorn.run('comfyui_server:app', host='0.0.0.0', port=5000, log_level="warning")
 
