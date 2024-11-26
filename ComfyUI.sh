@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Use provided path or default
-COMFYUI_PATH=~/Workspace/ComfyUI
-
 # Change to ComfyUI directory
 cd "$COMFYUI_PATH"
 
