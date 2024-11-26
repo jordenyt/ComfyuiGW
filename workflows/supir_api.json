@@ -21,7 +21,7 @@
   },
   "7": {
     "inputs": {
-      "seed": 658759448590371,
+      "seed": 285115455055814,
       "steps": 10,
       "cfg_scale_start": 1,
       "cfg_scale_end": 1,
@@ -59,7 +59,7 @@
   },
   "9": {
     "inputs": {
-      "positive_prompt": "1girl, black tank top, cut-out, collarbone, shoulder, slim, Japanese, necklace, cross",
+      "positive_prompt": "1girl, long brown hair",
       "negative_prompt": "bad quality, blurry, messy",
       "SUPIR_model": [
         "21",
@@ -117,7 +117,7 @@
       "method": "mkl",
       "strength": 1,
       "image_ref": [
-        "31",
+        "27",
         0
       ],
       "image_target": [
@@ -165,7 +165,7 @@
   },
   "27": {
     "inputs": {
-      "image": "background (7).jpg",
+      "image": "received_6012624482172001.jpeg",
       "resize": false,
       "width": 2560,
       "height": 2560,
@@ -197,7 +197,7 @@
       "show_history": "false",
       "show_history_by_prefix": "true",
       "embed_workflow": "true",
-      "show_previews": "false",
+      "show_previews": "true",
       "images": [
         "14",
         0
@@ -223,7 +223,7 @@
       "divisible_by": 1,
       "crop": "disabled",
       "image": [
-        "27",
+        "44",
         0
       ]
     },
@@ -260,6 +260,143 @@
     "class_type": "JWInteger",
     "_meta": {
       "title": "Integer"
+    }
+  },
+  "37": {
+    "inputs": {
+      "boolean": [
+        "47",
+        0
+      ],
+      "on_true": [
+        "27",
+        0
+      ],
+      "on_false": [
+        "41",
+        0
+      ]
+    },
+    "class_type": "easy ifElse",
+    "_meta": {
+      "title": "If else"
+    }
+  },
+  "38": {
+    "inputs": {
+      "expression": "max(a, b) * 4",
+      "a": [
+        "27",
+        2
+      ],
+      "b": [
+        "27",
+        3
+      ],
+      "c": [
+        "36",
+        0
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "41": {
+    "inputs": {
+      "width": 64,
+      "height": 64,
+      "upscale_method": "lanczos",
+      "keep_proportion": true,
+      "divisible_by": 1,
+      "crop": "disabled",
+      "image": [
+        "27",
+        0
+      ]
+    },
+    "class_type": "ImageResizeKJ",
+    "_meta": {
+      "title": "Resize Image"
+    }
+  },
+  "42": {
+    "inputs": {
+      "upscale_model": [
+        "43",
+        0
+      ],
+      "image": [
+        "37",
+        0
+      ]
+    },
+    "class_type": "ImageUpscaleWithModel",
+    "_meta": {
+      "title": "Upscale Image (using Model)"
+    }
+  },
+  "43": {
+    "inputs": {
+      "model_name": "4xNomos8kSCHAT-L.pth"
+    },
+    "class_type": "UpscaleModelLoader",
+    "_meta": {
+      "title": "Load Upscale Model"
+    }
+  },
+  "44": {
+    "inputs": {
+      "boolean": [
+        "47",
+        0
+      ],
+      "on_true": [
+        "50",
+        0
+      ],
+      "on_false": [
+        "27",
+        0
+      ]
+    },
+    "class_type": "easy ifElse",
+    "_meta": {
+      "title": "If else"
+    }
+  },
+  "47": {
+    "inputs": {
+      "comparison": "a > b",
+      "a": [
+        "35",
+        0
+      ],
+      "b": [
+        "38",
+        0
+      ]
+    },
+    "class_type": "easy compare",
+    "_meta": {
+      "title": "Compare"
+    }
+  },
+  "50": {
+    "inputs": {
+      "facedetection": "retinaface_resnet50",
+      "model": "GFPGANv1.4.pth",
+      "visibility": 1,
+      "codeformer_weight": 0,
+      "image": [
+        "42",
+        0
+      ]
+    },
+    "class_type": "ReActorRestoreFace",
+    "_meta": {
+      "title": "Restore Face 🌌 ReActor"
     }
   }
 }

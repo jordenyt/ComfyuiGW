@@ -1,82 +1,13 @@
 {
-  "3": {
-    "inputs": {
-      "seed": 1077505742343646,
-      "steps": 8,
-      "cfg": 2,
-      "sampler_name": "dpmpp_sde",
-      "scheduler": "normal",
-      "denoise": 1,
-      "model": [
-        "4",
-        0
-      ],
-      "positive": [
-        "40",
-        0
-      ],
-      "negative": [
-        "40",
-        1
-      ],
-      "latent_image": [
-        "38",
-        0
-      ]
-    },
-    "class_type": "KSampler",
-    "_meta": {
-      "title": "KSampler"
-    }
-  },
-  "4": {
-    "inputs": {
-      "ckpt_name": "sdxlTurboInpaint\\dreamshaperXL_lightningInpaint.safetensors"
-    },
-    "class_type": "CheckpointLoaderSimple",
-    "_meta": {
-      "title": "Load Checkpoint"
-    }
-  },
-  "6": {
-    "inputs": {
-      "text": "Young Korean woman with brown hair\n\nhighly detailed, profession photography",
-      "token_normalization": "none",
-      "weight_interpretation": "A1111",
-      "clip": [
-        "4",
-        1
-      ]
-    },
-    "class_type": "BNK_CLIPTextEncodeAdvanced",
-    "_meta": {
-      "title": "CLIP Text Encode (Positive)"
-    }
-  },
-  "7": {
-    "inputs": {
-      "text": "blurry, illustration, horror, bangs",
-      "token_normalization": "none",
-      "weight_interpretation": "A1111",
-      "clip": [
-        "4",
-        1
-      ]
-    },
-    "class_type": "BNK_CLIPTextEncodeAdvanced",
-    "_meta": {
-      "title": "CLIP Text Encode (Negative)"
-    }
-  },
   "8": {
     "inputs": {
       "samples": [
-        "3",
+        "86",
         0
       ],
       "vae": [
-        "4",
-        2
+        "75",
+        0
       ]
     },
     "class_type": "VAEDecode",
@@ -144,17 +75,18 @@
   },
   "40": {
     "inputs": {
+      "noise_mask": true,
       "positive": [
-        "6",
+        "73",
         0
       ],
       "negative": [
-        "7",
+        "74",
         0
       ],
       "vae": [
-        "4",
-        2
+        "75",
+        0
       ],
       "pixels": [
         "44",
@@ -163,8 +95,7 @@
       "mask": [
         "51",
         0
-      ],
-	  "noise_mask": true
+      ]
     },
     "class_type": "InpaintModelConditioning",
     "_meta": {
@@ -503,6 +434,130 @@
     "class_type": "JWFloatMax",
     "_meta": {
       "title": "Float Maximum"
+    }
+  },
+  "72": {
+    "inputs": {
+      "clip_name1": "t5xxl_fp16.safetensors",
+      "clip_name2": "clip_l.safetensors",
+      "type": "flux"
+    },
+    "class_type": "DualCLIPLoader",
+    "_meta": {
+      "title": "DualCLIPLoader"
+    }
+  },
+  "73": {
+    "inputs": {
+      "guidance": 30,
+      "conditioning": [
+        "84",
+        0
+      ]
+    },
+    "class_type": "FluxGuidance",
+    "_meta": {
+      "title": "FluxGuidance"
+    }
+  },
+  "74": {
+    "inputs": {
+      "guidance": 30,
+      "conditioning": [
+        "85",
+        0
+      ]
+    },
+    "class_type": "FluxGuidance",
+    "_meta": {
+      "title": "FluxGuidance"
+    }
+  },
+  "75": {
+    "inputs": {
+      "vae_name": "flux_vae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "78": {
+    "inputs": {
+      "unet_name": "fluxFillFP8_v10.safetensors",
+      "weight_dtype": "fp8_e4m3fn"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "84": {
+    "inputs": {
+      "text": "Young Korean woman with brown hair\n\nhighly detailed, profession photography",
+      "clip": [
+        "72",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "85": {
+    "inputs": {
+      "text": "blurry, illustration, horror, bangs",
+      "clip": [
+        "72",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "86": {
+    "inputs": {
+      "seed": 532955775826325,
+      "steps": 25,
+      "cfg": 1,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1,
+      "model": [
+        "78",
+        0
+      ],
+      "positive": [
+        "40",
+        0
+      ],
+      "negative": [
+        "40",
+        1
+      ],
+      "latent_image": [
+        "38",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "87": {
+    "inputs": {
+      "images": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
     }
   }
 }

@@ -455,6 +455,69 @@
 	},
 	
 	{
+		"name": "FluxRedux",
+		"title": "Flux Redux img2img",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"img2img", "denoise":1.0, "guidance": 3.5, "steps":20, "baseImage":"background", "sdSize":1024},
+		"fields": {
+			"workflow": "flux_redux",
+			"background": "$background",
+			"positive": "$positive",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"denoise": "$denoise",
+			"guidance": 3.5,
+			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
+			"loraStrength": 0.0
+		}
+	},
+	
+	{
+		"name": "FluxReduxLora",
+		"title": "Flux Redux LORA",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"img2img", "denoise":1.0, "guidance": 3.5, "steps":20, "baseImage":"background", "sdSize":1024},
+		"fields": {
+			"workflow": "flux_redux",
+			"background": "$background",
+			"positive": "$positive",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"denoise": "$denoise",
+			"guidance": 3.5,
+			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
+			"loraStrength": 1.0
+		}
+	},
+	
+	{
+		"name": "FluxReduxJorden",
+		"title": "Flux Redux Jorden",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"img2img", "denoise":1.0, "guidance": 3.5, "steps":20, "baseImage":"background", "sdSize":1024, "lora": "Flux\\JordenFlux.safetensors", "loraStrength": 1.0},
+		"fields": {
+			"workflow": "flux_redux",
+			"background": "$background",
+			"positive": "$positive",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"denoise": "$denoise",
+			"guidance": 3.5,
+			"lora": "Flux\\JordenFlux.safetensors",
+			"loraStrength": 1.0
+		}
+	},
+	
+	{
 		"name": "FluxLoraImg2img",
 		"title": "Flux LORA img2img",
 		"showT2I": false,
@@ -524,8 +587,78 @@
 	},
 	
 	{
+		"name": "FluxOutpaint",
+		"title": "Flux Outpainting",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"img2img", "cfgScale":1, "steps":20, "baseImage":"background", "left":0.0, "right":0.0, "top":0.0, "bottom":0.0, "feathering":0.1, "sdSize":1024},
+		"fields": {
+			"workflow": "flux_outpaint",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"guidance": 30,
+			"left": 0.0,
+			"right": 0.0,
+			"top": 0.0,
+			"bottom": 0.0,
+			"feathering": 0.1
+		}
+	},
+	
+	{
+		"name": "FluxFill",
+		"title": "Flux Fill",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":1.0, "cfgScale":1.0, "guidance":30, "steps":25, "baseImage":"background", "sdSize":1024},
+		"fields": {
+			"workflow": "flux_fill",
+			"paint": "$mask",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"guidance": 30,
+			"noise_mask": true
+		}
+	},
+	
+	{
+		"name": "FluxFillSketch",
+		"title": "Flux Fill (Sketch)",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.8, "cfgScale":1.0, "guidance":30, "steps":25, "baseImage":"sketch", "sdSize":1024},
+		"fields": {
+			"workflow": "flux_fill",
+			"paint": "$mask",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"guidance": 30
+		}
+	},
+	
+	{
 		"name": "FluxInpaint",
-		"title": "Flux Inpaint",
+		"title": "Flux Refine",
 		"showT2I": false,
 		"show": true,
 		"configurable": true,
@@ -550,7 +683,7 @@
 	
 	{
 		"name": "FluxInpaintSketch",
-		"title": "Flux Inpaint with Sketch",
+		"title": "Flux Refine (Sketch)",
 		"showT2I": false,
 		"show": true,
 		"configurable": true,
@@ -575,7 +708,7 @@
 	
 	{
 		"name": "FluxLoraInpaint",
-		"title": "Flux LORA Inpaint",
+		"title": "Flux Refine with LORA",
 		"showT2I": false,
 		"show": true,
 		"configurable": true,
@@ -600,7 +733,7 @@
 	
 	{
 		"name": "FluxLoraInpaintSketch",
-		"title": "Flux LORA Inpaint with Sketch",
+		"title": "Flux Refine with LORA (Sketch)",
 		"showT2I": false,
 		"show": true,
 		"configurable": true,
@@ -625,7 +758,7 @@
 	
 	{
 		"name": "FluxJordenInpaint",
-		"title": "Flux Jorden Inpaint",
+		"title": "Flux Refine with Jorden",
 		"showT2I": false,
 		"show": true,
 		"configurable": true,
@@ -650,7 +783,7 @@
 	
 	{
 		"name": "FluxJordenInpaintSketch",
-		"title": "Flux Jorden Inpaint (Sketch)",
+		"title": "Flux Refine with Jorden (Sketch)",
 		"showT2I": false,
 		"show": true,
 		"configurable": true,

@@ -19,7 +19,7 @@
         "prompt_workflow": "workflows/tools/upscale_api.json",
         "fields": {
 			"background": "36.inputs.image",
-			"size": ["45.inputs.width", "45.inputs.height"]
+			"size": "50.inputs.value"
         }
     },
 	
@@ -194,6 +194,57 @@
 			"maskBlur": ["63.inputs.blur_radius", "63.inputs.expand"],
 			"lora": "65.inputs.lora_name",
 			"loraStrength": ["65.inputs.strength_model","65.inputs.strength_clip"]
+        }
+    },
+	"flux_fill_api": {
+        "prompt_workflow": "workflows/flux_dev_fill_api.json",
+        "fields": {
+            "background": "35.inputs.image",
+            "paint": "53.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "55.inputs.text",
+            "size": ["35.inputs.width", "35.inputs.height", "53.inputs.width", "53.inputs.height"],
+            "batch_size": "56.inputs.amount",
+            "steps": "62.inputs.steps",
+            "cfg": "62.inputs.cfg",
+            "denoise": "62.inputs.denoise",
+            "seed": "62.inputs.seed",
+			"guidance": ["39.inputs.guidance", "59.inputs.guidance"],
+			"noise_mask": "37.inputs.noise_mask"
+        }
+    },
+	"flux_outpaint_api": {
+        "prompt_workflow": "workflows/flux_outpaint_api.json",
+        "fields": {
+            "background": "27.inputs.image",
+            "positive": "84.inputs.text",
+            "negative": "85.inputs.text",
+            "size": ["44.inputs.width","44.inputs.height"],
+            "batch_size": "38.inputs.amount",
+            "steps": "86.inputs.steps",
+            "cfg": "86.inputs.cfg",
+			"guidance": ["73.inputs.guidance", "74.inputs.guidance"],
+            "seed": "86.inputs.seed",
+			"left": "55.inputs.b",
+			"right": "60.inputs.b",
+			"top": "58.inputs.b",
+			"bottom": "62.inputs.b",
+			"feathering": "64.inputs.b"
+        }
+    },
+	"flux_redux_api": {
+        "prompt_workflow": "workflows/flux_redux_img2img_api.json",
+        "fields": {
+            "background": "45.inputs.image",
+            "positive": ["6.inputs.text", "63.inputs.text"],
+            "size": "51.inputs.value",
+            "batch_size": "68.inputs.value",
+            "steps": "17.inputs.steps",
+            "denoise": "17.inputs.denoise",
+            "seed": ["25.inputs.noise_seed", "60.inputs.seed"],
+			"guidance": "26.inputs.guidance",
+			"lora": "46.inputs.lora_name",
+			"loraStrength": ["46.inputs.strength_model","46.inputs.strength_clip"]
         }
     },
 	"sdxl_img2img_controlnet_api": {

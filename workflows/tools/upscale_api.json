@@ -17,7 +17,7 @@
       "embed_workflow": "true",
       "show_previews": "false",
       "images": [
-        "45",
+        "53",
         0
       ]
     },
@@ -28,7 +28,7 @@
   },
   "36": {
     "inputs": {
-      "image": "2005_02.jpg",
+      "image": "received_2043681125981419~3.jpeg",
       "upload": "image"
     },
     "class_type": "LoadImage",
@@ -46,22 +46,6 @@
     "class_type": "GetImageSize+",
     "_meta": {
       "title": "🔧 Get Image Size"
-    }
-  },
-  "41": {
-    "inputs": {
-      "a": [
-        "39",
-        0
-      ],
-      "b": [
-        "39",
-        1
-      ]
-    },
-    "class_type": "JWIntegerMul",
-    "_meta": {
-      "title": "Integer Multiply"
     }
   },
   "43": {
@@ -91,14 +75,20 @@
   },
   "45": {
     "inputs": {
-      "width": 4096,
-      "height": 4096,
+      "width": [
+        "50",
+        0
+      ],
+      "height": [
+        "50",
+        0
+      ],
       "upscale_method": "lanczos",
       "keep_proportion": true,
       "divisible_by": 1,
       "crop": "disabled",
       "image": [
-        "53",
+        "36",
         0
       ]
     },
@@ -135,7 +125,7 @@
         0
       ],
       "b": [
-        "41",
+        "59",
         0
       ]
     },
@@ -146,7 +136,7 @@
   },
   "50": {
     "inputs": {
-      "value": 2250000
+      "value": 4096
     },
     "class_type": "JWInteger",
     "_meta": {
@@ -155,8 +145,8 @@
   },
   "52": {
     "inputs": {
-      "width": 128,
-      "height": 128,
+      "width": 64,
+      "height": 64,
       "upscale_method": "lanczos",
       "keep_proportion": true,
       "divisible_by": 1,
@@ -178,17 +168,52 @@
         0
       ],
       "on_true": [
-        "44",
+        "56",
         0
       ],
       "on_false": [
-        "36",
+        "45",
         0
       ]
     },
     "class_type": "easy ifElse",
     "_meta": {
       "title": "If else"
+    }
+  },
+  "56": {
+    "inputs": {
+      "method": "mkl",
+      "strength": 1,
+      "image_ref": [
+        "36",
+        0
+      ],
+      "image_target": [
+        "44",
+        0
+      ]
+    },
+    "class_type": "ColorMatch",
+    "_meta": {
+      "title": "Color Match"
+    }
+  },
+  "59": {
+    "inputs": {
+      "expression": "max(a,b) * 4",
+      "a": [
+        "39",
+        0
+      ],
+      "b": [
+        "39",
+        1
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
     }
   }
 }
