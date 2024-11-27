@@ -25,8 +25,8 @@ else
 fi
 
 # Use provided path or default
-COMFYUI_PATH=~/Workspace/ComfyUI
+export COMFYUI_PATH=~/Workspace/ComfyUI
 
 # Run the Python script
 echo "Starting comfyui_server.py..."
-python comfyui_server.py
+python3 comfyui_server.py
