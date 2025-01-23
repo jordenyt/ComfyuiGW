@@ -118,17 +118,34 @@ def imageprocess(data, batch_path):
 async def process_image(request: Request):
     data = await request.json()
     return imageprocess(data, local_path + "dfl_gfpgan.bat")
+    
+def format_time(seconds):
+    """Convert seconds to mm:ss format."""
+    minutes, seconds = divmod(int(seconds), 60)
+    return f"{minutes:02d}:{seconds:02d}"
 
 def ws_message(ws, msg):
     def run(*args):
-        global finished_nodes, node_ids, msg_step, msg_progress
+        global finished_nodes, node_ids, msg_step, msg_progress, cur_node, last_node, last_time, last_step
         message = json.loads(msg)
         if message['type'] == 'progress':
             data = message['data']
             current_step = data['value']
-            msg_step = '--> Step: ' + str(current_step) + '/' + str(data['max'])
             if current_step == data['max']:
                 msg_step = ""
+            elif last_node == cur_node:
+                elapsed_time = time.time() - last_time
+                average_time_per_step = elapsed_time / (current_step - last_step)
+                remaining_steps = data['max'] - current_step
+                estimated_remaining_time = remaining_steps * average_time_per_step
+                remaining_time_formatted = format_time(estimated_remaining_time)
+                elapsed_time_formatted = format_time(elapsed_time)
+                msg_step = '--> Step: ' + str(current_step) + '/' + str(data['max']) + ' [' + elapsed_time_formatted + '<' +remaining_time_formatted + ']'
+            else:
+                last_node = cur_node
+                last_time = time.time()
+                last_step = current_step
+                msg_step = '--> Step: ' + str(current_step) + '/' + str(data['max'])
         elif message['type'] == 'execution_cached':
             data = message['data']
             for itm in data['nodes']:
@@ -141,6 +158,7 @@ def ws_message(ws, msg):
                 msg_progress = "Done"
             elif data['node'] not in finished_nodes:
                 finished_nodes.append(data['node'])
+                cur_node = data['node']
                 msg_progress = "Processing \"" + current_prompt[data['node']]["_meta"]["title"] + "\" (" + str(len(finished_nodes)) + "/" + str(len(node_ids)) + ")..."
         elif message['type'] == 'execution_interrupted':
             data = message['data']
@@ -188,12 +206,13 @@ def comfyui_free():
     return {"message": "ComfyUI memory released."}
 
 def queue_prompt(prompt_workflow):
-    global finished_nodes, node_ids, msg_progress, current_prompt
+    global finished_nodes, node_ids, msg_progress, current_prompt, last_node
     current_prompt = prompt_workflow
     node_ids = list(prompt_workflow.keys())
     finished_nodes = []
     msg_progress = ""
     msg_step = ""
+    last_node = ""
     p = {"prompt": prompt_workflow, "client_id": client_id}
     headers = {'Content-Type': 'application/json'}
     data = json.dumps(p).encode('utf-8')
