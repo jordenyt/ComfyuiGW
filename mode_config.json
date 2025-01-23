@@ -3,8 +3,8 @@
 		"name": "SDXLOutpaint",
 		"title": "SDXL Outpainting",
 		"showT2I": false,
-		"show": true,
-		"configurable": true,
+		"show": false,
+		"configurable": false,
 		"default": {"type":"img2img", "cfgScale":1, "steps":8, "baseImage":"background", "left":0.0, "right":0.0, "top":0.0, "bottom":0.0, "feathering":0.1, "sdSize":1024},
 		"fields": {
 			"workflow": "sdxl_outpaint",
@@ -41,7 +41,7 @@
 			"steps": "$steps",
 			"cfg": "$cfg",
 			"denoise": "$denoise",
-			"maskBlur": 0
+			"maskBlur": 5
 		}
 	},
 	
@@ -63,7 +63,7 @@
 			"steps": "$steps",
 			"cfg": "$cfg",
 			"denoise": "$denoise",
-			"maskBlur": 0
+			"maskBlur": 5
 		}
 	},
 	
@@ -147,28 +147,6 @@
 			"positive": "$positive",
 			"negative": "$negative",
 			"size": 2560
-		}
-	},
-	
-	{
-		"name": "IdmVton",
-		"title": "IDM-VTON Inpainting",
-		"showT2I": false,
-		"show": true,
-		"configurable": true,
-		"default": {"type":"inpaint", "baseImage":"sketch", "cfgScale":3, "steps":30, "denoise":0.7, "inpaintPartial":1, "sdSize":1280},
-		"fields": {
-			"workflow": "idm_vtron",
-			"paint": "$mask",
-			"background": "$background",
-			"size": "$size",
-			"reference": "$reference",
-			"positive": "$positive",
-			"negative": "$negative",
-			"batch_size": "$batchSize",
-			"steps": "$steps",
-			"cfg": "$cfg",
-			"denoise": "$denoise"
 		}
 	},
 	
@@ -328,9 +306,9 @@
 	{
 		"name": "PixelWave",
 		"title": "PixelWave txt2img",
-		"showT2I": true,
-		"show": true,
-		"configurable": true,
+		"showT2I": false,
+		"show": false,
+		"configurable": false,
 		"default": {"type":"txt2img", "cfgScale":1, "guidance":3.5, "steps":20, "sdSize":1024},
 		"fields": {
 			"workflow": "pixelwave_txt2img",
@@ -362,6 +340,27 @@
 			"steps": "$steps",
 			"cfg": "$cfg",
 			"guidance": 3.5,
+			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
+			"loraStrength": 0.0
+		}
+	},
+	
+	{
+		"name": "FluxDynCFG",
+		"title": "Flux txt2img (Dynamic CFG)",
+		"showT2I": true,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"txt2img", "cfgScale":4, "steps":25, "sdSize":1024},
+		"fields": {
+			"workflow": "flux_dyna_cfg_txt2img",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"width": "$width",
+			"height": "$height",
+			"steps": "$steps",
+			"cfg": "$cfg",
 			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
 			"loraStrength": 0.0
 		}
@@ -432,14 +431,58 @@
 	},
 	
 	{
-		"name": "FluxImg2img",
-		"title": "Flux img2img",
+		"name": "FluxDynCFGJorden",
+		"title": "Flux Jorden txt2img (Dynamic CFG)",
+		"showT2I": true,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"txt2img", "cfgScale":4, "steps":25, "sdSize":1024},
+		"fields": {
+			"workflow": "flux_dyna_cfg_txt2img",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"width": "$width",
+			"height": "$height",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"lora": "Flux\\JordenFlux.safetensors",
+			"loraStrength": 1.0
+		}
+	},
+	
+	{
+		"name": "FluxDynCFGJordenStyle",
+		"title": "Flux Jorden with Style txt2img (Dynamic CFG)",
+		"showT2I": true,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"txt2img", "cfgScale":4, "steps":25, "sdSize":1024},
+		"fields": {
+			"workflow": "flux_dyna_cfg_2lora_txt2img",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"width": "$width",
+			"height": "$height",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"lora": "Flux\\JordenFlux.safetensors",
+			"loraStrength": 0.5,
+			"lora2": "Flux\\style\\filmfotos.safetensors",
+			"lora2Strength": 0.8
+		}
+	},
+	
+	{
+		"name": "FluxFillBg",
+		"title": "Flux Fill BG by prompt",
 		"showT2I": false,
 		"show": true,
 		"configurable": true,
-		"default": {"type":"img2img", "denoise":0.6, "cfgScale":1, "guidance": 3.5, "steps":20, "baseImage":"background", "sdSize":1024},
+		"default": {"type":"img2img", "denoise":1, "cfgScale":1, "guidance": 30, "steps":25, "baseImage":"background", "sdSize":1024},
 		"fields": {
-			"workflow": "flux_img2img",
+			"workflow": "flux_fill_bg",
 			"background": "$background",
 			"positive": "$positive",
 			"negative": "$negative",
@@ -448,9 +491,29 @@
 			"steps": "$steps",
 			"cfg": "$cfg",
 			"denoise": "$denoise",
-			"guidance": 3.5,
-			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
-			"loraStrength": 0.0
+			"guidance": 3.5
+		}
+	},
+	
+	{
+		"name": "FluxReduxFillBg",
+		"title": "Flux Fill BG by Reference",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"img2img", "denoise":1, "cfgScale":1, "guidance": 30, "steps":25, "baseImage":"background", "sdSize":1024},
+		"fields": {
+			"workflow": "flux_redux_fill_bg",
+			"background": "$background",
+			"reference": "$reference",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"guidance": 3.5
 		}
 	},
 	
@@ -477,7 +540,7 @@
 	
 	{
 		"name": "FluxReduxLora",
-		"title": "Flux Redux LORA",
+		"title": "Flux Redux LORA img2img",
 		"showT2I": false,
 		"show": true,
 		"configurable": true,
@@ -498,7 +561,7 @@
 	
 	{
 		"name": "FluxReduxJorden",
-		"title": "Flux Redux Jorden",
+		"title": "Flux Redux Jorden img2img",
 		"showT2I": false,
 		"show": true,
 		"configurable": true,
@@ -514,6 +577,29 @@
 			"guidance": 3.5,
 			"lora": "Flux\\JordenFlux.safetensors",
 			"loraStrength": 1.0
+		}
+	},
+	
+	{
+		"name": "FluxImg2img",
+		"title": "Flux img2img",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"img2img", "denoise":0.6, "cfgScale":1, "guidance": 3.5, "steps":20, "baseImage":"background", "sdSize":1024},
+		"fields": {
+			"workflow": "flux_img2img",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"guidance": 3.5,
+			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
+			"loraStrength": 0.0
 		}
 	},
 	
@@ -546,7 +632,7 @@
 		"showT2I": false,
 		"show": true,
 		"configurable": true,
-		"default": {"type":"img2img", "denoise":0.6, "cfgScale":1, "guidance": 3.5, "steps":20, "baseImage":"background", "sdSize":1024, "lora": "Flux\\JordenFlux.safetensors", "loraStrength": 1.2},
+		"default": {"type":"img2img", "denoise":0.6, "cfgScale":1, "guidance": 3.5, "steps":20, "baseImage":"sketch", "sdSize":1024, "lora": "Flux\\JordenFlux.safetensors", "loraStrength": 1.2},
 		"fields": {
 			"workflow": "flux_img2img",
 			"background": "$background",
@@ -560,6 +646,51 @@
 			"guidance": 3.5,
 			"lora": "Flux\\JordenFlux.safetensors",
 			"loraStrength": 1.2
+		}
+	},
+	
+	{
+		"name": "FluxCannyImg2img",
+		"title": "Flux Canny img2img (Jorden)",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"img2img", "denoise":1.0, "cfgScale":1, "guidance": 3.5, "cnStrength":0.7, "steps":20, "baseImage":"sketch", "sdSize":1024, "lora": "Flux\\JordenFlux.safetensors", "loraStrength": 1.0},
+		"fields": {
+			"workflow": "flux_canny_img2img",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"denoise": "$denoise",
+			"cnStrength": 0.7,
+			"guidance": 3.5,
+			"lora": "Flux\\JordenFlux.safetensors",
+			"loraStrength": 1.0
+		}
+	},
+	
+	{
+		"name": "FluxDynCFGJordenImg2img",
+		"title": "Flux Jorden img2img (dynamic CFG)",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"img2img", "denoise":0.8, "cfgScale":6, "steps":25, "baseImage":"sketch", "sdSize":1024, "lora": "Flux\\JordenFlux.safetensors", "loraStrength": 1.0},
+		"fields": {
+			"workflow": "flux_dyna_cfg_img2img",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"size": "$size",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"lora": "Flux\\JordenFlux.safetensors",
+			"loraStrength": 1.0
 		}
 	},
 	
@@ -629,8 +760,7 @@
 			"steps": "$steps",
 			"cfg": "$cfg",
 			"denoise": "$denoise",
-			"guidance": 30,
-			"noise_mask": true
+			"guidance": 30
 		}
 	},
 	
@@ -653,6 +783,58 @@
 			"cfg": "$cfg",
 			"denoise": "$denoise",
 			"guidance": 30
+		}
+	},
+	
+	{
+		"name": "fluxReduxFill",
+		"title": "Flux Redux Fill",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"inpaint", "baseImage":"background", "cfgScale":1.0, "steps":25, "denoise":1.0, "inpaintPartial":1, "sdSize":1024},
+		"fields": {
+			"workflow": "flux_redux_fill",
+			"paint": "$mask",
+			"reference": "$reference",
+			"background": "$background",
+			"size": "$size",
+			"reference": "$reference",
+			"positive": "$positive",
+			"batch_size": "$batchSize",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"guidance": 30,
+			"ref_bg": false,
+			"lora": "Flux\\JordenFlux.safetensors",
+			"loraStrength": 0.0
+		}
+	},
+	
+	{
+		"name": "fluxReduxFillLora",
+		"title": "Flux Redux Fill LORA",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"inpaint", "baseImage":"background", "cfgScale":1.0, "steps":25, "denoise":1.0, "inpaintPartial":1, "sdSize":1024},
+		"fields": {
+			"workflow": "flux_redux_fill",
+			"paint": "$mask",
+			"reference": "$reference",
+			"background": "$background",
+			"size": "$size",
+			"reference": "$reference",
+			"positive": "$positive",
+			"batch_size": "$batchSize",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"guidance": 30,
+			"ref_bg": false,
+			"lora": "Flux\\JordenFlux.safetensors",
+			"loraStrength": 1.0
 		}
 	},
 	

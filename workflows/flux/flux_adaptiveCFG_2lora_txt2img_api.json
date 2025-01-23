@@ -1,0 +1,262 @@
+{
+  "8": {
+    "inputs": {
+      "samples": [
+        "79",
+        0
+      ],
+      "vae": [
+        "99",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "33": {
+    "inputs": {
+      "clip_l": "",
+      "t5xxl": "This is a photo collage featuring two images side by side, consistent in clothing and background but differing in camera angle, pose, and expression. Both photos depict an Asian woman with long, messy brown hair, lying on a gray sofa in a living room with a white brick wall backdrop. The setting is at night, with warm, dim lighting casting soft shadows that enhance the moody and intimate atmosphere. The woman wears a loose green long shirt that subtly reveals her panties, adding a touch of sensuality. The depth of field is shallow, focusing sharply on her while softly blurring the background. The photography style is candid and emotive, capturing a raw, private moment.\n\nIn the left photo, the woman lies on her side, her body slightly curled, with one arm resting on the sofa and the other draped over her waist. Her head is tilted back, her eyes half-closed, and her expression is relaxed yet sultry, with her lips slightly parted. The camera angle is at eye level, emphasizing her curves and the delicate reveal of her panties under the loose shirt.\n\nIn the right photo, the woman is lying on her back, her legs slightly bent and one arm stretched above her head, while the other rests lightly on her stomach. Her head is turned to the side, her hair spilling over the sofa, and her expression is more playful, with a soft smile and a teasing gaze directed at the camera. The camera angle is slightly above, capturing her full body and the way the shirt drapes over her figure, highlighting her sexy and carefree demeanor. Together, the images create a captivating contrast of relaxation and allure, showcasing her natural beauty and confidence.",
+      "guidance": 3.5,
+      "clip": [
+        "97",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncodeFlux",
+    "_meta": {
+      "title": "GuidancePositive"
+    }
+  },
+  "34": {
+    "inputs": {
+      "clip_l": "",
+      "t5xxl": "fat, ",
+      "guidance": 10,
+      "clip": [
+        "97",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncodeFlux",
+    "_meta": {
+      "title": "GuidanceNegative"
+    }
+  },
+  "59": {
+    "inputs": {
+      "mimic_scale": 1,
+      "threshold_percentile": 1,
+      "mimic_mode": "Half Cosine Up",
+      "mimic_scale_min": 0,
+      "cfg_mode": "Half Cosine Up",
+      "cfg_scale_min": 0,
+      "sched_val": 1,
+      "separate_feature_channels": "enable",
+      "scaling_startpoint": "MEAN",
+      "variability_measure": "AD",
+      "interpolate_phi": 0.7000000000000001,
+      "model": [
+        "97",
+        0
+      ]
+    },
+    "class_type": "DynamicThresholdingFull",
+    "_meta": {
+      "title": "DynamicThresholdingFull"
+    }
+  },
+  "78": {
+    "inputs": {
+      "width": 1024,
+      "height": 768,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Empty Latent Image"
+    }
+  },
+  "79": {
+    "inputs": {
+      "noise": [
+        "102",
+        0
+      ],
+      "guider": [
+        "83",
+        0
+      ],
+      "sampler": [
+        "80",
+        0
+      ],
+      "sigmas": [
+        "81",
+        0
+      ],
+      "latent_image": [
+        "78",
+        0
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  },
+  "80": {
+    "inputs": {
+      "sampler_name": "euler"
+    },
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "KSamplerSelect"
+    }
+  },
+  "81": {
+    "inputs": {
+      "scheduler": "normal",
+      "steps": 25,
+      "denoise": 1,
+      "model": [
+        "97",
+        0
+      ]
+    },
+    "class_type": "BasicScheduler",
+    "_meta": {
+      "title": "BasicScheduler"
+    }
+  },
+  "83": {
+    "inputs": {
+      "threshold": 0.993,
+      "cfg": 4,
+      "uncond_zero_scale": 0,
+      "cfg_start_pct": 0,
+      "model": [
+        "59",
+        0
+      ],
+      "positive": [
+        "33",
+        0
+      ],
+      "negative": [
+        "34",
+        0
+      ]
+    },
+    "class_type": "AdaptiveGuidance",
+    "_meta": {
+      "title": "AdaptiveGuider"
+    }
+  },
+  "96": {
+    "inputs": {
+      "unet_name": "flux1-dev-fp8.sft",
+      "weight_dtype": "fp8_e4m3fn_fast"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "97": {
+    "inputs": {
+      "lora_name": "Flux\\JordenFlux.safetensors",
+      "strength_model": 0.5,
+      "strength_clip": 0.5,
+      "model": [
+        "103",
+        0
+      ],
+      "clip": [
+        "103",
+        1
+      ]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  },
+  "98": {
+    "inputs": {
+      "clip_name1": "t5-v1_1-xxl-encoder-Q8_0.gguf",
+      "clip_name2": "clip_l.safetensors",
+      "type": "flux"
+    },
+    "class_type": "DualCLIPLoaderGGUF",
+    "_meta": {
+      "title": "DualCLIPLoader (GGUF)"
+    }
+  },
+  "99": {
+    "inputs": {
+      "vae_name": "flux_vae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "100": {
+    "inputs": {
+      "output_path": "",
+      "filename_prefix": "api",
+      "filename_delimiter": "_",
+      "filename_number_padding": 4,
+      "filename_number_start": "false",
+      "extension": "jpg",
+      "dpi": 300,
+      "quality": 95,
+      "optimize_image": "true",
+      "lossless_webp": "false",
+      "overwrite_mode": "false",
+      "show_history": "false",
+      "show_history_by_prefix": "true",
+      "embed_workflow": "true",
+      "show_previews": "true",
+      "images": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "Image Save",
+    "_meta": {
+      "title": "Image Save"
+    }
+  },
+  "102": {
+    "inputs": {
+      "noise_seed": 226845626007283
+    },
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "RandomNoise"
+    }
+  },
+  "103": {
+    "inputs": {
+      "lora_name": "Flux\\style\\filmfotos.safetensors",
+      "strength_model": 0.8,
+      "strength_clip": 0.8,
+      "model": [
+        "96",
+        0
+      ],
+      "clip": [
+        "98",
+        0
+      ]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  }
+}

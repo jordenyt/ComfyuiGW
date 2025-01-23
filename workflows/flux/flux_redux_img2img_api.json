@@ -128,7 +128,7 @@
   },
   "25": {
     "inputs": {
-      "noise_seed": 910201634405836
+      "noise_seed": 524165561554803
     },
     "class_type": "RandomNoise",
     "_meta": {
@@ -170,7 +170,7 @@
   },
   "30": {
     "inputs": {
-      "max_shift": 1.15,
+      "max_shift": 1.1500000000000001,
       "base_shift": 0.5,
       "width": [
         "45",
@@ -201,12 +201,13 @@
   },
   "39": {
     "inputs": {
+      "crop": "none",
       "clip_vision": [
         "38",
         0
       ],
       "image": [
-        "64",
+        "45",
         0
       ]
     },
@@ -217,6 +218,8 @@
   },
   "41": {
     "inputs": {
+      "strength": 1,
+      "strength_type": "multiply",
       "conditioning": [
         "26",
         0
@@ -258,7 +261,7 @@
       ],
       "repeat": 1,
       "keep_proportion": true,
-      "divisible_by": 8,
+      "divisible_by": 1,
       "mask_channel": "alpha",
       "background_color": "",
       "upload": "image"
@@ -314,40 +317,6 @@
       "title": "Image Save"
     }
   },
-  "49": {
-    "inputs": {
-      "target_width": [
-        "51",
-        0
-      ],
-      "target_height": [
-        "51",
-        0
-      ],
-      "feathering": 24,
-      "upscale_method": "lanczos",
-      "image": [
-        "45",
-        0
-      ]
-    },
-    "class_type": "ImagePadForOutpaintTargetSize",
-    "_meta": {
-      "title": "Image Pad For Outpaint Target Size"
-    }
-  },
-  "50": {
-    "inputs": {
-      "images": [
-        "64",
-        0
-      ]
-    },
-    "class_type": "PreviewImage",
-    "_meta": {
-      "title": "Preview Image"
-    }
-  },
   "51": {
     "inputs": {
       "value": 1024
@@ -357,131 +326,9 @@
       "title": "INT Constant"
     }
   },
-  "59": {
-    "inputs": {
-      "ckpt_name": "sdxlTurboInpaint\\dreamshaperXL_lightningInpaint.safetensors"
-    },
-    "class_type": "CheckpointLoaderSimple",
-    "_meta": {
-      "title": "Load Checkpoint"
-    }
-  },
-  "60": {
-    "inputs": {
-      "seed": 56190530316327,
-      "steps": 8,
-      "cfg": 2,
-      "sampler_name": "dpmpp_sde",
-      "scheduler": "normal",
-      "denoise": 1,
-      "model": [
-        "59",
-        0
-      ],
-      "positive": [
-        "62",
-        0
-      ],
-      "negative": [
-        "62",
-        1
-      ],
-      "latent_image": [
-        "62",
-        2
-      ]
-    },
-    "class_type": "KSampler",
-    "_meta": {
-      "title": "KSampler"
-    }
-  },
-  "62": {
-    "inputs": {
-      "noise_mask": true,
-      "positive": [
-        "63",
-        0
-      ],
-      "negative": [
-        "66",
-        0
-      ],
-      "vae": [
-        "59",
-        2
-      ],
-      "pixels": [
-        "49",
-        0
-      ],
-      "mask": [
-        "49",
-        1
-      ]
-    },
-    "class_type": "InpaintModelConditioning",
-    "_meta": {
-      "title": "InpaintModelConditioning"
-    }
-  },
-  "63": {
-    "inputs": {
-      "text": "Asian woman with long brown hair with bangs, collarbone, cleavage",
-      "clip": [
-        "59",
-        1
-      ]
-    },
-    "class_type": "CLIPTextEncode",
-    "_meta": {
-      "title": "CLIP Text Encode (Positive Prompt)"
-    }
-  },
-  "64": {
-    "inputs": {
-      "samples": [
-        "60",
-        0
-      ],
-      "vae": [
-        "59",
-        2
-      ]
-    },
-    "class_type": "VAEDecode",
-    "_meta": {
-      "title": "VAE Decode"
-    }
-  },
-  "66": {
-    "inputs": {
-      "text": "",
-      "clip": [
-        "59",
-        1
-      ]
-    },
-    "class_type": "CLIPTextEncode",
-    "_meta": {
-      "title": "CLIP Text Encode (Prompt)"
-    }
-  },
-  "68": {
-    "inputs": {
-      "value": 10
-    },
-    "class_type": "easy int",
-    "_meta": {
-      "title": "Int"
-    }
-  },
   "70": {
     "inputs": {
-      "a": [
-        "68",
-        0
-      ],
+      "a": 1,
       "b": 4
     },
     "class_type": "JWIntegerMin",

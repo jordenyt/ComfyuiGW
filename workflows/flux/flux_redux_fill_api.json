@@ -1,0 +1,501 @@
+{
+  "6": {
+    "inputs": {
+      "text": "",
+      "clip": [
+        "85",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "8": {
+    "inputs": {
+      "samples": [
+        "62",
+        0
+      ],
+      "vae": [
+        "10",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "10": {
+    "inputs": {
+      "vae_name": "flux_vae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "11": {
+    "inputs": {
+      "clip_name1": "t5-v1_1-xxl-encoder-Q8_0.gguf",
+      "clip_name2": "clip_l.safetensors",
+      "type": "flux"
+    },
+    "class_type": "DualCLIPLoaderGGUF",
+    "_meta": {
+      "title": "DualCLIPLoader (GGUF)"
+    }
+  },
+  "12": {
+    "inputs": {
+      "unet_name": "fluxFillFP8_v10.safetensors",
+      "weight_dtype": "fp8_e4m3fn"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "35": {
+    "inputs": {
+      "image": "background_54561607805075.jpg",
+      "resize": true,
+      "width": [
+        "82",
+        0
+      ],
+      "height": [
+        "81",
+        0
+      ],
+      "repeat": 1,
+      "keep_proportion": true,
+      "divisible_by": 1,
+      "mask_channel": "alpha",
+      "background_color": "black",
+      "upload": "image"
+    },
+    "class_type": "LoadAndResizeImage",
+    "_meta": {
+      "title": "Load & Resize Image"
+    }
+  },
+  "37": {
+    "inputs": {
+      "noise_mask": true,
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "55",
+        0
+      ],
+      "vae": [
+        "10",
+        0
+      ],
+      "pixels": [
+        "74",
+        0
+      ],
+      "mask": [
+        "52",
+        0
+      ]
+    },
+    "class_type": "InpaintModelConditioning",
+    "_meta": {
+      "title": "InpaintModelConditioning"
+    }
+  },
+  "39": {
+    "inputs": {
+      "guidance": 30,
+      "conditioning": [
+        "70",
+        0
+      ]
+    },
+    "class_type": "FluxGuidance",
+    "_meta": {
+      "title": "FluxGuidance"
+    }
+  },
+  "52": {
+    "inputs": {
+      "channel": "red",
+      "image": [
+        "76",
+        0
+      ]
+    },
+    "class_type": "ImageToMask",
+    "_meta": {
+      "title": "Convert Image to Mask"
+    }
+  },
+  "53": {
+    "inputs": {
+      "image": "paint_54561607805075.jpg",
+      "resize": true,
+      "width": [
+        "35",
+        2
+      ],
+      "height": [
+        "35",
+        3
+      ],
+      "repeat": 1,
+      "keep_proportion": true,
+      "divisible_by": 1,
+      "mask_channel": "alpha",
+      "background_color": "black",
+      "upload": "image"
+    },
+    "class_type": "LoadAndResizeImage",
+    "_meta": {
+      "title": "Load & Resize Image"
+    }
+  },
+  "55": {
+    "inputs": {
+      "text": "",
+      "clip": [
+        "85",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "56": {
+    "inputs": {
+      "amount": [
+        "84",
+        0
+      ],
+      "samples": [
+        "37",
+        2
+      ]
+    },
+    "class_type": "RepeatLatentBatch",
+    "_meta": {
+      "title": "Repeat Latent Batch"
+    }
+  },
+  "57": {
+    "inputs": {
+      "output_path": "",
+      "filename_prefix": "api",
+      "filename_delimiter": "_",
+      "filename_number_padding": 4,
+      "filename_number_start": "false",
+      "extension": "jpg",
+      "dpi": 300,
+      "quality": 95,
+      "optimize_image": "true",
+      "lossless_webp": "false",
+      "overwrite_mode": "false",
+      "show_history": "false",
+      "show_history_by_prefix": "true",
+      "embed_workflow": "true",
+      "show_previews": "true",
+      "images": [
+        "80",
+        0
+      ]
+    },
+    "class_type": "Image Save",
+    "_meta": {
+      "title": "Image Save"
+    }
+  },
+  "59": {
+    "inputs": {
+      "guidance": 30,
+      "conditioning": [
+        "37",
+        1
+      ]
+    },
+    "class_type": "FluxGuidance",
+    "_meta": {
+      "title": "FluxGuidance"
+    }
+  },
+  "62": {
+    "inputs": {
+      "seed": 217283641249855,
+      "steps": 25,
+      "cfg": 1,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 1,
+      "model": [
+        "85",
+        0
+      ],
+      "positive": [
+        "39",
+        0
+      ],
+      "negative": [
+        "59",
+        0
+      ],
+      "latent_image": [
+        "56",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "64": {
+    "inputs": {
+      "style_model_name": "flux1-redux-dev.safetensors"
+    },
+    "class_type": "StyleModelLoader",
+    "_meta": {
+      "title": "Load Style Model"
+    }
+  },
+  "67": {
+    "inputs": {
+      "clip_name": "sigclip_vision_patch14_384.safetensors"
+    },
+    "class_type": "CLIPVisionLoader",
+    "_meta": {
+      "title": "Load CLIP Vision"
+    }
+  },
+  "68": {
+    "inputs": {
+      "image": "reference_54561607805075.jpg",
+      "resize": true,
+      "width": [
+        "82",
+        0
+      ],
+      "height": [
+        "81",
+        0
+      ],
+      "repeat": 1,
+      "keep_proportion": true,
+      "divisible_by": 1,
+      "mask_channel": "alpha",
+      "background_color": "",
+      "upload": "image"
+    },
+    "class_type": "LoadAndResizeImage",
+    "_meta": {
+      "title": "Load & Resize Image"
+    }
+  },
+  "70": {
+    "inputs": {
+      "downsampling_factor": 1,
+      "downsampling_function": "area",
+      "mode": "autocrop with mask",
+      "weight": 1,
+      "autocrop_margin": 0.1,
+      "conditioning": [
+        "37",
+        0
+      ],
+      "style_model": [
+        "64",
+        0
+      ],
+      "clip_vision": [
+        "67",
+        0
+      ],
+      "image": [
+        "73",
+        0
+      ],
+      "mask": [
+        "71",
+        1
+      ]
+    },
+    "class_type": "ReduxAdvanced",
+    "_meta": {
+      "title": "ReduxAdvanced"
+    }
+  },
+  "71": {
+    "inputs": {
+      "model": "RMBG-2.0",
+      "sensitivity": 1,
+      "process_res": 1024,
+      "mask_blur": 0,
+      "mask_offset": 0,
+      "background": "Alpha",
+      "invert_output": false,
+      "optimize": "default",
+      "image": [
+        "68",
+        0
+      ]
+    },
+    "class_type": "RMBG",
+    "_meta": {
+      "title": "RMBG (RMBG-2.0, INSPYRENET, BEN)"
+    }
+  },
+  "73": {
+    "inputs": {
+      "image": [
+        "71",
+        0
+      ]
+    },
+    "class_type": "ImageRGBA2RGB",
+    "_meta": {
+      "title": "Convert RGBA to RGB 🌌 ReActor"
+    }
+  },
+  "74": {
+    "inputs": {
+      "direction": "right",
+      "match_image_size": false,
+      "image1": [
+        "73",
+        0
+      ],
+      "image2": [
+        "35",
+        0
+      ]
+    },
+    "class_type": "ImageConcanate",
+    "_meta": {
+      "title": "Image Concatenate"
+    }
+  },
+  "76": {
+    "inputs": {
+      "direction": "right",
+      "match_image_size": false,
+      "image1": [
+        "79",
+        0
+      ],
+      "image2": [
+        "53",
+        0
+      ]
+    },
+    "class_type": "ImageConcanate",
+    "_meta": {
+      "title": "Image Concatenate"
+    }
+  },
+  "79": {
+    "inputs": {
+      "width": [
+        "68",
+        2
+      ],
+      "height": [
+        "68",
+        3
+      ],
+      "red": 0,
+      "green": 0,
+      "blue": 0
+    },
+    "class_type": "Image Blank",
+    "_meta": {
+      "title": "Image Blank"
+    }
+  },
+  "80": {
+    "inputs": {
+      "width": [
+        "53",
+        2
+      ],
+      "height": [
+        "53",
+        3
+      ],
+      "x": [
+        "68",
+        2
+      ],
+      "y": 0,
+      "image": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "ImageCrop",
+    "_meta": {
+      "title": "Image Crop"
+    }
+  },
+  "81": {
+    "inputs": {
+      "value": 1024
+    },
+    "class_type": "JWInteger",
+    "_meta": {
+      "title": "Integer"
+    }
+  },
+  "82": {
+    "inputs": {
+      "a": [
+        "81",
+        0
+      ],
+      "b": 2
+    },
+    "class_type": "JWIntegerMul",
+    "_meta": {
+      "title": "Integer Multiply"
+    }
+  },
+  "84": {
+    "inputs": {
+      "a": 3,
+      "b": 3
+    },
+    "class_type": "JWIntegerMin",
+    "_meta": {
+      "title": "Integer Minimum"
+    }
+  },
+  "85": {
+    "inputs": {
+      "lora_name": "Flux\\JordenFlux.safetensors",
+      "strength_model": 1,
+      "strength_clip": 1,
+      "model": [
+        "12",
+        0
+      ],
+      "clip": [
+        "11",
+        0
+      ]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  }
+}

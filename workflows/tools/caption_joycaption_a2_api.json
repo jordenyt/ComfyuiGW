@@ -39,8 +39,7 @@
       "text": [
         "14",
         0
-      ],
-      "text2": "This is a high-resolution photograph featuring a young Asian couple posing together in a lush, tropical outdoor setting. The man, with short dark hair and glasses, wears a white t-shirt and a grey backpack. He has a slight smile, showing his teeth. The woman, with long brown hair, wears a strapless yellow top, exposing her shoulders and collarbones, and a delicate necklace. She smiles warmly at the camera. Both individuals have light skin tones. The background includes a rustic bamboo structure with a thatched roof, adorned with colorful decorations, and a green metal railing. The setting is vibrant and natural, with dense green foliage and a natural lighting source, providing a well-lit scene. The composition follows the rule of thirds, with the couple positioned centrally, and the background slightly blurred to emphasize depth of field. The photograph captures a candid, joyful moment in a picturesque, tropical environment."
+      ]
     },
     "class_type": "ShowText|pysssss",
     "_meta": {
@@ -57,12 +56,12 @@
       "Include information about whether there are JPEG artifacts or not.": false,
       "If it is a photo you MUST include information about what camera was likely used and details such as aperture, shutter speed, ISO, etc.": false,
       "Do NOT include anything sexual; keep it PG.": false,
-      "Do NOT mention the image's resolution.": false,
+      "Do NOT mention the image's resolution.": true,
       "You MUST include information about the subjective aesthetic quality of the image from low to very high.": false,
-      "Include information on the image's composition style, such as leading lines, rule of thirds, or symmetry.": true,
+      "Include information on the image's composition style, such as leading lines, rule of thirds, or symmetry.": false,
       "Do NOT mention any text that is in the image.": false,
       "Specify the depth of field and whether the background is in focus or blurred.": true,
-      "If applicable, mention the likely use of artificial or natural lighting sources.": true,
+      "If applicable, mention the likely use of artificial or natural lighting sources.": false,
       "Do NOT use any ambiguous language.": false,
       "Include whether the image is sfw, suggestive, or nsfw.": false,
       "ONLY describe the most important elements of the image.": false

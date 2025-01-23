@@ -2,14 +2,14 @@
   "1": {
     "inputs": {
       "text_input": "",
-      "task": "more_detailed_caption",
+      "task": "prompt_gen_tags",
       "fill_mask": false,
       "keep_model_loaded": false,
       "max_new_tokens": 1024,
       "num_beams": 20,
       "do_sample": true,
       "output_mask_select": "",
-      "seed": 471002173250445,
+      "seed": 132049239933176,
       "image": [
         "6",
         0
@@ -51,7 +51,7 @@
         "1",
         2
       ],
-      "text2": "A photo-realistic shoot from a front camera angle about a young asian woman with long brown hair smiling at the camera. she is standing in the middle of the image, wearing a white off-the-shoulder top with ruffles and a pair of red floral shorts. the woman has a slender physique, fair skin, and is wearing a silver bracelet on her left wrist. her right hand is resting on her chin, and she is looking directly at the viewer with a playful expression. the background is blurred, but it appears to be an indoor setting with people walking in the distance. the lighting is bright and natural, and the image has a soft, dreamy quality."
+      "text2": ""
     },
     "class_type": "ShowText|pysssss",
     "_meta": {

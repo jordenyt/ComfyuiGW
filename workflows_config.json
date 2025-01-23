@@ -6,8 +6,17 @@
         }
     },
 	
-	"tag_api": {
+	"florence2_caption_api": {
         "prompt_workflow": "workflows/tools/caption_api.json",
+        "fields": {
+			"seed": "1.inputs.seed",
+			"task":"1.inputs.task",
+			"background": "6.inputs.image"
+        }
+    },
+	
+	"tag_api": {
+        "prompt_workflow": "workflows/tools/tag_api.json",
         "fields": {
 			"seed": "1.inputs.seed",
 			"task":"1.inputs.task",
@@ -64,21 +73,6 @@
             "negative": "9.inputs.text"
         }
     },
-    "idm_vtron_api": {
-        "prompt_workflow": "workflows/idm_vton_api.json",
-        "fields": {
-            "seed": "32.inputs.seed",
-            "background": "12.inputs.image",
-            "reference": "13.inputs.image",
-            "paint": "14.inputs.image",
-			"size": ["12.inputs.width","12.inputs.height", "1.inputs.resolution", "13.inputs.width", "13.inputs.height", "14.inputs.width","14.inputs.height"],
-            "positive": "32.inputs.garment_description",
-            "negative": "32.inputs.negative_prompt",
-            "denoise": "32.inputs.strength",
-            "steps": "32.inputs.num_inference_steps",
-            "cfg": "32.inputs.guidance_scale"
-        }
-    },
     "sd35_txt2img_api": {
         "prompt_workflow": "workflows/sd35_txt2img_api.json",
         "fields": {
@@ -110,9 +104,8 @@
     },
 	
     "flux_gguf_txt2img_api": {
-        "prompt_workflow": "workflows/flux_gguf_txt2img_api.json",
+        "prompt_workflow": "workflows/flux/flux_gguf_txt2img_api.json",
         "fields": {
-            "flux_unet_gguf": "47.inputs.unet_name",
             "positive": "6.inputs.text",
             "negative": "29.inputs.text",
             "width": "44.inputs.value",
@@ -125,9 +118,8 @@
         }
     },
 	"flux_lora_txt2img_api": {
-        "prompt_workflow": "workflows/flux_lora_txt2img_api.json",
+        "prompt_workflow": "workflows/flux/flux_lora_txt2img_api.json",
         "fields": {
-            "flux_unet": "12.inputs.unet_name",
             "positive": "6.inputs.text",
             "negative": "29.inputs.text",
             "width": "44.inputs.value",
@@ -141,10 +133,57 @@
 			"loraStrength": ["49.inputs.strength_model","49.inputs.strength_clip"]
         }
     },
-	"flux_lora_jorden_txt2img_api": {
-        "prompt_workflow": "workflows/flux_lora_jorden_txt2img_api.json",
+	"flux_dyna_cfg_txt2img_api": {
+        "prompt_workflow": "workflows/flux/flux_adaptiveCFG_txt2img_api.json",
         "fields": {
-            "flux_unet": "12.inputs.unet_name",
+            "positive": "33.inputs.t5xxl",
+            "negative": "34.inputs.clip_l",
+            "width": "78.inputs.width",
+            "height": "78.inputs.height",
+            "batch_size": "78.inputs.batch_size",
+            "steps": "81.inputs.steps",
+            "cfg": "83.inputs.cfg",
+            "seed": "102.inputs.noise_seed",
+			"lora": "97.inputs.lora_name",
+			"loraStrength": ["97.inputs.strength_model","97.inputs.strength_clip"]
+        }
+    },
+	"flux_dyna_cfg_2lora_txt2img_api": {
+        "prompt_workflow": "workflows/flux/flux_adaptiveCFG_2lora_txt2img_api.json",
+        "fields": {
+            "positive": "33.inputs.t5xxl",
+            "negative": "34.inputs.clip_l",
+            "width": "78.inputs.width",
+            "height": "78.inputs.height",
+            "batch_size": "78.inputs.batch_size",
+            "steps": "81.inputs.steps",
+            "cfg": "83.inputs.cfg",
+            "seed": "102.inputs.noise_seed",
+			"lora": "97.inputs.lora_name",
+			"loraStrength": ["97.inputs.strength_model","97.inputs.strength_clip"],
+			"lora2": "103.inputs.lora_name",
+			"lora2Strength": ["103.inputs.strength_model","103.inputs.strength_clip"]
+        }
+    },
+	"flux_dyna_cfg_img2img_api": {
+        "prompt_workflow": "workflows/flux/flux_adaptiveCFG_img2img_api.json",
+        "fields": {
+			"background": "103.inputs.image",
+            "positive": "33.inputs.t5xxl",
+            "negative": "34.inputs.clip_l",
+            "size": ["103.inputs.width","103.inputs.height"],
+            "denoise": "81.inputs.denoise",
+            "batch_size": "105.inputs.amount",
+            "steps": "81.inputs.steps",
+            "cfg": "83.inputs.cfg",
+            "seed": "102.inputs.noise_seed",
+			"lora": "97.inputs.lora_name",
+			"loraStrength": ["97.inputs.strength_model","97.inputs.strength_clip"]
+        }
+    },
+	"flux_lora_jorden_txt2img_api": {
+        "prompt_workflow": "workflows/flux/flux_lora_jorden_txt2img_api.json",
+        "fields": {
             "positive": "6.inputs.text",
             "negative": "29.inputs.text",
             "width": "44.inputs.value",
@@ -159,9 +198,8 @@
         }
     },
     "flux_img2img_api": {
-        "prompt_workflow": "workflows/flux_dev_img2img_api.json",
+        "prompt_workflow": "workflows/flux/flux_dev_img2img_api.json",
         "fields": {
-            "flux_unet": "12.inputs.unet_name",
             "background": "41.inputs.image",
             "positive": "6.inputs.text",
             "negative": "29.inputs.text",
@@ -176,10 +214,61 @@
 			"loraStrength": ["48.inputs.strength_model","48.inputs.strength_clip"]
         }
     },
-    "flux_inpaint_api": {
-        "prompt_workflow": "workflows/flux_dev_inpaint_api.json",
+	
+	"flux_canny_img2img_api": {
+        "prompt_workflow": "workflows/flux/flux_canny_img2img_api.json",
         "fields": {
-            "flux_unet": "12.inputs.unet_name",
+            "background": "41.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "29.inputs.text",
+            "size": ["41.inputs.width", "41.inputs.height", "54.inputs.resolution"],
+            "batch_size": "43.inputs.amount",
+            "steps": "53.inputs.steps",
+            "denoise": "53.inputs.image_to_image_strength",
+            "seed": "53.inputs.noise_seed",
+			"guidance": ["45.inputs.guidance", "46.inputs.guidance"],
+			"cnStrength": "50.inputs.strength",
+			"lora": "48.inputs.lora_name",
+			"loraStrength": ["48.inputs.strength_model","48.inputs.strength_clip"]
+        }
+    },
+	
+	"flux_fill_bg_api": {
+        "prompt_workflow": "workflows/flux/flux_fill_bg_api.json",
+        "fields": {
+            "background": "1.inputs.image",
+            "positive": "7.inputs.text",
+            "negative": "9.inputs.text",
+            "size": "2.inputs.value", 
+            "batch_size": "14.inputs.amount",
+            "steps": "13.inputs.steps",
+            "cfg": "13.inputs.cfg",
+            "denoise": "13.inputs.denoise",
+            "seed": "13.inputs.seed",
+			"guidance": ["12.inputs.guidance", "14.inputs.guidance"]
+        }
+    },
+	
+	"flux_redux_fill_bg_api": {
+        "prompt_workflow": "workflows/flux/flux_redux_fill_bg_api.json",
+        "fields": {
+            "background": "35.inputs.image",
+			"reference": "68.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "55.inputs.text",
+            "size": "81.inputs.value", 
+            "batch_size": "56.inputs.amount",
+            "steps": "62.inputs.steps",
+            "cfg": "62.inputs.cfg",
+            "denoise": "62.inputs.denoise",
+            "seed": "62.inputs.seed",
+			"guidance": ["39.inputs.guidance", "59.inputs.guidance"]
+        }
+    },
+	
+    "flux_inpaint_api": {
+        "prompt_workflow": "workflows/flux/flux_dev_inpaint_api.json",
+        "fields": {
             "background": "35.inputs.image",
             "paint": "53.inputs.image",
             "positive": "6.inputs.text",
@@ -197,7 +286,7 @@
         }
     },
 	"flux_fill_api": {
-        "prompt_workflow": "workflows/flux_dev_fill_api.json",
+        "prompt_workflow": "workflows/flux/flux_dev_fill_api.json",
         "fields": {
             "background": "35.inputs.image",
             "paint": "53.inputs.image",
@@ -210,11 +299,31 @@
             "denoise": "62.inputs.denoise",
             "seed": "62.inputs.seed",
 			"guidance": ["39.inputs.guidance", "59.inputs.guidance"],
-			"noise_mask": "37.inputs.noise_mask"
+			"maskBlur": ["73.inputs.grow","64.inputs.grow","64.inputs.blur"]
+        }
+    },
+	"flux_redux_fill_api": {
+        "prompt_workflow": "workflows/flux/flux_redux_fill_api.json",
+        "fields": {
+            "background": "35.inputs.image",
+            "paint": "53.inputs.image",
+			"reference": "68.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "55.inputs.text",
+            "size": "81.inputs.value",
+            "batch_size": "84.inputs.a",
+            "steps": "62.inputs.steps",
+            "cfg": "62.inputs.cfg",
+            "denoise": "62.inputs.denoise",
+            "seed": "62.inputs.seed",
+			"guidance": ["39.inputs.guidance", "59.inputs.guidance"],
+			"lora": "85.inputs.lora_name",
+			"loraStrength": ["85.inputs.strength_model","85.inputs.strength_clip"],
+			"ref_bg": "71.inputs.invert_output"
         }
     },
 	"flux_outpaint_api": {
-        "prompt_workflow": "workflows/flux_outpaint_api.json",
+        "prompt_workflow": "workflows/flux/flux_outpaint_api.json",
         "fields": {
             "background": "27.inputs.image",
             "positive": "84.inputs.text",
@@ -233,15 +342,15 @@
         }
     },
 	"flux_redux_api": {
-        "prompt_workflow": "workflows/flux_redux_img2img_api.json",
+        "prompt_workflow": "workflows/flux/flux_redux_img2img_api.json",
         "fields": {
             "background": "45.inputs.image",
-            "positive": ["6.inputs.text", "63.inputs.text"],
+            "positive": "6.inputs.text",
             "size": "51.inputs.value",
-            "batch_size": "68.inputs.value",
+            "batch_size": "70.inputs.a",
             "steps": "17.inputs.steps",
             "denoise": "17.inputs.denoise",
-            "seed": ["25.inputs.noise_seed", "60.inputs.seed"],
+            "seed": "25.inputs.noise_seed",
 			"guidance": "26.inputs.guidance",
 			"lora": "46.inputs.lora_name",
 			"loraStrength": ["46.inputs.strength_model","46.inputs.strength_clip"]

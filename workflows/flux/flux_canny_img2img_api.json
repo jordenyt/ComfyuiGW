@@ -1,0 +1,323 @@
+{
+  "6": {
+    "inputs": {
+      "text": "Young Taiwanese girl with long dark brown hair, in a dark room at night. She is wearing a white long-sleeves translucent dress.",
+      "clip": [
+        "48",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "8": {
+    "inputs": {
+      "samples": [
+        "53",
+        0
+      ],
+      "vae": [
+        "10",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "10": {
+    "inputs": {
+      "vae_name": "flux_vae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "11": {
+    "inputs": {
+      "clip_name1": "t5-v1_1-xxl-encoder-Q8_0.gguf",
+      "clip_name2": "clip_l.safetensors",
+      "type": "flux"
+    },
+    "class_type": "DualCLIPLoaderGGUF",
+    "_meta": {
+      "title": "DualCLIPLoader (GGUF)"
+    }
+  },
+  "12": {
+    "inputs": {
+      "unet_name": "flux1-dev-fp8.sft",
+      "weight_dtype": "fp8_e4m3fn"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "16": {
+    "inputs": {
+      "sampler_name": "ddim"
+    },
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "KSamplerSelect"
+    }
+  },
+  "25": {
+    "inputs": {
+      "noise_seed": 82671298597597
+    },
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "RandomNoise"
+    }
+  },
+  "29": {
+    "inputs": {
+      "text": "smile, thin, fat, lamp",
+      "clip": [
+        "48",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "40": {
+    "inputs": {
+      "output_path": "",
+      "filename_prefix": "api",
+      "filename_delimiter": "_",
+      "filename_number_padding": 4,
+      "filename_number_start": "false",
+      "extension": "jpg",
+      "dpi": 300,
+      "quality": 95,
+      "optimize_image": "true",
+      "lossless_webp": "false",
+      "overwrite_mode": "false",
+      "show_history": "false",
+      "show_history_by_prefix": "true",
+      "embed_workflow": "true",
+      "show_previews": "true",
+      "images": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "Image Save",
+    "_meta": {
+      "title": "Image Save"
+    }
+  },
+  "41": {
+    "inputs": {
+      "image": "CogVideoX_1_5_I2V_00001.mp4_snapshot_00.03.062.jpg",
+      "resize": true,
+      "width": 1024,
+      "height": 1024,
+      "repeat": 1,
+      "keep_proportion": true,
+      "divisible_by": 16,
+      "mask_channel": "alpha",
+      "background_color": "black",
+      "upload": "image"
+    },
+    "class_type": "LoadAndResizeImage",
+    "_meta": {
+      "title": "Load & Resize Image"
+    }
+  },
+  "42": {
+    "inputs": {
+      "pixels": [
+        "41",
+        0
+      ],
+      "vae": [
+        "10",
+        0
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE Encode"
+    }
+  },
+  "43": {
+    "inputs": {
+      "amount": 1,
+      "samples": [
+        "42",
+        0
+      ]
+    },
+    "class_type": "RepeatLatentBatch",
+    "_meta": {
+      "title": "Repeat Latent Batch"
+    }
+  },
+  "44": {
+    "inputs": {
+      "max_shift": 1.1500000000000001,
+      "base_shift": 0.5,
+      "width": [
+        "41",
+        2
+      ],
+      "height": [
+        "41",
+        3
+      ],
+      "model": [
+        "48",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingFlux",
+    "_meta": {
+      "title": "ModelSamplingFlux"
+    }
+  },
+  "45": {
+    "inputs": {
+      "guidance": 4,
+      "conditioning": [
+        "6",
+        0
+      ]
+    },
+    "class_type": "FluxGuidance",
+    "_meta": {
+      "title": "FluxGuidance"
+    }
+  },
+  "46": {
+    "inputs": {
+      "guidance": 3.5,
+      "conditioning": [
+        "29",
+        0
+      ]
+    },
+    "class_type": "FluxGuidance",
+    "_meta": {
+      "title": "FluxGuidance"
+    }
+  },
+  "48": {
+    "inputs": {
+      "lora_name": "Flux\\JordenFlux.safetensors",
+      "strength_model": 1,
+      "strength_clip": 1,
+      "model": [
+        "12",
+        0
+      ],
+      "clip": [
+        "11",
+        0
+      ]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  },
+  "50": {
+    "inputs": {
+      "strength": 0.7000000000000001,
+      "start": 0,
+      "end": 1,
+      "controlnet": [
+        "52",
+        0
+      ],
+      "image": [
+        "54",
+        0
+      ]
+    },
+    "class_type": "ApplyAdvancedFluxControlNet",
+    "_meta": {
+      "title": "Apply Advanced Flux ControlNet"
+    }
+  },
+  "52": {
+    "inputs": {
+      "model_name": "flux-dev-fp8",
+      "controlnet_path": "flux-canny-controlnet-v3.safetensors"
+    },
+    "class_type": "LoadFluxControlNet",
+    "_meta": {
+      "title": "Load Flux ControlNet"
+    }
+  },
+  "53": {
+    "inputs": {
+      "noise_seed": 1021799328714831,
+      "steps": 20,
+      "timestep_to_start_cfg": 20,
+      "true_gs": 3,
+      "image_to_image_strength": 1,
+      "denoise_strength": 1,
+      "model": [
+        "44",
+        0
+      ],
+      "conditioning": [
+        "45",
+        0
+      ],
+      "neg_conditioning": [
+        "46",
+        0
+      ],
+      "latent_image": [
+        "43",
+        0
+      ],
+      "controlnet_condition": [
+        "50",
+        0
+      ]
+    },
+    "class_type": "XlabsSampler",
+    "_meta": {
+      "title": "Xlabs Sampler"
+    }
+  },
+  "54": {
+    "inputs": {
+      "low_threshold": 20,
+      "high_threshold": 150,
+      "resolution": 1024,
+      "image": [
+        "41",
+        0
+      ]
+    },
+    "class_type": "CannyEdgePreprocessor",
+    "_meta": {
+      "title": "Canny Edge"
+    }
+  },
+  "55": {
+    "inputs": {
+      "images": [
+        "54",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  }
+}

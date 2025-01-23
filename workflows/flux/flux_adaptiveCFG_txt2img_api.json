@@ -1,0 +1,243 @@
+{
+  "8": {
+    "inputs": {
+      "samples": [
+        "79",
+        0
+      ],
+      "vae": [
+        "99",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "33": {
+    "inputs": {
+      "clip_l": "",
+      "t5xxl": "Hong Kong woman with long dark brown hair, sitting in indoors Starbuck cafe at night. She is wearing a cut-out ruffled blouse, showing sexy collarbone.",
+      "guidance": 3.5,
+      "clip": [
+        "97",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncodeFlux",
+    "_meta": {
+      "title": "GuidancePositive"
+    }
+  },
+  "34": {
+    "inputs": {
+      "clip_l": "thin, lamp, necklace, daytime",
+      "t5xxl": "",
+      "guidance": 10,
+      "clip": [
+        "97",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncodeFlux",
+    "_meta": {
+      "title": "GuidanceNegative"
+    }
+  },
+  "59": {
+    "inputs": {
+      "mimic_scale": 1,
+      "threshold_percentile": 1,
+      "mimic_mode": "Half Cosine Up",
+      "mimic_scale_min": 0,
+      "cfg_mode": "Half Cosine Up",
+      "cfg_scale_min": 0,
+      "sched_val": 1,
+      "separate_feature_channels": "enable",
+      "scaling_startpoint": "MEAN",
+      "variability_measure": "AD",
+      "interpolate_phi": 0.7000000000000001,
+      "model": [
+        "97",
+        0
+      ]
+    },
+    "class_type": "DynamicThresholdingFull",
+    "_meta": {
+      "title": "DynamicThresholdingFull"
+    }
+  },
+  "78": {
+    "inputs": {
+      "width": 768,
+      "height": 1024,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Empty Latent Image"
+    }
+  },
+  "79": {
+    "inputs": {
+      "noise": [
+        "102",
+        0
+      ],
+      "guider": [
+        "83",
+        0
+      ],
+      "sampler": [
+        "80",
+        0
+      ],
+      "sigmas": [
+        "81",
+        0
+      ],
+      "latent_image": [
+        "78",
+        0
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  },
+  "80": {
+    "inputs": {
+      "sampler_name": "euler"
+    },
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "KSamplerSelect"
+    }
+  },
+  "81": {
+    "inputs": {
+      "scheduler": "normal",
+      "steps": 25,
+      "denoise": 1,
+      "model": [
+        "97",
+        0
+      ]
+    },
+    "class_type": "BasicScheduler",
+    "_meta": {
+      "title": "BasicScheduler"
+    }
+  },
+  "83": {
+    "inputs": {
+      "threshold": 0.993,
+      "cfg": 6,
+      "uncond_zero_scale": 0,
+      "cfg_start_pct": 0,
+      "model": [
+        "59",
+        0
+      ],
+      "positive": [
+        "33",
+        0
+      ],
+      "negative": [
+        "34",
+        0
+      ]
+    },
+    "class_type": "AdaptiveGuidance",
+    "_meta": {
+      "title": "AdaptiveGuider"
+    }
+  },
+  "96": {
+    "inputs": {
+      "unet_name": "flux1-dev-fp8.sft",
+      "weight_dtype": "fp8_e4m3fn_fast"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "97": {
+    "inputs": {
+      "lora_name": "Flux\\JordenFlux.safetensors",
+      "strength_model": 1,
+      "strength_clip": 1,
+      "model": [
+        "96",
+        0
+      ],
+      "clip": [
+        "98",
+        0
+      ]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  },
+  "98": {
+    "inputs": {
+      "clip_name1": "t5-v1_1-xxl-encoder-Q8_0.gguf",
+      "clip_name2": "clip_l.safetensors",
+      "type": "flux"
+    },
+    "class_type": "DualCLIPLoaderGGUF",
+    "_meta": {
+      "title": "DualCLIPLoader (GGUF)"
+    }
+  },
+  "99": {
+    "inputs": {
+      "vae_name": "flux_vae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "100": {
+    "inputs": {
+      "output_path": "",
+      "filename_prefix": "api",
+      "filename_delimiter": "_",
+      "filename_number_padding": 4,
+      "filename_number_start": "false",
+      "extension": "jpg",
+      "dpi": 300,
+      "quality": 95,
+      "optimize_image": "true",
+      "lossless_webp": "false",
+      "overwrite_mode": "false",
+      "show_history": "false",
+      "show_history_by_prefix": "true",
+      "embed_workflow": "true",
+      "show_previews": "true",
+      "images": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "Image Save",
+    "_meta": {
+      "title": "Image Save"
+    }
+  },
+  "102": {
+    "inputs": {
+      "noise_seed": 237684210219055
+    },
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "RandomNoise"
+    }
+  }
+}

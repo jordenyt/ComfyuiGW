@@ -1,10 +1,10 @@
 {
   "6": {
     "inputs": {
-      "text": "hands on table holding a glass of water ",
+      "text": "Young Taiwanese woman, long brown hair, in cafe, smile, collarbone, cleavage",
       "clip": [
-        "11",
-        0
+        "65",
+        1
       ]
     },
     "class_type": "CLIPTextEncode",
@@ -15,7 +15,7 @@
   "8": {
     "inputs": {
       "samples": [
-        "62",
+        "13",
         0
       ],
       "vae": [
@@ -50,7 +50,7 @@
   },
   "12": {
     "inputs": {
-      "unet_name": "fluxFillFP8_v10.safetensors",
+      "unet_name": "flux1-dev-fp8.sft",
       "weight_dtype": "fp8_e4m3fn"
     },
     "class_type": "UNETLoader",
@@ -58,9 +58,70 @@
       "title": "Load Diffusion Model"
     }
   },
+  "13": {
+    "inputs": {
+      "noise": [
+        "25",
+        0
+      ],
+      "guider": [
+        "58",
+        0
+      ],
+      "sampler": [
+        "16",
+        0
+      ],
+      "sigmas": [
+        "17",
+        0
+      ],
+      "latent_image": [
+        "56",
+        0
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  },
+  "16": {
+    "inputs": {
+      "sampler_name": "ddim"
+    },
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "KSamplerSelect"
+    }
+  },
+  "17": {
+    "inputs": {
+      "scheduler": "normal",
+      "steps": 20,
+      "denoise": 0.75,
+      "model": [
+        "60",
+        0
+      ]
+    },
+    "class_type": "BasicScheduler",
+    "_meta": {
+      "title": "BasicScheduler"
+    }
+  },
+  "25": {
+    "inputs": {
+      "noise_seed": 289579997104707
+    },
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "RandomNoise"
+    }
+  },
   "35": {
     "inputs": {
-      "image": "background_492534840317730.jpg",
+      "image": "background (29).jpg",
       "resize": true,
       "width": 1024,
       "height": 1024,
@@ -78,7 +139,6 @@
   },
   "37": {
     "inputs": {
-      "noise_mask": false,
       "positive": [
         "39",
         0
@@ -96,9 +156,10 @@
         0
       ],
       "mask": [
-        "52",
+        "63",
         0
-      ]
+      ],
+	  "noise_mask": true
     },
     "class_type": "InpaintModelConditioning",
     "_meta": {
@@ -107,7 +168,7 @@
   },
   "39": {
     "inputs": {
-      "guidance": 30,
+      "guidance": 3.5,
       "conditioning": [
         "6",
         0
@@ -133,7 +194,7 @@
   },
   "53": {
     "inputs": {
-      "image": "paint_492534840317730.jpg",
+      "image": "paint (18).jpg",
       "resize": true,
       "width": 1024,
       "height": 1024,
@@ -151,10 +212,10 @@
   },
   "55": {
     "inputs": {
-      "text": "",
+      "text": "earrings, necklace,",
       "clip": [
-        "11",
-        0
+        "65",
+        1
       ]
     },
     "class_type": "CLIPTextEncode",
@@ -202,9 +263,30 @@
       "title": "Image Save"
     }
   },
+  "58": {
+    "inputs": {
+      "cfg": 1,
+      "model": [
+        "60",
+        0
+      ],
+      "positive": [
+        "37",
+        0
+      ],
+      "negative": [
+        "37",
+        1
+      ]
+    },
+    "class_type": "CFGGuider",
+    "_meta": {
+      "title": "CFGGuider"
+    }
+  },
   "59": {
     "inputs": {
-      "guidance": 30,
+      "guidance": 3.5,
       "conditioning": [
         "55",
         0
@@ -215,34 +297,65 @@
       "title": "FluxGuidance"
     }
   },
-  "62": {
+  "60": {
     "inputs": {
-      "seed": 931783879724838,
-      "steps": 20,
-      "cfg": 1,
-      "sampler_name": "euler",
-      "scheduler": "normal",
-      "denoise": 1,
+      "max_shift": 1.1500000000000001,
+      "base_shift": 0.5,
+      "width": [
+        "35",
+        2
+      ],
+      "height": [
+        "35",
+        3
+      ],
+      "model": [
+        "65",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingFlux",
+    "_meta": {
+      "title": "ModelSamplingFlux"
+    }
+  },
+  "63": {
+    "inputs": {
+      "expand": 0,
+      "incremental_expandrate": 0,
+      "tapered_corners": true,
+      "flip_input": false,
+      "blur_radius": 20,
+      "lerp_alpha": 1,
+      "decay_factor": 1,
+      "fill_holes": false,
+      "mask": [
+        "52",
+        0
+      ]
+    },
+    "class_type": "GrowMaskWithBlur",
+    "_meta": {
+      "title": "Grow Mask With Blur"
+    }
+  },
+  "65": {
+    "inputs": {
+      "lora_name": "Flux\\amateurphoto_v3.5.safetensors",
+      "strength_model": 0.8,
+      "strength_clip": 0,
       "model": [
         "12",
         0
       ],
-      "positive": [
-        "37",
-        0
-      ],
-      "negative": [
-        "37",
-        1
-      ],
-      "latent_image": [
-        "56",
+      "clip": [
+        "11",
         0
       ]
     },
-    "class_type": "KSampler",
+    "class_type": "LoraLoader",
     "_meta": {
-      "title": "KSampler"
+      "title": "Load LoRA"
     }
   }
 }
