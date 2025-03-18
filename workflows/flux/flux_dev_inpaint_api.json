@@ -129,8 +129,7 @@
       "keep_proportion": true,
       "divisible_by": 1,
       "mask_channel": "alpha",
-      "background_color": "black",
-      "upload": "image"
+      "background_color": "black"
     },
     "class_type": "LoadAndResizeImage",
     "_meta": {
@@ -139,6 +138,7 @@
   },
   "37": {
     "inputs": {
+      "noise_mask": true,
       "positive": [
         "39",
         0
@@ -158,8 +158,7 @@
       "mask": [
         "63",
         0
-      ],
-	  "noise_mask": true
+      ]
     },
     "class_type": "InpaintModelConditioning",
     "_meta": {
@@ -202,8 +201,7 @@
       "keep_proportion": true,
       "divisible_by": 1,
       "mask_channel": "alpha",
-      "background_color": "black",
-      "upload": "image"
+      "background_color": "black"
     },
     "class_type": "LoadAndResizeImage",
     "_meta": {
@@ -310,7 +308,7 @@
         3
       ],
       "model": [
-        "65",
+        "67",
         0
       ]
     },
@@ -356,6 +354,33 @@
     "class_type": "LoraLoader",
     "_meta": {
       "title": "Load LoRA"
+    }
+  },
+  "66": {
+    "inputs": {
+      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "model": [
+        "65",
+        0
+      ]
+    },
+    "class_type": "PathchSageAttentionKJ",
+    "_meta": {
+      "title": "Patch Sage Attention KJ"
+    }
+  },
+  "67": {
+    "inputs": {
+      "model_type": "flux",
+      "rel_l1_thresh": 0.2,
+      "model": [
+        "66",
+        0
+      ]
+    },
+    "class_type": "TeaCacheForImgGen",
+    "_meta": {
+      "title": "TeaCache For Img Gen"
     }
   }
 }

@@ -1,0 +1,75 @@
+{
+  "6": {
+    "inputs": {
+      "image": "sdsketch_6717_240815135600.jpg",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "9": {
+    "inputs": {
+      "root_dir": "output",
+      "file": "caption.txt",
+      "append": "new only",
+      "insert": false,
+      "text": [
+        "12",
+        0
+      ]
+    },
+    "class_type": "SaveText|pysssss",
+    "_meta": {
+      "title": "Save Text 🐍"
+    }
+  },
+  "12": {
+    "inputs": {
+      "text": [
+        "16",
+        0
+      ],
+      "text2": ""
+    },
+    "class_type": "ShowText|pysssss",
+    "_meta": {
+      "title": "Show Text 🐍"
+    }
+  },
+  "15": {
+    "inputs": {
+      "model_name": "deepseek-ai/Janus-Pro-7B"
+    },
+    "class_type": "JanusModelLoader",
+    "_meta": {
+      "title": "Janus Model Loader"
+    }
+  },
+  "16": {
+    "inputs": {
+      "question": "Describe this image in detail.  Describe the race (Asian / westerns / whites / blacks), skin colour, gender (man or woman), age, appearence (include hair style and makeup), pose (selfie / standing / sitting / laying ...), actions and facial expression in details.  Describe the clothing and accessories in details includes the color, cutting, pattern or style if any. Include detailed description on weather, day time, setting, lighting, shadows and background. Inculde detailed information about camera angle and photo composition. The output should be in English only.",
+      "seed": 842421959954212,
+      "temperature": 0.1,
+      "top_p": 0.95,
+      "max_new_tokens": 512,
+      "model": [
+        "15",
+        0
+      ],
+      "processor": [
+        "15",
+        1
+      ],
+      "image": [
+        "6",
+        0
+      ]
+    },
+    "class_type": "JanusImageUnderstanding",
+    "_meta": {
+      "title": "Janus Image Understanding"
+    }
+  }
+}

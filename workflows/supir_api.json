@@ -21,7 +21,7 @@
   },
   "7": {
     "inputs": {
-      "seed": 285115455055814,
+      "seed": 149965750865438,
       "steps": 10,
       "cfg_scale_start": 1,
       "cfg_scale_end": 1,
@@ -165,7 +165,7 @@
   },
   "27": {
     "inputs": {
-      "image": "received_6012624482172001.jpeg",
+      "image": "background_576446436290036.jpg",
       "resize": false,
       "width": 2560,
       "height": 2560,

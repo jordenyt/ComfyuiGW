@@ -58,8 +58,7 @@
       "keep_proportion": true,
       "divisible_by": 8,
       "mask_channel": "alpha",
-      "background_color": "",
-      "upload": "image"
+      "background_color": ""
     },
     "class_type": "LoadAndResizeImage",
     "_meta": {
@@ -131,8 +130,7 @@
       "keep_proportion": true,
       "divisible_by": 8,
       "mask_channel": "alpha",
-      "background_color": "",
-      "upload": "image"
+      "background_color": ""
     },
     "class_type": "LoadAndResizeImage",
     "_meta": {
@@ -214,7 +212,7 @@
       "scheduler": "normal",
       "denoise": 1,
       "model": [
-        "69",
+        "76",
         0
       ],
       "positive": [
@@ -309,6 +307,33 @@
     "class_type": "ImageColorMatchAdobe+",
     "_meta": {
       "title": "🔧 Image Color Match Adobe"
+    }
+  },
+  "75": {
+    "inputs": {
+      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "model": [
+        "69",
+        0
+      ]
+    },
+    "class_type": "PathchSageAttentionKJ",
+    "_meta": {
+      "title": "Patch Sage Attention KJ"
+    }
+  },
+  "76": {
+    "inputs": {
+      "model_type": "flux",
+      "rel_l1_thresh": 0.2,
+      "model": [
+        "75",
+        0
+      ]
+    },
+    "class_type": "TeaCacheForImgGen",
+    "_meta": {
+      "title": "TeaCache For Img Gen"
     }
   }
 }

@@ -190,8 +190,7 @@
       "keep_proportion": true,
       "divisible_by": 1,
       "mask_channel": "alpha",
-      "background_color": "black",
-      "upload": "image"
+      "background_color": "black"
     },
     "class_type": "LoadAndResizeImage",
     "_meta": {
@@ -240,7 +239,7 @@
         3
       ],
       "model": [
-        "48",
+        "50",
         0
       ]
     },
@@ -292,6 +291,33 @@
     "class_type": "LoraLoader",
     "_meta": {
       "title": "Load LoRA"
+    }
+  },
+  "49": {
+    "inputs": {
+      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "model": [
+        "48",
+        0
+      ]
+    },
+    "class_type": "PathchSageAttentionKJ",
+    "_meta": {
+      "title": "Patch Sage Attention KJ"
+    }
+  },
+  "50": {
+    "inputs": {
+      "model_type": "flux",
+      "rel_l1_thresh": 0.2,
+      "model": [
+        "49",
+        0
+      ]
+    },
+    "class_type": "TeaCacheForImgGen",
+    "_meta": {
+      "title": "TeaCache For Img Gen"
     }
   }
 }

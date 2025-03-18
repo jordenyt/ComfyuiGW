@@ -25,8 +25,7 @@
       "keep_proportion": true,
       "divisible_by": 1,
       "mask_channel": "alpha",
-      "background_color": "black",
-      "upload": "image"
+      "background_color": "black"
     },
     "class_type": "LoadAndResizeImage",
     "_meta": {
@@ -440,7 +439,8 @@
     "inputs": {
       "clip_name1": "t5xxl_fp16.safetensors",
       "clip_name2": "clip_l.safetensors",
-      "type": "flux"
+      "type": "flux",
+      "device": "default"
     },
     "class_type": "DualCLIPLoader",
     "_meta": {
@@ -527,7 +527,7 @@
       "scheduler": "normal",
       "denoise": 1,
       "model": [
-        "78",
+        "89",
         0
       ],
       "positive": [
@@ -558,6 +558,33 @@
     "class_type": "PreviewImage",
     "_meta": {
       "title": "Preview Image"
+    }
+  },
+  "88": {
+    "inputs": {
+      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "model": [
+        "78",
+        0
+      ]
+    },
+    "class_type": "PathchSageAttentionKJ",
+    "_meta": {
+      "title": "Patch Sage Attention KJ"
+    }
+  },
+  "89": {
+    "inputs": {
+      "model_type": "flux",
+      "rel_l1_thresh": 0.2,
+      "model": [
+        "88",
+        0
+      ]
+    },
+    "class_type": "TeaCacheForImgGen",
+    "_meta": {
+      "title": "TeaCache For Img Gen"
     }
   }
 }

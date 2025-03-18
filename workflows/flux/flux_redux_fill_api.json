@@ -74,8 +74,7 @@
       "keep_proportion": true,
       "divisible_by": 1,
       "mask_channel": "alpha",
-      "background_color": "black",
-      "upload": "image"
+      "background_color": "black"
     },
     "class_type": "LoadAndResizeImage",
     "_meta": {
@@ -153,8 +152,7 @@
       "keep_proportion": true,
       "divisible_by": 1,
       "mask_channel": "alpha",
-      "background_color": "black",
-      "upload": "image"
+      "background_color": "black"
     },
     "class_type": "LoadAndResizeImage",
     "_meta": {
@@ -239,7 +237,7 @@
       "scheduler": "simple",
       "denoise": 1,
       "model": [
-        "85",
+        "87",
         0
       ],
       "positive": [
@@ -294,8 +292,7 @@
       "keep_proportion": true,
       "divisible_by": 1,
       "mask_channel": "alpha",
-      "background_color": "",
-      "upload": "image"
+      "background_color": ""
     },
     "class_type": "LoadAndResizeImage",
     "_meta": {
@@ -345,6 +342,7 @@
       "background": "Alpha",
       "invert_output": false,
       "optimize": "default",
+      "refine_foreground": false,
       "image": [
         "68",
         0
@@ -370,7 +368,7 @@
   "74": {
     "inputs": {
       "direction": "right",
-      "match_image_size": false,
+      "match_image_size": true,
       "image1": [
         "73",
         0
@@ -388,7 +386,7 @@
   "76": {
     "inputs": {
       "direction": "right",
-      "match_image_size": false,
+      "match_image_size": true,
       "image1": [
         "79",
         0
@@ -496,6 +494,33 @@
     "class_type": "LoraLoader",
     "_meta": {
       "title": "Load LoRA"
+    }
+  },
+  "86": {
+    "inputs": {
+      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "model": [
+        "85",
+        0
+      ]
+    },
+    "class_type": "PathchSageAttentionKJ",
+    "_meta": {
+      "title": "Patch Sage Attention KJ"
+    }
+  },
+  "87": {
+    "inputs": {
+      "model_type": "flux",
+      "rel_l1_thresh": 0.2,
+      "model": [
+        "86",
+        0
+      ]
+    },
+    "class_type": "TeaCacheForImgGen",
+    "_meta": {
+      "title": "TeaCache For Img Gen"
     }
   }
 }

@@ -59,7 +59,7 @@
       "variability_measure": "AD",
       "interpolate_phi": 0.7000000000000001,
       "model": [
-        "97",
+        "104",
         0
       ]
     },
@@ -122,7 +122,7 @@
       "steps": 25,
       "denoise": 1,
       "model": [
-        "97",
+        "104",
         0
       ]
     },
@@ -233,11 +233,38 @@
   },
   "102": {
     "inputs": {
-      "noise_seed": 237684210219055
+      "noise_seed": 189112666694302
     },
     "class_type": "RandomNoise",
     "_meta": {
       "title": "RandomNoise"
+    }
+  },
+  "103": {
+    "inputs": {
+      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "model": [
+        "97",
+        0
+      ]
+    },
+    "class_type": "PathchSageAttentionKJ",
+    "_meta": {
+      "title": "Patch Sage Attention KJ"
+    }
+  },
+  "104": {
+    "inputs": {
+      "model_type": "flux",
+      "rel_l1_thresh": 0.2,
+      "model": [
+        "103",
+        0
+      ]
+    },
+    "class_type": "TeaCacheForImgGen",
+    "_meta": {
+      "title": "TeaCache For Img Gen"
     }
   }
 }

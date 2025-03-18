@@ -340,7 +340,7 @@
 			"steps": "$steps",
 			"cfg": "$cfg",
 			"guidance": 3.5,
-			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
+			"lora": "Flux\\style\\Improved_Amateur_Realism_v8.safetensors",
 			"loraStrength": 0.0
 		}
 	},
@@ -361,8 +361,29 @@
 			"height": "$height",
 			"steps": "$steps",
 			"cfg": "$cfg",
-			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
+			"lora": "Flux\\style\\Improved_Amateur_Realism_v8.safetensors",
 			"loraStrength": 0.0
+		}
+	},
+	
+	{
+		"name": "FluxDynCFGLora",
+		"title": "Flux LORA txt2img (Dynamic CFG)",
+		"showT2I": true,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"txt2img", "cfgScale":4, "steps":25, "sdSize":1024},
+		"fields": {
+			"workflow": "flux_dyna_cfg_txt2img",
+			"positive": "$positive",
+			"negative": "$negative",
+			"batch_size": "$batchSize",
+			"width": "$width",
+			"height": "$height",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"lora": "Flux\\style\\Improved_Amateur_Realism_v8.safetensors",
+			"loraStrength": 1.0
 		}
 	},
 	
@@ -392,7 +413,7 @@
 		"showT2I": true,
 		"show": true,
 		"configurable": true,
-		"default": {"type":"txt2img", "cfgScale":1, "guidance":3.5, "steps":20, "sdSize":1024, "lora": "Flux\\style\\UltraRealPhoto.safetensors", "loraStrength": 1.0},
+		"default": {"type":"txt2img", "cfgScale":1, "guidance":3.5, "steps":20, "sdSize":1024, "lora": "Flux\\style\\Improved_Amateur_Realism_v8.safetensors", "loraStrength": 1.0},
 		"fields": {
 			"workflow": "flux_lora_txt2img",
 			"positive": "$positive",
@@ -403,7 +424,7 @@
 			"steps": "$steps",
 			"cfg": "$cfg",
 			"guidance": 3.5,
-			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
+			"lora": "Flux\\style\\Improved_Amateur_Realism_v8.safetensors",
 			"loraStrength": 1.0
 		}
 	},
@@ -469,7 +490,7 @@
 			"cfg": "$cfg",
 			"lora": "Flux\\JordenFlux.safetensors",
 			"loraStrength": 0.5,
-			"lora2": "Flux\\style\\filmfotos.safetensors",
+			"lora2": "Flux\\style\\Improved_Amateur_Realism_v8.safetensors",
 			"lora2Strength": 0.8
 		}
 	},
@@ -533,7 +554,7 @@
 			"steps": "$steps",
 			"denoise": "$denoise",
 			"guidance": 3.5,
-			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
+			"lora": "Flux\\style\\Improved_Amateur_Realism_v8.safetensors",
 			"loraStrength": 0.0
 		}
 	},
@@ -554,7 +575,7 @@
 			"steps": "$steps",
 			"denoise": "$denoise",
 			"guidance": 3.5,
-			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
+			"lora": "Flux\\style\\Improved_Amateur_Realism_v8.safetensors",
 			"loraStrength": 1.0
 		}
 	},
@@ -598,7 +619,7 @@
 			"cfg": "$cfg",
 			"denoise": "$denoise",
 			"guidance": 3.5,
-			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
+			"lora": "Flux\\style\\Improved_Amateur_Realism_v8.safetensors",
 			"loraStrength": 0.0
 		}
 	},
@@ -609,7 +630,7 @@
 		"showT2I": false,
 		"show": true,
 		"configurable": true,
-		"default": {"type":"img2img", "denoise":0.6, "cfgScale":1, "guidance": 3.5, "steps":20, "baseImage":"background", "sdSize":1024, "lora": "Flux\\style\\UltraRealPhoto.safetensors", "loraStrength": 1.0},
+		"default": {"type":"img2img", "denoise":0.6, "cfgScale":1, "guidance": 3.5, "steps":20, "baseImage":"background", "sdSize":1024, "lora": "Flux\\style\\Improved_Amateur_Realism_v8.safetensors", "loraStrength": 1.0},
 		"fields": {
 			"workflow": "flux_img2img",
 			"background": "$background",
@@ -621,7 +642,7 @@
 			"cfg": "$cfg",
 			"denoise": "$denoise",
 			"guidance": 3.5,
-			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
+			"lora": "Flux\\style\\Improved_Amateur_Realism_v8.safetensors",
 			"loraStrength": 1.0
 		}
 	},
@@ -813,6 +834,32 @@
 	},
 	
 	{
+		"name": "fluxReduxFillSketch",
+		"title": "Flux Redux Fill (Sketch)",
+		"showT2I": false,
+		"show": true,
+		"configurable": true,
+		"default": {"type":"inpaint", "baseImage":"sketch", "cfgScale":1.0, "steps":25, "denoise":1.0, "inpaintPartial":1, "sdSize":1024},
+		"fields": {
+			"workflow": "flux_redux_fill",
+			"paint": "$mask",
+			"reference": "$reference",
+			"background": "$background",
+			"size": "$size",
+			"reference": "$reference",
+			"positive": "$positive",
+			"batch_size": "$batchSize",
+			"steps": "$steps",
+			"cfg": "$cfg",
+			"denoise": "$denoise",
+			"guidance": 30,
+			"ref_bg": false,
+			"lora": "Flux\\JordenFlux.safetensors",
+			"loraStrength": 0.0
+		}
+	},
+	
+	{
 		"name": "fluxReduxFillLora",
 		"title": "Flux Redux Fill LORA",
 		"showT2I": false,
@@ -858,7 +905,7 @@
 			"denoise": "$denoise",
 			"guidance": 3.5,
 			"maskBlur": "$maskBlur",
-			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
+			"lora": "Flux\\style\\Improved_Amateur_Realism_v8.safetensors",
 			"loraStrength": 0.0
 		}
 	},
@@ -883,7 +930,7 @@
 			"denoise": "$denoise",
 			"guidance": 3.5,
 			"maskBlur": "$maskBlur",
-			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
+			"lora": "Flux\\style\\Improved_Amateur_Realism_v8.safetensors",
 			"loraStrength": 0.0
 		}
 	},
@@ -894,7 +941,7 @@
 		"showT2I": false,
 		"show": true,
 		"configurable": true,
-		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.75, "cfgScale":1, "guidance":3.5, "steps":20, "maskBlur": 20, "baseImage":"background", "sdSize":1024, "lora": "Flux\\style\\UltraRealPhoto.safetensors", "loraStrength": 1.0},
+		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.75, "cfgScale":1, "guidance":3.5, "steps":20, "maskBlur": 20, "baseImage":"background", "sdSize":1024, "lora": "Flux\\style\\Improved_Amateur_Realism_v8.safetensors", "loraStrength": 1.0},
 		"fields": {
 			"workflow": "flux_inpaint",
 			"paint": "$mask",
@@ -908,7 +955,7 @@
 			"denoise": "$denoise",
 			"guidance": 3.5,
 			"maskBlur": "$maskBlur",
-			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
+			"lora": "Flux\\style\\Improved_Amateur_Realism_v8.safetensors",
 			"loraStrength": 1.0
 		}
 	},
@@ -919,7 +966,7 @@
 		"showT2I": false,
 		"show": true,
 		"configurable": true,
-		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.75, "cfgScale":1, "guidance":3.5, "steps":20, "maskBlur": 20, "baseImage":"sketch", "sdSize":1024, "lora": "Flux\\style\\UltraRealPhoto.safetensors", "loraStrength": 1.0},
+		"default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.75, "cfgScale":1, "guidance":3.5, "steps":20, "maskBlur": 20, "baseImage":"sketch", "sdSize":1024, "lora": "Flux\\style\\Improved_Amateur_Realism_v8.safetensors", "loraStrength": 1.0},
 		"fields": {
 			"workflow": "flux_inpaint",
 			"paint": "$mask",
@@ -933,7 +980,7 @@
 			"denoise": "$denoise",
 			"guidance": 3.5,
 			"maskBlur": "$maskBlur",
-			"lora": "Flux\\style\\UltraRealPhoto.safetensors",
+			"lora": "Flux\\style\\Improved_Amateur_Realism_v8.safetensors",
 			"loraStrength": 1.0
 		}
 	},
@@ -1056,6 +1103,128 @@
 			"preserve_edges": 1,
 			"sharpen": 15,
 			"ratio": 0.5
+		}
+	},
+	
+	{
+		"name": "I2V_WAN_480p",
+		"title": "I2V WAN 480p",
+		"showT2I": false,
+		"show": true,
+		"configurable": false,
+		"default": {"type":"img2img", "baseImage":"background"},
+		"fields": {
+			"workflow": "i2v_wan_480p",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"length": 81,
+			"cfg": 6,
+			"steps": 20
+		}
+	},
+	
+	{
+		"name": "I2V_WAN_480p_LORA",
+		"title": "I2V WAN 480p LORA",
+		"showT2I": false,
+		"show": true,
+		"configurable": false,
+		"default": {"type":"img2img", "baseImage":"background"},
+		"fields": {
+			"workflow": "i2v_wan_480p",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"length": 81,
+			"cfg": 6,
+			"steps": 20,
+			"lora": "WAN21\\wan-nsfw-e14-fixed.safetensors",
+			"loraStrength": 1
+		}
+	},
+	
+	{
+		"name": "I2V_WAN_720p",
+		"title": "I2V WAN 720p",
+		"showT2I": false,
+		"show": true,
+		"configurable": false,
+		"default": {"type":"img2img", "baseImage":"background"},
+		"fields": {
+			"workflow": "i2v_wan_480p",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"length": 81,
+			"cfg": 6,
+			"steps": 20,
+			"unet_name": "wan2.1-i2v-14b-720p-Q6_K.gguf",
+			"coefficients": "i2v_720",
+			"size": 960
+		}
+	},
+	
+	{
+		"name": "I2V_WAN_720p_LORA",
+		"title": "I2V WAN 720p LORA",
+		"showT2I": false,
+		"show": true,
+		"configurable": false,
+		"default": {"type":"img2img", "baseImage":"background"},
+		"fields": {
+			"workflow": "i2v_wan_480p",
+			"background": "$background",
+			"positive": "$positive",
+			"negative": "$negative",
+			"length": 81,
+			"cfg": 6,
+			"steps": 20,
+			"lora": "WAN21\\wan-nsfw-e14-fixed.safetensors",
+			"loraStrength": 1,
+			"unet_name": "wan2.1-i2v-14b-720p-Q6_K.gguf",
+			"coefficients": "i2v_720",
+			"size": 960
+		}
+	},
+	
+	{
+		"name": "T2V_WAN",
+		"title": "T2V WAN",
+		"showT2I": true,
+		"show": true,
+		"configurable": false,
+		"default": {"type":"txt2img", "sdSize":720, "cfgScale":6.0, "steps":20},
+		"fields": {
+			"workflow": "t2v_wan",
+			"positive": "$positive",
+			"negative": "$negative",
+			"length": 81,
+			"cfg": 6,
+			"steps": 20,
+			"width": "$width",
+			"height": "$height"
+		}
+	},
+	
+	{
+		"name": "T2V_WAN LORA",
+		"title": "T2V WAN LORA",
+		"showT2I": true,
+		"show": true,
+		"configurable": false,
+		"default": {"type":"txt2img", "sdSize":720, "cfgScale":6.0, "steps":20},
+		"fields": {
+			"workflow": "t2v_wan",
+			"positive": "$positive",
+			"negative": "$negative",
+			"length": 81,
+			"cfg": "$cfg",
+			"steps": "$steps",
+			"width": "$width",
+			"height": "$height",
+			"lora": "WAN21\\wan-nsfw-e14-fixed.safetensors",
+			"loraStrength": 1
 		}
 	}
 ]

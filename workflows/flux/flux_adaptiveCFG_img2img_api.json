@@ -59,7 +59,7 @@
       "variability_measure": "AD",
       "interpolate_phi": 0.7000000000000001,
       "model": [
-        "97",
+        "107",
         0
       ]
     },
@@ -111,7 +111,7 @@
       "steps": 25,
       "denoise": 0.8,
       "model": [
-        "97",
+        "107",
         0
       ]
     },
@@ -222,7 +222,7 @@
   },
   "102": {
     "inputs": {
-      "noise_seed": 384479514608651
+      "noise_seed": 479506003623461
     },
     "class_type": "RandomNoise",
     "_meta": {
@@ -231,7 +231,7 @@
   },
   "103": {
     "inputs": {
-      "image": "317380898399313928.mp4_snapshot_00.00.000.jpg",
+      "image": "CogVideoX_1_5_I2V_00001.mp4_snapshot_00.03.062.jpg",
       "resize": true,
       "width": 1024,
       "height": 1024,
@@ -239,8 +239,7 @@
       "keep_proportion": true,
       "divisible_by": 8,
       "mask_channel": "alpha",
-      "background_color": "",
-      "upload": "image"
+      "background_color": ""
     },
     "class_type": "LoadAndResizeImage",
     "_meta": {
@@ -274,6 +273,33 @@
     "class_type": "RepeatLatentBatch",
     "_meta": {
       "title": "Repeat Latent Batch"
+    }
+  },
+  "106": {
+    "inputs": {
+      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "model": [
+        "97",
+        0
+      ]
+    },
+    "class_type": "PathchSageAttentionKJ",
+    "_meta": {
+      "title": "Patch Sage Attention KJ"
+    }
+  },
+  "107": {
+    "inputs": {
+      "model_type": "flux",
+      "rel_l1_thresh": 0.2,
+      "model": [
+        "106",
+        0
+      ]
+    },
+    "class_type": "TeaCacheForImgGen",
+    "_meta": {
+      "title": "TeaCache For Img Gen"
     }
   }
 }

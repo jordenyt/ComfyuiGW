@@ -1,6 +1,6 @@
 {
     "caption_api": {
-        "prompt_workflow": "workflows/tools/caption_joycaption_a2_api.json",
+        "prompt_workflow": "workflows/tools/caption_janus_pro_7b_api.json",
         "fields": {
 			"background": "6.inputs.image"
         }
@@ -23,6 +23,40 @@
 			"background": "6.inputs.image"
         }
     },
+	
+	"i2v_wan_480p_api": {
+		"prompt_workflow": "workflows/video/i2v_wan_480p_api.json",
+        "fields": {
+			"seed": "48:0.inputs.noise_seed",
+			"background": "26.inputs.image",
+			"positive": "27.inputs.text",
+            "negative": "28.inputs.text",
+			"length": "40.inputs.length",
+			"cfg": "48:7.inputs.cfg",
+			"steps": "48:2.inputs.Number",
+			"loraStrength": "25.inputs.strength",
+			"lora": "25.inputs.lora_name",
+			"unet_name": "23.inputs.unet_name",
+			"coefficients": "24.inputs.coefficients",
+			"size": ["26.inputs.width","26.inputs.height"]
+        }
+	},
+	
+	"t2v_wan_api": {
+		"prompt_workflow": "workflows/video/t2v_wan_api.json",
+        "fields": {
+			"seed": "48:0.inputs.noise_seed",
+			"positive": "27.inputs.text",
+            "negative": "28.inputs.text",
+			"length": "53.inputs.length",
+			"cfg": "48:7.inputs.cfg",
+			"steps": "48:2.inputs.Number",
+			"loraStrength": "25.inputs.strength",
+			"lora": "25.inputs.lora_name",
+			"width": "53.inputs.width",
+			"height": "53.inputs.height"
+        }
+	},
 	
 	"upscale_api": {
         "prompt_workflow": "workflows/tools/upscale_api.json",
