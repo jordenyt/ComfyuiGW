@@ -32,9 +32,7 @@ promptID = None
 client_id = str(uuid.uuid4())
 msg_progress = ""
 msg_step = ""
-background_image_path = None
-reference_image_path = None
-paint_image_path = None
+image_path = {}
 current_prompt = None
 finished_nodes = []
 node_ids = []
@@ -59,12 +57,8 @@ def set_workflow_value(d, path, key, data):
     
     if key == "seed":
         d[path[-1]] = random.randint(1, 1125899906842600)
-    elif key == "background":
-        d[path[-1]] = background_image_path
-    elif key == "reference":
-        d[path[-1]] = reference_image_path
-    elif key == "paint":
-        d[path[-1]] = paint_image_path
+    elif key in ["background", "reference", "paint"]:
+        d[path[-1]] = image_path[key]
     elif key in data:
         d[path[-1]] = data[key]
 
@@ -106,10 +100,10 @@ def open_websocket_connection():
 
 def save_base64_image(base64_data, prefix, session_id):
     decoded_data = base64.b64decode(base64_data)
-    image_path = f"{local_path}{prefix}_{session_id}.jpg"
-    with open(image_path, 'wb') as img_file:
+    save_path = f"{local_path}{prefix}_{session_id}.jpg"
+    with open(save_path, 'wb') as img_file:
         img_file.write(decoded_data)
-    return image_path
+    return save_path
 
 def cleanup_images(prefixes):
     for f in os.listdir(local_path):
@@ -243,7 +237,7 @@ def comfyui_result():
 
 @app.post('/comfyui_workflow')
 async def comfyui_workflow_handler(request: Request):
-    global background_image_path, paint_image_path, reference_image_path, promptID, ws
+    global image_path, promptID, ws  # Changed to use dictionary
     data = await request.json()
     
     if not comfyui_process:
@@ -252,13 +246,9 @@ async def comfyui_workflow_handler(request: Request):
     cleanup_images(["background_", "paint_", "reference_"])
     session_id = str(random.randint(1, 1125899906842600))
     
-    # Process images
-    if "background" in data:
-        background_image_path = save_base64_image(data['background'], "background", session_id)
-    if "paint" in data:
-        paint_image_path = save_base64_image(data['paint'], "paint", session_id)
-    if "reference" in data:
-        reference_image_path = save_base64_image(data['reference'], "reference", session_id)
+    for key in ['background', 'paint', 'reference']:
+        if key in data:
+            image_path[key] = save_base64_image(data[key], key, session_id)
 
     workflow_name = data['workflow'] + '_api'
     promptID = comfyui_workflow(workflow_name, data)['prompt_id']
@@ -275,7 +265,7 @@ async def comfyui_workflow_handler(request: Request):
 
 @app.post('/comfyui_caption')
 async def comfyui_caption(request: Request):
-    global background_image_path, promptID
+    global image_path, promptID
     data = await request.json()
     
     if not comfyui_process:
@@ -285,7 +275,7 @@ async def comfyui_caption(request: Request):
     cleanup_images(["background_"])
     
     if "background" in data:
-        background_image_path = save_base64_image(data['background'], "background", session_id)
+        image_path["background"] = save_base64_image(data['background'], "background", session_id)
         
         caption_file = os.path.join(comfyui_output_dir, "caption.txt")
         if os.path.exists(caption_file):
