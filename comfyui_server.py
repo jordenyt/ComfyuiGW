@@ -111,7 +111,7 @@ def save_base64_image(base64_data, prefix, session_id):
 def cleanup_images(prefixes):
     for f in os.listdir(local_path):
         for prefix in prefixes:
-            if f.startswith(prefix) and f.endswith(".jpg"):
+            if f.startswith(prefix) and (f.endswith(".jpg") or f.endswith(".mp4")):
                 os.remove(os.path.join(local_path, f))
 
 def ws_message(ws, msg):
