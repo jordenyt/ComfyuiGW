@@ -74,8 +74,7 @@
       "keep_proportion": true,
       "divisible_by": 1,
       "mask_channel": "alpha",
-      "background_color": "black",
-      "upload": "image"
+      "background_color": "black"
     },
     "class_type": "LoadAndResizeImage",
     "_meta": {
@@ -212,7 +211,7 @@
       "scheduler": "simple",
       "denoise": 1,
       "model": [
-        "12",
+        "97",
         0
       ],
       "positive": [
@@ -267,8 +266,7 @@
       "keep_proportion": true,
       "divisible_by": 8,
       "mask_channel": "alpha",
-      "background_color": "",
-      "upload": "image"
+      "background_color": ""
     },
     "class_type": "LoadAndResizeImage",
     "_meta": {
@@ -281,7 +279,7 @@
       "downsampling_function": "area",
       "mode": "autocrop with mask",
       "weight": 1,
-      "autocrop_margin": 0.1,
+      "autocrop_margin": 0.10000000000000002,
       "conditioning": [
         "37",
         0
@@ -423,6 +421,7 @@
       "background": "Alpha",
       "invert_output": true,
       "optimize": "default",
+      "refine_foreground": false,
       "image": [
         "88",
         0
@@ -596,6 +595,33 @@
     "class_type": "ImpactImageBatchToImageList",
     "_meta": {
       "title": "Image Batch to Image List"
+    }
+  },
+  "97": {
+    "inputs": {
+      "model_type": "flux",
+      "rel_l1_thresh": 0.20000000000000004,
+      "model": [
+        "98",
+        0
+      ]
+    },
+    "class_type": "TeaCacheForImgGen",
+    "_meta": {
+      "title": "TeaCache For Img Gen"
+    }
+  },
+  "98": {
+    "inputs": {
+      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "model": [
+        "12",
+        0
+      ]
+    },
+    "class_type": "PathchSageAttentionKJ",
+    "_meta": {
+      "title": "Patch Sage Attention KJ"
     }
   }
 }

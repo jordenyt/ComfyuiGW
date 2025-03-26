@@ -14,8 +14,8 @@
   },
   "24": {
     "inputs": {
-      "rel_l1_thresh": 0.2,
-      "start_percent": 0.3,
+      "rel_l1_thresh": 0.13000000000000003,
+      "start_percent": 0.30000000000000004,
       "end_percent": 1,
       "cache_device": "offload_device",
       "coefficients": "14B",
@@ -88,9 +88,9 @@
   },
   "32": {
     "inputs": {
-      "shift": 8,
+      "shift": 8.000000000000002,
       "model": [
-        "24",
+        "57",
         0
       ]
     },
@@ -136,7 +136,7 @@
   },
   "50": {
     "inputs": {
-      "weight": 2,
+      "weight": 2.0000000000000004,
       "model": [
         "32",
         0
@@ -224,9 +224,24 @@
       "title": "Load VAE"
     }
   },
+  "57": {
+    "inputs": {
+      "blocks": "9",
+      "start_percent": 0.2,
+      "end_percent": 1,
+      "model": [
+        "24",
+        0
+      ]
+    },
+    "class_type": "SkipLayerGuidanceWanVideo",
+    "_meta": {
+      "title": "Skip Layer Guidance WanVideo"
+    }
+  },
   "48:0": {
     "inputs": {
-      "noise_seed": 552241137467723
+      "noise_seed": 912497507453717
     },
     "class_type": "RandomNoise",
     "_meta": {
@@ -253,7 +268,7 @@
   },
   "48:3": {
     "inputs": {
-      "expression": "round(a / 2)",
+      "expression": "round(a * 0.7)",
       "a": [
         "48:2",
         0

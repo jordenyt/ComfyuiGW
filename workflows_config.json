@@ -39,8 +39,56 @@
 			"unet_name": "23.inputs.unet_name",
 			"coefficients": "24.inputs.coefficients",
 			"size": ["26.inputs.width","26.inputs.height"]
-        }
+        },
+		"inputs": {
+			"background": {
+				"type": "image",
+				"default": null
+			},
+			"positive": {
+				"type": "text",
+				"default": ""
+			},
+			"negative": {
+				"type": "text", 
+				"default": ""
+			},
+			"length": {
+				"type": "integer",
+				"default": 81
+			},
+			"cfg": {
+				"type": "float",
+				"default": 6.0
+			},
+			"steps": {
+				"type": "integer",
+				"default": 20
+			},
+			"size": {
+				"type": "integer",
+				"default": 720
+			}
+		}
 	},
+
+    "v2v_upscale_VFI_api": {
+        "prompt_workflow": "workflows/video/v2v_upscale_VFI_api.json",
+        "fields": {
+            "video": "376.inputs.video",
+            "force_rate": "376.inputs.force_rate"
+        },
+        "inputs": {
+            "video": {
+				"type": "video",
+				"default": null
+			},
+            "force_rate": {
+				"type": "integer",
+				"default": 16
+			}
+        }
+    },
 	
 	"t2v_wan_api": {
 		"prompt_workflow": "workflows/video/t2v_wan_api.json",

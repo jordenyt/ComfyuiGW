@@ -1,0 +1,175 @@
+{
+  "303": {
+    "inputs": {
+      "frame_rate": [
+        "396",
+        1
+      ],
+      "loop_count": 0,
+      "filename_prefix": "upscaled_",
+      "format": "video/h264-mp4",
+      "pix_fmt": "yuv420p",
+      "crf": 19,
+      "save_metadata": false,
+      "trim_to_audio": false,
+      "pingpong": false,
+      "save_output": true,
+      "images": [
+        "329",
+        0
+      ],
+      "audio": [
+        "376",
+        2
+      ]
+    },
+    "class_type": "VHS_VideoCombine",
+    "_meta": {
+      "title": "Video Combine 🎥🅥🅗🅢"
+    }
+  },
+  "329": {
+    "inputs": {
+      "ckpt_name": "rife49.pth",
+      "clear_cache_after_n_frames": 10,
+      "multiplier": [
+        "397",
+        0
+      ],
+      "fast_mode": true,
+      "ensemble": true,
+      "scale_factor": 1,
+      "frames": [
+        "390:2",
+        0
+      ]
+    },
+    "class_type": "RIFE VFI",
+    "_meta": {
+      "title": "RIFE VFI (recommend rife47 and rife49)"
+    }
+  },
+  "376": {
+    "inputs": {
+      "video": "i2v_wan_00015.mp4",
+      "force_rate": 0,
+      "custom_width": 0,
+      "custom_height": 0,
+      "frame_load_cap": 0,
+      "skip_first_frames": 0,
+      "select_every_nth": 1,
+      "format": "None"
+    },
+    "class_type": "VHS_LoadVideo",
+    "_meta": {
+      "title": "Load Video (Upload) 🎥🅥🅗🅢"
+    }
+  },
+  "394": {
+    "inputs": {
+      "video_info": [
+        "376",
+        3
+      ]
+    },
+    "class_type": "VHS_VideoInfo",
+    "_meta": {
+      "title": "Video Info 🎥🅥🅗🅢"
+    }
+  },
+  "396": {
+    "inputs": {
+      "expression": "a * b",
+      "a": [
+        "394",
+        5
+      ],
+      "b": [
+        "397",
+        0
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "397": {
+    "inputs": {
+      "value": 2
+    },
+    "class_type": "JWInteger",
+    "_meta": {
+      "title": "Integer"
+    }
+  },
+  "400": {
+    "inputs": {
+      "expression": "round(c / (max(a, b) * 4) * 10) / 10",
+      "a": [
+        "394",
+        8
+      ],
+      "b": [
+        "394",
+        9
+      ],
+      "c": [
+        "401",
+        0
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "401": {
+    "inputs": {
+      "value": 1500
+    },
+    "class_type": "JWInteger",
+    "_meta": {
+      "title": "Integer"
+    }
+  },
+  "390:0": {
+    "inputs": {
+      "model_name": "4xPurePhoto-RealPLSKR.pth"
+    },
+    "class_type": "UpscaleModelLoader",
+    "_meta": {
+      "title": "Load Upscale Model"
+    }
+  },
+  "390:1": {
+    "inputs": {
+      "upscale_model": [
+        "390:0",
+        0
+      ],
+      "image": [
+        "376",
+        0
+      ]
+    },
+    "class_type": "ImageUpscaleWithModel",
+    "_meta": {
+      "title": "Upscale Image (using Model)"
+    }
+  },
+  "390:2": {
+    "inputs": {
+      "upscale_method": "lanczos",
+      "scale_by": 0.5000000000000001,
+      "image": [
+        "390:1",
+        0
+      ]
+    },
+    "class_type": "ImageScaleBy",
+    "_meta": {
+      "title": "Upscale Image By"
+    }
+  }
+}
