@@ -13,6 +13,8 @@ import platform
 import shlex
 from urllib import request
 from fastapi import FastAPI, Request, HTTPException
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 import random
 
 # Configuration
@@ -26,6 +28,7 @@ is_windows = platform.system() == 'Windows'
 
 # Global variables
 app = FastAPI()
+templates = Jinja2Templates(directory="templates")
 ws = None
 comfyui_process = None
 promptID = None
@@ -263,6 +266,73 @@ async def comfyui_workflow_handler(request: Request):
 
     return {"status": "Got Prompt"}
 
+@app.post('/comfyui_runflow')
+async def comfyui_runflow_handler(request: Request):
+    global image_path, promptID, ws
+    form_data = await request.form()
+    
+    if not comfyui_process:
+        return {"message": "ComfyUI is not started."}
+    
+    # Get workflow config
+    workflow_name = form_data.get('workflow')
+    if not workflow_name:
+        raise HTTPException(status_code=400, detail="Workflow not specified")
+    
+    with open(workflows_config_path, 'r') as f:
+        config = json.load(f)
+    
+    workflow_config = config.get(workflow_name)
+    if not workflow_config:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    
+    # Process form data
+    data = {}
+    #cleanup_images([])
+    session_id = str(random.randint(1, 1125899906842600))
+    
+    if "inputs" in workflow_config:
+        for field_name, field in workflow_config["inputs"].items():
+            field_type = field["type"]
+            
+            if field_type in ["image", "video"]:
+                # Handle file upload
+                cleanup_images([field_name+"_"])
+                file = form_data.get(field_name)
+                if file and file.filename:
+                    # Save file
+                    file_ext = os.path.splitext(file.filename)[1]
+                    save_path = f"{local_path}{field_name}_{session_id}{file_ext}"
+                    with open(save_path, 'wb') as f:
+                        f.write(await file.read())
+                    image_path[field_name] = save_path
+                    data[field_name] = save_path
+            else:
+                # Handle regular fields
+                value = form_data.get(field_name)
+                if value is not None:
+                    if field_type == "integer":
+                        data[field_name] = int(value)
+                    elif field_type == "float":
+                        data[field_name] = float(value)
+                    elif field_type == "array":
+                        data[field_name] = [x.strip() for x in value.split(',')]
+                    else:
+                        data[field_name] = value
+    
+    # Run workflow
+    promptID = comfyui_workflow(workflow_name, data)['prompt_id']
+    
+    if not ws:
+        ws = open_websocket_connection()
+
+    # Clean up old output files
+    #for f in os.listdir(comfyui_output_dir):
+    #    if f.startswith("api"):
+    #        os.remove(os.path.join(comfyui_output_dir, f))
+
+    return {"status": "Got Prompt"}
+
 @app.post('/comfyui_caption')
 async def comfyui_caption(request: Request):
     global image_path, promptID
@@ -298,6 +368,48 @@ async def get_mode_config():
         with open(mode_config_path, 'r') as f:
             return json.load(f)
     raise HTTPException(status_code=404, detail="Config file not found")
+
+@app.get("/runflow/{workflow}", response_class=HTMLResponse)
+async def run_workflow_form(request: Request, workflow: str):
+    try:
+        with open(workflows_config_path, 'r') as f:
+            config = json.load(f)
+        
+        workflow_config = config.get(f"{workflow}_api")
+        if not workflow_config:
+            raise HTTPException(status_code=404, detail="Workflow not found")
+            
+        if "inputs" not in workflow_config:
+            raise HTTPException(status_code=400, detail="Workflow has no inputs defined")
+            
+        form_fields = []
+        for name, field in workflow_config["inputs"].items():
+            field_type = field["type"]
+            default = field["default"]
+            
+            field_def = {
+                "name": name,
+                "type": field_type,
+                "default": default,
+                "required": True
+            }
+            
+            if field_type == "array":
+                field_def["item_type"] = "integer"  # Assuming array contains integers
+                
+            form_fields.append(field_def)
+            
+        return templates.TemplateResponse(
+            "runflow_form.html",
+            {
+                "request": request,
+                "workflow": f"{workflow}_api",
+                "form_fields": form_fields
+            }
+        )
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == '__main__':
     uvicorn.run('comfyui_server:app', host='0.0.0.0', port=5000, log_level="warning")

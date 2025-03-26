@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Run Workflow: {{ workflow }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], input[type="number"], textarea { 
+            width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+        }
+        input[type="file"] { margin-top: 5px; }
+        button { 
+            background-color: #4CAF50; color: white; padding: 10px 15px; 
+            border: none; border-radius: 4px; cursor: pointer; 
+        }
+        button:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+    <h1>Run Workflow: {{ workflow }}</h1>
+    <form method="post" action="/comfyui_runflow" enctype="multipart/form-data">
+        <input type="hidden" name="workflow" value="{{ workflow }}">
+        {% for field in form_fields %}
+        <div class="form-group">
+            <label for="{{ field.name }}">{{ field.name }} ({{ field.type }})</label>
+            {% if field.type == 'string' or field.type == 'text' %}
+                {% if field.type == 'text' %}
+                <textarea name="{{ field.name }}" id="{{ field.name }}" rows="4">{{ field.default }}</textarea>
+                {% else %}
+                <input type="text" name="{{ field.name }}" id="{{ field.name }}" value="{{ field.default }}">
+                {% endif %}
+            {% elif field.type == 'integer' or field.type == 'float' %}
+                <input type="number" name="{{ field.name }}" id="{{ field.name }}" 
+                       value="{{ field.default }}" step="{{ '1' if field.type == 'integer' else 'any' }}">
+            {% elif field.type == 'image' or field.type == 'video' %}
+                <input type="file" name="{{ field.name }}" id="{{ field.name }}" accept="{{ 'image/*' if field.type == 'image' else 'video/*' }}">
+            {% elif field.type == 'array' %}
+                <input type="text" name="{{ field.name }}" id="{{ field.name }}" 
+                       value="{{ field.default|join(',') }}" placeholder="Comma separated values">
+            {% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
