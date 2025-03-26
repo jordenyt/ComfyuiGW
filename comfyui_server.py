@@ -331,7 +331,10 @@ async def comfyui_runflow_handler(request: Request):
     #    if f.startswith("api"):
     #        os.remove(os.path.join(comfyui_output_dir, f))
 
-    return {"status": "Got Prompt"}
+    return templates.TemplateResponse(
+        "workflow_progress.html", 
+        {"request": request}
+    )
 
 @app.post('/comfyui_caption')
 async def comfyui_caption(request: Request):
