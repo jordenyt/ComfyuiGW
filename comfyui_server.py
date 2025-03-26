@@ -326,10 +326,6 @@ async def comfyui_runflow_handler(request: Request):
     if not ws:
         ws = open_websocket_connection()
 
-    # Clean up old output files
-    #for f in os.listdir(comfyui_output_dir):
-    #    if f.startswith("api"):
-    #        os.remove(os.path.join(comfyui_output_dir, f))
 
     return templates.TemplateResponse(
         "workflow_progress.html", 
@@ -371,6 +367,32 @@ async def get_mode_config():
         with open(mode_config_path, 'r') as f:
             return json.load(f)
     raise HTTPException(status_code=404, detail="Config file not found")
+
+@app.get("/runflow", response_class=HTMLResponse)
+async def list_workflows(request: Request):
+    with open(workflows_config_path, 'r') as f:
+        config = json.load(f)
+    
+    # Filter workflows to only those with inputs defined
+    workflows_with_inputs = {
+        name: config for name, config in config.items() 
+        if "inputs" in config
+    }
+    
+    return templates.TemplateResponse(
+        "runflow_list.html",
+        {
+            "request": request,
+            "workflows": workflows_with_inputs
+        }
+    )
+
+@app.get("/workflow_status", response_class=HTMLResponse)
+async def workflow_status_page(request: Request):
+    return templates.TemplateResponse(
+        "workflow_progress.html",
+        {"request": request}
+    )
 
 @app.get("/runflow/{workflow}", response_class=HTMLResponse)
 async def run_workflow_form(request: Request, workflow: str):
