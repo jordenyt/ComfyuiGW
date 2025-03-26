@@ -59,10 +59,24 @@
 <body>
     <h1>Available Workflows</h1>
     <div style="text-align: center; margin-bottom: 20px;">
-        <a href="/workflow_status" style="font-size: 1.1em; color: #3498db; text-decoration: none;">
+        <a href="/workflow_status" style="font-size: 1.1em; color: #3498db; text-decoration: none; margin-right: 20px;">
             View Workflow Status
         </a>
+        <button onclick="freeMemory()" style="font-size: 1.1em; background-color: #3498db; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer;">
+            Free Memory
+        </button>
     </div>
+    <script>
+        async function freeMemory() {
+            try {
+                const response = await fetch('/comfyui_free');
+                const result = await response.json();
+                alert(result.message);
+            } catch (error) {
+                alert('Error freeing memory: ' + error);
+            }
+        }
+    </script>
     <div class="workflow-list">
         {% for workflow_name, workflow in workflows.items() %}
             {% if "inputs" in workflow %}

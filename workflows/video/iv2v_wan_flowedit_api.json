@@ -1,0 +1,652 @@
+{
+  "11": {
+    "inputs": {
+      "text": "A woman with long messy brown hair is walking slowly and looking steadily to viewer along side of buildings. She is wearing purple tube top.",
+      "clip": [
+        "139",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Target Prompt"
+    }
+  },
+  "20": {
+    "inputs": {
+      "text": "chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip",
+      "clip": [
+        "139",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "65": {
+    "inputs": {
+      "noise": [
+        "92",
+        0
+      ],
+      "guider": [
+        "141",
+        0
+      ],
+      "sampler": [
+        "73",
+        0
+      ],
+      "sigmas": [
+        "76",
+        0
+      ],
+      "latent_image": [
+        "143",
+        0
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  },
+  "70": {
+    "inputs": {
+      "text": "A man with short dark hair is walking slowly and looking steadily to viewer along side of buildings. He is wearing purple T-shirt.",
+      "clip": [
+        "139",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Source Prompt"
+    }
+  },
+  "72": {
+    "inputs": {
+      "start": 0,
+      "length": 1,
+      "image": [
+        "206",
+        0
+      ]
+    },
+    "class_type": "ImageFromBatch+",
+    "_meta": {
+      "title": "Input First Frame"
+    }
+  },
+  "73": {
+    "inputs": {
+      "skip_steps": 3,
+      "drift_steps": 22,
+      "seed": 579857246690464
+    },
+    "class_type": "HYFlowEditSampler",
+    "_meta": {
+      "title": "HY FlowEdit Sampler"
+    }
+  },
+  "75": {
+    "inputs": {
+      "frame_rate": [
+        "207",
+        5
+      ],
+      "loop_count": 0,
+      "filename_prefix": "WanFlowEditI2V",
+      "format": "video/h264-mp4",
+      "pix_fmt": "yuv420p",
+      "crf": 19,
+      "save_metadata": true,
+      "trim_to_audio": false,
+      "pingpong": false,
+      "save_output": false,
+      "images": [
+        "93",
+        0
+      ]
+    },
+    "class_type": "VHS_VideoCombine",
+    "_meta": {
+      "title": "Video Combine 🎥🅥🅗🅢"
+    }
+  },
+  "76": {
+    "inputs": {
+      "scheduler": "simple",
+      "steps": 30,
+      "denoise": 1,
+      "model": [
+        "221",
+        0
+      ]
+    },
+    "class_type": "BasicScheduler",
+    "_meta": {
+      "title": "BasicScheduler"
+    }
+  },
+  "92": {
+    "inputs": {},
+    "class_type": "DisableNoise",
+    "_meta": {
+      "title": "DisableNoise"
+    }
+  },
+  "93": {
+    "inputs": {
+      "inputcount": 3,
+      "direction": "right",
+      "match_image_size": true,
+      "Update inputs": "",
+      "image_1": [
+        "99",
+        0
+      ],
+      "image_2": [
+        "96",
+        0
+      ],
+      "image_3": [
+        "97",
+        0
+      ]
+    },
+    "class_type": "ImageConcatMulti",
+    "_meta": {
+      "title": "Image Concatenate Multi"
+    }
+  },
+  "96": {
+    "inputs": {
+      "text_x": 10,
+      "text_y": 2,
+      "height": 48,
+      "font_size": 32,
+      "font_color": "white",
+      "label_color": "black",
+      "font": "FreeMono.ttf",
+      "text": "FlowEditted",
+      "direction": "down",
+      "image": [
+        "127",
+        0
+      ]
+    },
+    "class_type": "AddLabel",
+    "_meta": {
+      "title": "Add Label"
+    }
+  },
+  "97": {
+    "inputs": {
+      "text_x": 10,
+      "text_y": 2,
+      "height": 48,
+      "font_size": 32,
+      "font_color": "white",
+      "label_color": "black",
+      "font": "FreeMono.ttf",
+      "text": "Original Video",
+      "direction": "down",
+      "image": [
+        "206",
+        0
+      ]
+    },
+    "class_type": "AddLabel",
+    "_meta": {
+      "title": "Add Label"
+    }
+  },
+  "99": {
+    "inputs": {
+      "text_x": 10,
+      "text_y": 2,
+      "height": 48,
+      "font_size": 32,
+      "font_color": "white",
+      "label_color": "black",
+      "font": "FreeMono.ttf",
+      "text": "Input Image",
+      "direction": "down",
+      "image": [
+        "205",
+        0
+      ]
+    },
+    "class_type": "AddLabel",
+    "_meta": {
+      "title": "Add Label"
+    }
+  },
+  "111": {
+    "inputs": {
+      "vae_name": "wan_2.1_vae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "127": {
+    "inputs": {
+      "tile_size": 256,
+      "overlap": 64,
+      "temporal_size": 64,
+      "temporal_overlap": 8,
+      "samples": [
+        "65",
+        1
+      ],
+      "vae": [
+        "111",
+        0
+      ]
+    },
+    "class_type": "VAEDecodeTiled",
+    "_meta": {
+      "title": "VAE Decode (Tiled)"
+    }
+  },
+  "131": {
+    "inputs": {
+      "frame_rate": 16,
+      "loop_count": 0,
+      "filename_prefix": "WanFlowEditI2V",
+      "format": "video/h264-mp4",
+      "pix_fmt": "yuv420p",
+      "crf": 10,
+      "save_metadata": true,
+      "trim_to_audio": false,
+      "pingpong": false,
+      "save_output": true,
+      "images": [
+        "127",
+        0
+      ],
+      "audio": [
+        "212",
+        2
+      ]
+    },
+    "class_type": "VHS_VideoCombine",
+    "_meta": {
+      "title": "Video Combine 🎥🅥🅗🅢"
+    }
+  },
+  "132": {
+    "inputs": {
+      "width": [
+        "206",
+        1
+      ],
+      "height": [
+        "206",
+        2
+      ],
+      "length": [
+        "207",
+        6
+      ],
+      "batch_size": 1,
+      "positive": [
+        "11",
+        0
+      ],
+      "negative": [
+        "20",
+        0
+      ],
+      "vae": [
+        "111",
+        0
+      ],
+      "clip_vision_output": [
+        "136",
+        0
+      ],
+      "start_image": [
+        "205",
+        0
+      ]
+    },
+    "class_type": "WanImageToVideo",
+    "_meta": {
+      "title": "WanImageToVideo"
+    }
+  },
+  "135": {
+    "inputs": {
+      "clip_name": "clip_vision_h_fp8_e4m3fn.safetensors"
+    },
+    "class_type": "CLIPVisionLoader",
+    "_meta": {
+      "title": "Load CLIP Vision"
+    }
+  },
+  "136": {
+    "inputs": {
+      "crop": "none",
+      "clip_vision": [
+        "135",
+        0
+      ],
+      "image": [
+        "205",
+        0
+      ]
+    },
+    "class_type": "CLIPVisionEncode",
+    "_meta": {
+      "title": "CLIP Vision Encode"
+    }
+  },
+  "137": {
+    "inputs": {
+      "width": [
+        "206",
+        1
+      ],
+      "height": [
+        "206",
+        2
+      ],
+      "length": [
+        "207",
+        6
+      ],
+      "batch_size": 1,
+      "positive": [
+        "70",
+        0
+      ],
+      "negative": [
+        "20",
+        0
+      ],
+      "vae": [
+        "111",
+        0
+      ],
+      "clip_vision_output": [
+        "177",
+        0
+      ],
+      "start_image": [
+        "72",
+        0
+      ]
+    },
+    "class_type": "WanImageToVideo",
+    "_meta": {
+      "title": "WanImageToVideo"
+    }
+  },
+  "139": {
+    "inputs": {
+      "clip_name": "t5xxl_um_fp8_e4m3fn_scaled.safetensors",
+      "type": "wan",
+      "device": "cpu"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP"
+    }
+  },
+  "141": {
+    "inputs": {
+      "source_cfg": 2.0000000000000004,
+      "target_cfg": 4.500000000000001,
+      "model": [
+        "221",
+        0
+      ],
+      "source_cond": [
+        "137",
+        0
+      ],
+      "source_uncond": [
+        "137",
+        1
+      ],
+      "target_cond": [
+        "132",
+        0
+      ],
+      "target_uncond": [
+        "132",
+        1
+      ]
+    },
+    "class_type": "HYFlowEditGuiderCFG",
+    "_meta": {
+      "title": "HY FlowEdit Guider CFG"
+    }
+  },
+  "143": {
+    "inputs": {
+      "pixels": [
+        "206",
+        0
+      ],
+      "vae": [
+        "111",
+        0
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE Encode"
+    }
+  },
+  "177": {
+    "inputs": {
+      "crop": "none",
+      "clip_vision": [
+        "135",
+        0
+      ],
+      "image": [
+        "72",
+        0
+      ]
+    },
+    "class_type": "CLIPVisionEncode",
+    "_meta": {
+      "title": "CLIP Vision Encode"
+    }
+  },
+  "181": {
+    "inputs": {
+      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "model": [
+        "216",
+        0
+      ]
+    },
+    "class_type": "PathchSageAttentionKJ",
+    "_meta": {
+      "title": "Patch Sage Attention KJ"
+    }
+  },
+  "183": {
+    "inputs": {
+      "shift": 5,
+      "model": [
+        "181",
+        0
+      ]
+    },
+    "class_type": "HYReverseModelSamplingPred",
+    "_meta": {
+      "title": "HY Reverse Model Pred"
+    }
+  },
+  "205": {
+    "inputs": {
+      "image": "sdsketch_10487_250217151343.jpg",
+      "resize": true,
+      "width": [
+        "206",
+        1
+      ],
+      "height": [
+        "206",
+        2
+      ],
+      "repeat": 1,
+      "keep_proportion": true,
+      "divisible_by": 2,
+      "mask_channel": "alpha",
+      "background_color": ""
+    },
+    "class_type": "LoadAndResizeImage",
+    "_meta": {
+      "title": "Load & Resize Image"
+    }
+  },
+  "206": {
+    "inputs": {
+      "width": 640,
+      "height": 640,
+      "upscale_method": "lanczos",
+      "keep_proportion": true,
+      "divisible_by": 2,
+      "crop": "disabled",
+      "image": [
+        "212",
+        0
+      ]
+    },
+    "class_type": "ImageResizeKJ",
+    "_meta": {
+      "title": "Resize Image"
+    }
+  },
+  "207": {
+    "inputs": {
+      "video_info": [
+        "212",
+        3
+      ]
+    },
+    "class_type": "VHS_VideoInfo",
+    "_meta": {
+      "title": "Video Info 🎥🅥🅗🅢"
+    }
+  },
+  "212": {
+    "inputs": {
+      "video": "20250217_133654.mp4",
+      "force_rate": 16,
+      "custom_width": 0,
+      "custom_height": 0,
+      "frame_load_cap": 161,
+      "skip_first_frames": 0,
+      "select_every_nth": 1,
+      "format": "None"
+    },
+    "class_type": "VHS_LoadVideo",
+    "_meta": {
+      "title": "Load Video (Upload) 🎥🅥🅗🅢"
+    }
+  },
+  "216": {
+    "inputs": {
+      "unet_name": "wan2.1-i2v-14b-480p-Q6_K.gguf",
+      "device": "cuda:0",
+      "virtual_vram_gb": 0,
+      "use_other_vram": false,
+      "expert_mode_allocations": ""
+    },
+    "class_type": "UnetLoaderGGUFDisTorchMultiGPU",
+    "_meta": {
+      "title": "UnetLoaderGGUFDisTorchMultiGPU"
+    }
+  },
+  "221": {
+    "inputs": {
+      "weight": 4,
+      "model": [
+        "227",
+        0
+      ],
+      "latent": [
+        "143",
+        0
+      ]
+    },
+    "class_type": "WanVideoEnhanceAVideoKJ",
+    "_meta": {
+      "title": "WanVideo Enhance A Video (native)"
+    }
+  },
+  "222": {
+    "inputs": {
+      "rgthree_comparer": {
+        "images": [
+          {
+            "name": "A",
+            "selected": true,
+            "url": "/api/view?filename=rgthree.compare._temp_rskoi_00003_.png&type=temp&subfolder=&rand=0.11394894578384474"
+          },
+          {
+            "name": "B",
+            "selected": true,
+            "url": "/api/view?filename=rgthree.compare._temp_rskoi_00004_.png&type=temp&subfolder=&rand=0.7680869523082348"
+          }
+        ]
+      },
+      "image_a": [
+        "72",
+        0
+      ],
+      "image_b": [
+        "205",
+        0
+      ]
+    },
+    "class_type": "Image Comparer (rgthree)",
+    "_meta": {
+      "title": "Image Comparer (rgthree)"
+    }
+  },
+  "225": {
+    "inputs": {
+      "blocks": "9",
+      "start_percent": 0.20000000000000004,
+      "end_percent": 1,
+      "model": [
+        "183",
+        0
+      ]
+    },
+    "class_type": "SkipLayerGuidanceWanVideo",
+    "_meta": {
+      "title": "Skip Layer Guidance WanVideo"
+    }
+  },
+  "227": {
+    "inputs": {
+      "rel_l1_thresh": 0.20000000000000004,
+      "start_percent": 0.30000000000000004,
+      "end_percent": 1,
+      "cache_device": "offload_device",
+      "coefficients": "i2v_480",
+      "model": [
+        "225",
+        0
+      ]
+    },
+    "class_type": "WanVideoTeaCacheKJ",
+    "_meta": {
+      "title": "WanVideo Tea Cache (native)"
+    }
+  }
+}

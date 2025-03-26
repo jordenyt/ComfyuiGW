@@ -89,6 +89,37 @@
 			}
         }
     },
+
+    "iv2v_wan_flowedit_api": {
+        "prompt_workflow": "workflows/video/iv2v_wan_flowedit_api.json",
+        "fields": {
+            "seed": "73.inputs.seed",
+            "skip_steps": "73.inputs.skip_steps",
+            "drift_steps": "73.inputs.drift_steps",
+            "size": ["206.inputs.width", "206.inputs.height"],
+            "src_prompt": "70.inputs.text",
+            "target_prompt": "11.inputs.text",
+            "negative_prompt": "20.inputs.text",
+            "src_cfg": "141.inputs.source_cfg",
+            "target_cfg": "141.inputs.target_cfg",
+            "src_video": "212.inputs.video",
+            "target_image": "205.inputs.image",
+            "num_frame": "212.inputs.frame_load_cap"
+        },
+        "inputs": {
+            "src_video": {"type":"video", "default":null},
+            "target_image": {"type":"image", "default":null},
+            "num_frame": {"type":"integer", "default":81},
+            "src_prompt": {"type":"text", "default":""},
+            "target_prompt": {"type":"text", "default":""},
+            "negative_prompt": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
+            "skip_steps": {"type":"integer", "default":2},
+            "drift_steps": {"type":"integer", "default":22},
+            "size": {"type":"integer", "default":640},
+            "src_cfg": {"type":"float", "default":2},
+            "target_cfg": {"type":"float", "default":4.5}
+        }
+    },
 	
 	"t2v_wan_api": {
 		"prompt_workflow": "workflows/video/t2v_wan_api.json",
