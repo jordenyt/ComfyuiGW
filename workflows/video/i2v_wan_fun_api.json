@@ -1,7 +1,7 @@
 {
   "23": {
     "inputs": {
-      "unet_name": "wan2.1-i2v-14b-480p-Q6_K.gguf",
+      "unet_name": "wan2.1-fun-14b-inp-Q6_K.gguf",
       "device": "cuda:0",
       "virtual_vram_gb": 0,
       "use_other_vram": false,
@@ -14,11 +14,11 @@
   },
   "24": {
     "inputs": {
-      "rel_l1_thresh": 0.20000000000000004,
-      "start_percent": 0.30000000000000004,
+      "rel_l1_thresh": 0.2,
+      "start_percent": 0.3,
       "end_percent": 1,
       "cache_device": "offload_device",
-      "coefficients": "i2v_480",
+      "coefficients": "14B",
       "model": [
         "49",
         0
@@ -27,21 +27,6 @@
     "class_type": "WanVideoTeaCacheKJ",
     "_meta": {
       "title": "WanVideo Tea Cache (native)"
-    }
-  },
-  "25": {
-    "inputs": {
-      "lora_name": "WAN21\\wan-nsfw-e14-fixed.safetensors",
-      "strength": 0,
-      "blocks_type": "all",
-      "model": [
-        "32",
-        0
-      ]
-    },
-    "class_type": "HunyuanVideoLoraLoader",
-    "_meta": {
-      "title": "Hunyuan Video LoRA Loader"
     }
   },
   "26": {
@@ -105,7 +90,7 @@
   },
   "32": {
     "inputs": {
-      "shift": 8.000000000000002,
+      "shift": 8,
       "model": [
         "23",
         0
@@ -138,44 +123,6 @@
       "title": "Video Combine 🎥🅥🅗🅢"
     }
   },
-  "40": {
-    "inputs": {
-      "width": [
-        "26",
-        2
-      ],
-      "height": [
-        "26",
-        3
-      ],
-      "length": 81,
-      "batch_size": 1,
-      "positive": [
-        "27",
-        0
-      ],
-      "negative": [
-        "28",
-        0
-      ],
-      "vae": [
-        "21:2",
-        0
-      ],
-      "clip_vision_output": [
-        "41",
-        0
-      ],
-      "start_image": [
-        "26",
-        0
-      ]
-    },
-    "class_type": "WanImageToVideo",
-    "_meta": {
-      "title": "WanImageToVideo"
-    }
-  },
   "41": {
     "inputs": {
       "crop": "none",
@@ -197,7 +144,7 @@
     "inputs": {
       "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
       "model": [
-        "53",
+        "72",
         0
       ]
     },
@@ -208,13 +155,13 @@
   },
   "50": {
     "inputs": {
-      "weight": 2.0000000000000004,
+      "weight": 2,
       "model": [
         "24",
         0
       ],
       "latent": [
-        "40",
+        "70",
         2
       ]
     },
@@ -264,31 +211,81 @@
       "title": "Image Save"
     }
   },
-  "53": {
+  "70": {
     "inputs": {
-      "blocks": "9",
-      "start_percent": 0.20000000000000004,
-      "end_percent": 1,
-      "model": [
-        "25",
+      "width": [
+        "26",
+        2
+      ],
+      "height": [
+        "26",
+        3
+      ],
+      "length": 81,
+      "batch_size": 1,
+      "positive": [
+        "27",
+        0
+      ],
+      "negative": [
+        "28",
+        0
+      ],
+      "vae": [
+        "21:2",
+        0
+      ],
+      "clip_vision_output": [
+        "41",
+        0
+      ],
+      "start_image": [
+        "26",
+        0
+      ],
+      "end_image": [
+        "71",
         0
       ]
     },
-    "class_type": "SkipLayerGuidanceWanVideo",
+    "class_type": "WanFunInpaintToVideo",
     "_meta": {
-      "title": "Skip Layer Guidance WanVideo"
+      "title": "WanFunInpaintToVideo"
     }
   },
-  "67": {
+  "71": {
     "inputs": {
-      "width": 832,
-      "height": 480,
-      "length": 81,
-      "batch_size": 1
+      "image": "sdsketch_9256_241211160458.jpg",
+      "resize": true,
+      "width": [
+        "26",
+        2
+      ],
+      "height": [
+        "26",
+        3
+      ],
+      "repeat": 1,
+      "keep_proportion": false,
+      "divisible_by": 2,
+      "mask_channel": "alpha",
+      "background_color": ""
     },
-    "class_type": "WanImageToVideo",
+    "class_type": "LoadAndResizeImage",
     "_meta": {
-      "title": "WanImageToVideo"
+      "title": "Load & Resize Image"
+    }
+  },
+  "72": {
+    "inputs": {
+      "model": [
+        "32",
+        0
+      ]
+    },
+    "class_type": "CFGZeroStar",
+    "_meta": {
+      "title": "CFGZeroStar"
     }
   },
   "21:0": {
@@ -322,7 +319,7 @@
   },
   "48:0": {
     "inputs": {
-      "noise_seed": 462027262093711
+      "noise_seed": 1027124882697681
     },
     "class_type": "RandomNoise",
     "_meta": {
@@ -368,11 +365,11 @@
         0
       ],
       "positive": [
-        "40",
+        "70",
         0
       ],
       "negative": [
-        "40",
+        "70",
         1
       ]
     },
@@ -389,11 +386,11 @@
         0
       ],
       "positive": [
-        "40",
+        "70",
         0
       ],
       "negative": [
-        "40",
+        "70",
         1
       ]
     },
@@ -455,7 +452,7 @@
         0
       ],
       "latent_image": [
-        "40",
+        "70",
         2
       ]
     },
