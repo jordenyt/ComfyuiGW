@@ -83,14 +83,17 @@
             {% if "inputs" in workflow %}
             <div class="workflow-card">
                 <div class="workflow-name">
-                    <a href="/runflow/{{ workflow_name.replace('_api', '') }}">{{ workflow_name.replace('_api', '') }}</a>
+                    <a href="/runflow/{{ workflow_name.replace('_api', '') }}">{{ workflow_name.replace('_api', '').replace('_', ' ') }}</a>
                 </div>
                 <div class="workflow-inputs">
+                    {{workflow["descriptions"]}}
+                    <!--
                     {% for input_name, input_def in workflow["inputs"].items() %}
                     <div class="workflow-input">
                         {{ input_name }}: <span class="input-type">{{ input_def["type"] }}</span>
                     </div>
                     {% endfor %}
+                    -->
                 </div>
             </div>
             {% endif %}

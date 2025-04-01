@@ -17,7 +17,7 @@
       "embed_workflow": "true",
       "show_previews": "false",
       "images": [
-        "53",
+        "45",
         0
       ]
     },
@@ -28,8 +28,7 @@
   },
   "36": {
     "inputs": {
-      "image": "received_2043681125981419~3.jpeg",
-      "upload": "image"
+      "image": "received_2043681125981419~3.jpeg"
     },
     "class_type": "LoadImage",
     "_meta": {
@@ -50,7 +49,7 @@
   },
   "43": {
     "inputs": {
-      "model_name": "4xNomos8kSCHAT-L.pth"
+      "model_name": "4xPurePhoto-RealPLSKR.pth"
     },
     "class_type": "UpscaleModelLoader",
     "_meta": {
@@ -88,7 +87,7 @@
       "divisible_by": 1,
       "crop": "disabled",
       "image": [
-        "36",
+        "53",
         0
       ]
     },
@@ -172,7 +171,7 @@
         0
       ],
       "on_false": [
-        "45",
+        "36",
         0
       ]
     },
@@ -184,7 +183,7 @@
   "56": {
     "inputs": {
       "method": "mkl",
-      "strength": 1,
+      "strength": 1.0000000000000002,
       "image_ref": [
         "36",
         0

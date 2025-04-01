@@ -477,7 +477,7 @@
   },
   "183": {
     "inputs": {
-      "shift": 5.000000000000001,
+      "shift": 5,
       "model": [
         "181",
         0
@@ -572,7 +572,7 @@
   },
   "221": {
     "inputs": {
-      "weight": 4.000000000000001,
+      "weight": 4,
       "model": [
         "227",
         0
@@ -640,13 +640,27 @@
       "cache_device": "offload_device",
       "coefficients": "i2v_480",
       "model": [
-        "225",
+        "229",
         0
       ]
     },
     "class_type": "WanVideoTeaCacheKJ",
     "_meta": {
       "title": "WanVideo Tea Cache (native)"
+    }
+  },
+  "229": {
+    "inputs": {
+      "lora_name": "WAN21\\wan-nsfw-e14-fixed.safetensors",
+      "strength_model": 0,
+      "model": [
+        "225",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderModelOnly",
+    "_meta": {
+      "title": "LoraLoaderModelOnly"
     }
   }
 }

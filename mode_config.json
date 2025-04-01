@@ -1115,7 +1115,7 @@
 		"default": {"type":"img2img", "baseImage":"background"},
 		"fields": {
 			"workflow": "i2v_wan_480p",
-			"background": "$background",
+			"start_img": "$background",
 			"positive": "$positive",
 			"negative": "$negative",
 			"length": 81,
@@ -1133,7 +1133,7 @@
 		"default": {"type":"img2img", "baseImage":"background"},
 		"fields": {
 			"workflow": "i2v_wan_480p",
-			"background": "$background",
+			"start_img": "$background",
 			"positive": "$positive",
 			"negative": "$negative",
 			"length": 81,
@@ -1153,7 +1153,7 @@
 		"default": {"type":"img2img", "baseImage":"background"},
 		"fields": {
 			"workflow": "i2v_wan_480p",
-			"background": "$background",
+			"start_img": "$background",
 			"positive": "$positive",
 			"negative": "$negative",
 			"length": 81,
@@ -1174,7 +1174,7 @@
 		"default": {"type":"img2img", "baseImage":"background"},
 		"fields": {
 			"workflow": "i2v_wan_480p",
-			"background": "$background",
+			"start_img": "$background",
 			"positive": "$positive",
 			"negative": "$negative",
 			"length": 81,
