@@ -16,6 +16,8 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 import random
+from io import BytesIO
+from PIL import Image
 
 # Configuration
 COMFYUI_PATH = os.environ.get('COMFYUI_PATH', os.path.join(os.path.expanduser('~'), 'Workspace', 'ComfyUI'))
@@ -35,7 +37,6 @@ promptID = None
 client_id = str(uuid.uuid4())
 msg_progress = ""
 msg_step = ""
-image_path = {}
 current_prompt = None
 finished_nodes = []
 node_ids = []
@@ -60,8 +61,6 @@ def set_workflow_value(d, path, key, data):
     
     if key == "seed":
         d[path[-1]] = random.randint(1, 1125899906842600)
-    elif key in ["background", "reference", "paint"]:
-        d[path[-1]] = image_path[key]
     elif key in data:
         d[path[-1]] = data[key]
 
@@ -100,6 +99,21 @@ def open_websocket_connection():
     ws = websocket.WebSocketApp(f"ws://{comfyui_server}/ws?clientId={client_id}", on_message=ws_message)
     Thread(target=ws.run_forever).start()
     return ws
+
+def is_valid_base64_image(base64_data):
+    try:
+        decoded_data = base64.b64decode(base64_data)
+    except (base64.binascii.Error, ValueError, TypeError):
+        return False
+
+    try:
+        with Image.open(BytesIO(decoded_data)) as img:
+            img.verify()  # Basic verification
+            img = Image.open(BytesIO(decoded_data))
+            img.getdata()[0]  # Try to access pixel data
+        return True
+    except Exception:
+        return False
 
 def save_base64_image(base64_data, prefix, session_id):
     decoded_data = base64.b64decode(base64_data)
@@ -240,18 +254,19 @@ def comfyui_result():
 
 @app.post('/comfyui_workflow')
 async def comfyui_workflow_handler(request: Request):
-    global image_path, promptID, ws  # Changed to use dictionary
+    global promptID, ws  # Changed to use dictionary
     data = await request.json()
     
     if not comfyui_process:
         return {"message": "ComfyUI is not started."}
     
-    cleanup_images(["background_", "paint_", "reference_"])
     session_id = str(random.randint(1, 1125899906842600))
     
-    for key in ['background', 'paint', 'reference']:
-        if key in data:
-            image_path[key] = save_base64_image(data[key], key, session_id)
+    for key, value in data.items():
+        if isinstance(value, str) and is_valid_base64_image(value):
+            #print(f"{key} is_valid_base64_image.")
+            cleanup_images([key+"_"])
+            data[key] = save_base64_image(value, key, session_id)
 
     workflow_name = data['workflow'] + '_api'
     promptID = comfyui_workflow(workflow_name, data)['prompt_id']
@@ -268,7 +283,7 @@ async def comfyui_workflow_handler(request: Request):
 
 @app.post('/comfyui_runflow')
 async def comfyui_runflow_handler(request: Request):
-    global image_path, promptID, ws
+    global promptID, ws
     form_data = await request.form()
     
     if not comfyui_process:
@@ -305,7 +320,6 @@ async def comfyui_runflow_handler(request: Request):
                     save_path = f"{local_path}{field_name}_{session_id}{file_ext}"
                     with open(save_path, 'wb') as f:
                         f.write(await file.read())
-                    image_path[field_name] = save_path
                     data[field_name] = save_path
             else:
                 # Handle regular fields
@@ -334,7 +348,7 @@ async def comfyui_runflow_handler(request: Request):
 
 @app.post('/comfyui_caption')
 async def comfyui_caption(request: Request):
-    global image_path, promptID
+    global promptID
     data = await request.json()
     
     if not comfyui_process:
@@ -344,7 +358,7 @@ async def comfyui_caption(request: Request):
     cleanup_images(["background_"])
     
     if "background" in data:
-        image_path["background"] = save_base64_image(data['background'], "background", session_id)
+        data["background"]=save_base64_image(data['background'], "background", session_id)
         
         caption_file = os.path.join(comfyui_output_dir, "caption.txt")
         if os.path.exists(caption_file):
