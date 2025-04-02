@@ -1,0 +1,118 @@
+[
+    {
+        "name": "I2V_WAN_480p",
+        "title": "I2V WAN 480p",
+        "showT2I": false,
+        "show": true,
+        "configurable": false,
+        "default": {"type":"img2img", "baseImage":"background"},
+        "fields": {
+            "workflow": "i2v_wan_480p",
+            "start_img": "$background",
+            "positive": "$positive",
+            "negative": "$negative",
+            "length": 81,
+            "cfg": 6,
+            "steps": 20
+        }
+    },
+    {
+        "name": "I2V_WAN_480p_LORA",
+        "title": "I2V WAN 480p LORA",
+        "showT2I": false,
+        "show": true,
+        "configurable": false,
+        "default": {"type":"img2img", "baseImage":"background"},
+        "fields": {
+            "workflow": "i2v_wan_480p",
+            "start_img": "$background",
+            "positive": "$positive",
+            "negative": "$negative",
+            "length": 81,
+            "cfg": 6,
+            "steps": 20,
+            "lora": "WAN21\\wan-nsfw-e14-fixed.safetensors",
+            "loraStrength": 1
+        }
+    },
+    {
+        "name": "I2V_WAN_720p",
+        "title": "I2V WAN 720p",
+        "showT2I": false,
+        "show": true,
+        "configurable": false,
+        "default": {"type":"img2img", "baseImage":"background"},
+        "fields": {
+            "workflow": "i2v_wan_480p",
+            "start_img": "$background",
+            "positive": "$positive",
+            "negative": "$negative",
+            "length": 81,
+            "cfg": 6,
+            "steps": 20,
+            "unet_name": "wan2.1-i2v-14b-720p-Q6_K.gguf",
+            "coefficients": "i2v_720",
+            "size": 960
+        }
+    },
+    {
+        "name": "I2V_WAN_720p_LORA",
+        "title": "I2V WAN 720p LORA",
+        "showT2I": false,
+        "show": true,
+        "configurable": false,
+        "default": {"type":"img2img", "baseImage":"background"},
+        "fields": {
+            "workflow": "i2v_wan_480p",
+            "start_img": "$background",
+            "positive": "$positive",
+            "negative": "$negative",
+            "length": 81,
+            "cfg": 6,
+            "steps": 20,
+            "lora": "WAN21\\wan-nsfw-e14-fixed.safetensors",
+            "loraStrength": 1,
+            "unet_name": "wan2.1-i2v-14b-720p-Q6_K.gguf",
+            "coefficients": "i2v_720",
+            "size": 960
+        }
+    },
+    {
+        "name": "T2V_WAN",
+        "title": "T2V WAN",
+        "showT2I": true,
+        "show": true,
+        "configurable": false,
+        "default": {"type":"txt2img", "sdSize":720, "cfgScale":6.0, "steps":20},
+        "fields": {
+            "workflow": "t2v_wan",
+            "positive": "$positive",
+            "negative": "$negative",
+            "length": 81,
+            "cfg": 6,
+            "steps": 20,
+            "width": "$width",
+            "height": "$height"
+        }
+    },
+    {
+        "name": "T2V_WAN LORA",
+        "title": "T2V WAN LORA",
+        "showT2I": true,
+        "show": true,
+        "configurable": false,
+        "default": {"type":"txt2img", "sdSize":720, "cfgScale":6.0, "steps":20},
+        "fields": {
+            "workflow": "t2v_wan",
+            "positive": "$positive",
+            "negative": "$negative",
+            "length": 81,
+            "cfg": "$cfg",
+            "steps": "$steps",
+            "width": "$width",
+            "height": "$height",
+            "lora": "WAN21\\wan-nsfw-e14-fixed.safetensors",
+            "loraStrength": 1
+        }
+    }
+]

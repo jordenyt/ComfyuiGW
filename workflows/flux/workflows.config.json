@@ -1,0 +1,289 @@
+{
+    "flux_gguf_txt2img_api": {
+        "prompt_workflow": "workflows/flux/flux_gguf_txt2img_api.json",
+        "fields": {
+            "positive": "6.inputs.text",
+            "negative": "29.inputs.text",
+            "width": "44.inputs.value",
+            "height": "46.inputs.value",
+            "batch_size": "45.inputs.batch_size",
+            "steps": "17.inputs.steps",
+            "cfg": "31.inputs.cfg",
+            "seed": "25.inputs.noise_seed",
+            "guidance": ["41.inputs.guidance", "42.inputs.guidance"]
+        }
+    },
+    "flux_lora_txt2img_api": {
+        "prompt_workflow": "workflows/flux/flux_lora_txt2img_api.json",
+        "fields": {
+            "positive": "6.inputs.text",
+            "negative": "29.inputs.text",
+            "width": "44.inputs.value",
+            "height": "46.inputs.value",
+            "batch_size": "45.inputs.batch_size",
+            "steps": "17.inputs.steps",
+            "cfg": "31.inputs.cfg",
+            "seed": "25.inputs.noise_seed",
+            "guidance": ["41.inputs.guidance", "42.inputs.guidance"],
+            "lora": "49.inputs.lora_name",
+            "loraStrength": ["49.inputs.strength_model","49.inputs.strength_clip"]
+        }
+    },
+    "flux_dyna_cfg_txt2img_api": {
+        "prompt_workflow": "workflows/flux/flux_adaptiveCFG_txt2img_api.json",
+        "fields": {
+            "positive": "33.inputs.t5xxl",
+            "negative": "34.inputs.clip_l",
+            "width": "78.inputs.width",
+            "height": "78.inputs.height",
+            "batch_size": "78.inputs.batch_size",
+            "steps": "81.inputs.steps",
+            "cfg": "83.inputs.cfg",
+            "seed": "102.inputs.noise_seed",
+            "lora": "97.inputs.lora_name",
+            "loraStrength": ["97.inputs.strength_model","97.inputs.strength_clip"]
+        }
+    },
+    "flux_dyna_cfg_2lora_txt2img_api": {
+        "prompt_workflow": "workflows/flux/flux_adaptiveCFG_2lora_txt2img_api.json",
+        "fields": {
+            "positive": "33.inputs.t5xxl",
+            "negative": "34.inputs.clip_l",
+            "width": "78.inputs.width",
+            "height": "78.inputs.height",
+            "batch_size": "78.inputs.batch_size",
+            "steps": "81.inputs.steps",
+            "cfg": "83.inputs.cfg",
+            "seed": "102.inputs.noise_seed",
+            "lora": "97.inputs.lora_name",
+            "loraStrength": ["97.inputs.strength_model","97.inputs.strength_clip"],
+            "lora2": "103.inputs.lora_name",
+            "lora2Strength": ["103.inputs.strength_model","103.inputs.strength_clip"]
+        }
+    },
+    "flux_dyna_cfg_img2img_api": {
+        "prompt_workflow": "workflows/flux/flux_adaptiveCFG_img2img_api.json",
+        "fields": {
+            "background": "103.inputs.image",
+            "positive": "33.inputs.t5xxl",
+            "negative": "34.inputs.clip_l",
+            "size": ["103.inputs.width","103.inputs.height"],
+            "denoise": "81.inputs.denoise",
+            "batch_size": "105.inputs.amount",
+            "steps": "81.inputs.steps",
+            "cfg": "83.inputs.cfg",
+            "seed": "102.inputs.noise_seed",
+            "lora": "97.inputs.lora_name",
+            "loraStrength": ["97.inputs.strength_model","97.inputs.strength_clip"]
+        }
+    },
+    "flux_lora_jorden_txt2img_api": {
+        "prompt_workflow": "workflows/flux/flux_lora_jorden_txt2img_api.json",
+        "fields": {
+            "positive": "6.inputs.text",
+            "negative": "29.inputs.text",
+            "width": "44.inputs.value",
+            "height": "46.inputs.value",
+            "batch_size": "45.inputs.batch_size",
+            "steps": "17.inputs.steps",
+            "cfg": "31.inputs.cfg",
+            "seed": "25.inputs.noise_seed",
+            "guidance": ["41.inputs.guidance", "42.inputs.guidance"],
+            "lora": "49.inputs.lora_name",
+            "loraStrength": ["49.inputs.strength_model", "49.inputs.strength_clip"]
+        }
+    },
+    "flux_img2img_api": {
+        "prompt_workflow": "workflows/flux/flux_dev_img2img_api.json",
+        "fields": {
+            "background": "41.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "29.inputs.text",
+            "size": ["41.inputs.width", "41.inputs.height"],
+            "batch_size": "43.inputs.amount",
+            "steps": "17.inputs.steps",
+            "cfg": "31.inputs.cfg",
+            "denoise": "17.inputs.denoise",
+            "seed": "25.inputs.noise_seed",
+            "guidance": ["45.inputs.guidance", "46.inputs.guidance"],
+            "lora": "48.inputs.lora_name",
+            "loraStrength": ["48.inputs.strength_model","48.inputs.strength_clip"]
+        }
+    },
+    "flux_cn_pose_img2img_api": {
+        "prompt_workflow": "workflows/flux/flux_cn_pose_img2img_api.json",
+        "fields": {
+            "background": "66.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "42.inputs.text",
+            "size": "67.inputs.value",
+            "steps": "17.inputs.steps",
+            "cfg": "71.inputs.cfg",
+            "denoise": "17.inputs.denoise",
+            "seed": "25.inputs.noise_seed",
+            "guidance": ["26.inputs.guidance", "72.inputs.guidance"],
+            "lora": "65.inputs.lora_name",
+            "loraStrength": "65.inputs.strength_model",
+            "cnStrength": "38.inputs.strength",
+            "cnEnd": "38.inputs.end_percent",
+            "cnStart": "38.inputs.start_percent"
+        }
+    },
+    "flux_cn_pose_depth_img2img_api": {
+        "prompt_workflow": "workflows/flux/flux_cn_pose_depth_img2img_api.json",
+        "fields": {
+            "background": "66.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "42.inputs.text",
+            "size": "67.inputs.value",
+            "steps": "17.inputs.steps",
+            "cfg": "71.inputs.cfg",
+            "denoise": "17.inputs.denoise",
+            "seed": "25.inputs.noise_seed",
+            "guidance": ["26.inputs.guidance", "72.inputs.guidance"],
+            "lora": "65.inputs.lora_name",
+            "loraStrength": "65.inputs.strength_model",
+            "cnStrength": "38.inputs.strength",
+            "cnEnd": "38.inputs.end_percent",
+            "cnStart": "38.inputs.start_percent"
+        }
+    },
+    "flux_canny_img2img_api": {
+        "prompt_workflow": "workflows/flux/flux_canny_img2img_api.json",
+        "fields": {
+            "background": "41.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "29.inputs.text",
+            "size": ["41.inputs.width", "41.inputs.height", "54.inputs.resolution"],
+            "batch_size": "43.inputs.amount",
+            "steps": "53.inputs.steps",
+            "denoise": "53.inputs.image_to_image_strength",
+            "seed": "53.inputs.noise_seed",
+            "guidance": ["45.inputs.guidance", "46.inputs.guidance"],
+            "cnStrength": "50.inputs.strength",
+            "lora": "48.inputs.lora_name",
+            "loraStrength": ["48.inputs.strength_model","48.inputs.strength_clip"]
+        }
+    },
+    "flux_fill_bg_api": {
+        "prompt_workflow": "workflows/flux/flux_fill_bg_api.json",
+        "fields": {
+            "background": "1.inputs.image",
+            "positive": "7.inputs.text",
+            "negative": "9.inputs.text",
+            "size": "2.inputs.value",
+            "batch_size": "14.inputs.amount",
+            "steps": "13.inputs.steps",
+            "cfg": "13.inputs.cfg",
+            "denoise": "13.inputs.denoise",
+            "seed": "13.inputs.seed",
+            "guidance": ["12.inputs.guidance", "14.inputs.guidance"]
+        }
+    },
+    "flux_redux_fill_bg_api": {
+        "prompt_workflow": "workflows/flux/flux_redux_fill_bg_api.json",
+        "fields": {
+            "background": "35.inputs.image",
+            "reference": "68.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "55.inputs.text",
+            "size": "81.inputs.value",
+            "batch_size": "56.inputs.amount",
+            "steps": "62.inputs.steps",
+            "cfg": "62.inputs.cfg",
+            "denoise": "62.inputs.denoise",
+            "seed": "62.inputs.seed",
+            "guidance": ["39.inputs.guidance", "59.inputs.guidance"]
+        }
+    },
+    "flux_inpaint_api": {
+        "prompt_workflow": "workflows/flux/flux_dev_inpaint_api.json",
+        "fields": {
+            "background": "35.inputs.image",
+            "paint": "53.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "55.inputs.text",
+            "size": ["35.inputs.width", "35.inputs.height", "53.inputs.width", "53.inputs.height"],
+            "batch_size": "56.inputs.amount",
+            "steps": "17.inputs.steps",
+            "cfg": "58.inputs.cfg",
+            "denoise": "17.inputs.denoise",
+            "seed": "25.inputs.noise_seed",
+            "guidance": ["39.inputs.guidance", "59.inputs.guidance"],
+            "maskBlur": ["63.inputs.blur_radius", "63.inputs.expand"],
+            "lora": "65.inputs.lora_name",
+            "loraStrength": ["65.inputs.strength_model","65.inputs.strength_clip"]
+        }
+    },
+    "flux_fill_api": {
+        "prompt_workflow": "workflows/flux/flux_dev_fill_api.json",
+        "fields": {
+            "background": "35.inputs.image",
+            "paint": "53.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "55.inputs.text",
+            "size": ["35.inputs.width", "35.inputs.height", "53.inputs.width", "53.inputs.height"],
+            "batch_size": "56.inputs.amount",
+            "steps": "62.inputs.steps",
+            "cfg": "62.inputs.cfg",
+            "denoise": "62.inputs.denoise",
+            "seed": "62.inputs.seed",
+            "guidance": ["39.inputs.guidance", "59.inputs.guidance"],
+            "maskBlur": ["73.inputs.grow","64.inputs.grow","64.inputs.blur"]
+        }
+    },
+    "flux_redux_fill_api": {
+        "prompt_workflow": "workflows/flux/flux_redux_fill_api.json",
+        "fields": {
+            "background": "35.inputs.image",
+            "paint": "53.inputs.image",
+            "reference": "68.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "55.inputs.text",
+            "size": "81.inputs.value",
+            "batch_size": "84.inputs.a",
+            "steps": "62.inputs.steps",
+            "cfg": "62.inputs.cfg",
+            "denoise": "62.inputs.denoise",
+            "seed": "62.inputs.seed",
+            "guidance": ["39.inputs.guidance", "59.inputs.guidance"],
+            "lora": "85.inputs.lora_name",
+            "loraStrength": ["85.inputs.strength_model","85.inputs.strength_clip"],
+            "ref_bg": "71.inputs.invert_output"
+        }
+    },
+    "flux_outpaint_api": {
+        "prompt_workflow": "workflows/flux/flux_outpaint_api.json",
+        "fields": {
+            "background": "27.inputs.image",
+            "positive": "84.inputs.text",
+            "negative": "85.inputs.text",
+            "size": ["44.inputs.width","44.inputs.height"],
+            "batch_size": "38.inputs.amount",
+            "steps": "86.inputs.steps",
+            "cfg": "86.inputs.cfg",
+            "guidance": ["73.inputs.guidance", "74.inputs.guidance"],
+            "seed": "86.inputs.seed",
+            "left": "55.inputs.b",
+            "right": "60.inputs.b",
+            "top": "58.inputs.b",
+            "bottom": "62.inputs.b",
+            "feathering": "64.inputs.b"
+        }
+    },
+    "flux_redux_api": {
+        "prompt_workflow": "workflows/flux/flux_redux_img2img_api.json",
+        "fields": {
+            "background": "45.inputs.image",
+            "positive": "6.inputs.text",
+            "size": "51.inputs.value",
+            "batch_size": "70.inputs.a",
+            "steps": "17.inputs.steps",
+            "denoise": "17.inputs.denoise",
+            "seed": "25.inputs.noise_seed",
+            "guidance": "26.inputs.guidance",
+            "lora": "46.inputs.lora_name",
+            "loraStrength": ["46.inputs.strength_model","46.inputs.strength_clip"]
+        }
+    }
+}

@@ -1,0 +1,443 @@
+{
+  "6": {
+    "inputs": {
+      "text": "Taiwanese woman with long messy brown hair, sitting in cafe. she is showing her sexy collarbone, medium size breast and cleavage.",
+      "clip": [
+        "11",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Positive Prompt)"
+    }
+  },
+  "8": {
+    "inputs": {
+      "samples": [
+        "13",
+        0
+      ],
+      "vae": [
+        "10",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "10": {
+    "inputs": {
+      "vae_name": "flux_vae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "11": {
+    "inputs": {
+      "clip_name1": "t5xxl_fp8_e4m3fn.safetensors",
+      "clip_name2": "clip_l.safetensors",
+      "type": "flux",
+      "device": "default"
+    },
+    "class_type": "DualCLIPLoader",
+    "_meta": {
+      "title": "DualCLIPLoader"
+    }
+  },
+  "12": {
+    "inputs": {
+      "unet_name": "flux1-dev-fp8.sft",
+      "weight_dtype": "fp8_e4m3fn_fast"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "13": {
+    "inputs": {
+      "noise": [
+        "25",
+        0
+      ],
+      "guider": [
+        "71",
+        0
+      ],
+      "sampler": [
+        "16",
+        0
+      ],
+      "sigmas": [
+        "17",
+        0
+      ],
+      "latent_image": [
+        "78",
+        0
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  },
+  "16": {
+    "inputs": {
+      "sampler_name": "euler"
+    },
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "KSamplerSelect"
+    }
+  },
+  "17": {
+    "inputs": {
+      "scheduler": "simple",
+      "steps": 30,
+      "denoise": 1,
+      "model": [
+        "30",
+        0
+      ]
+    },
+    "class_type": "BasicScheduler",
+    "_meta": {
+      "title": "BasicScheduler"
+    }
+  },
+  "25": {
+    "inputs": {
+      "noise_seed": 793668191832301
+    },
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "RandomNoise"
+    }
+  },
+  "26": {
+    "inputs": {
+      "guidance": 3.5,
+      "conditioning": [
+        "38",
+        0
+      ]
+    },
+    "class_type": "FluxGuidance",
+    "_meta": {
+      "title": "FluxGuidance"
+    }
+  },
+  "30": {
+    "inputs": {
+      "max_shift": 0.5,
+      "base_shift": 0.5,
+      "width": [
+        "66",
+        2
+      ],
+      "height": [
+        "66",
+        3
+      ],
+      "model": [
+        "64",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingFlux",
+    "_meta": {
+      "title": "ModelSamplingFlux"
+    }
+  },
+  "38": {
+    "inputs": {
+      "strength": 0.8000000000000002,
+      "start_percent": 0,
+      "end_percent": 0.6000000000000001,
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "42",
+        0
+      ],
+      "control_net": [
+        "49",
+        0
+      ],
+      "vae": [
+        "10",
+        0
+      ],
+      "image": [
+        "81",
+        0
+      ]
+    },
+    "class_type": "ControlNetApplySD3",
+    "_meta": {
+      "title": "Apply Controlnet with VAE"
+    }
+  },
+  "42": {
+    "inputs": {
+      "text": "fat, bangs",
+      "clip": [
+        "11",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Negative Prompt)"
+    }
+  },
+  "48": {
+    "inputs": {
+      "control_net_name": "flux\\Shakker-Labs_FLUX.1-dev-ControlNet-Union-Pro-fp8.safetensors"
+    },
+    "class_type": "ControlNetLoader",
+    "_meta": {
+      "title": "Load ControlNet Model"
+    }
+  },
+  "49": {
+    "inputs": {
+      "type": "normal",
+      "control_net": [
+        "48",
+        0
+      ]
+    },
+    "class_type": "SetUnionControlNetType",
+    "_meta": {
+      "title": "SetUnionControlNetType"
+    }
+  },
+  "62": {
+    "inputs": {
+      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "model": [
+        "65",
+        0
+      ]
+    },
+    "class_type": "PathchSageAttentionKJ",
+    "_meta": {
+      "title": "Patch Sage Attention KJ"
+    }
+  },
+  "64": {
+    "inputs": {
+      "model_type": "flux",
+      "rel_l1_thresh": 0.10000000000000002,
+      "model": [
+        "62",
+        0
+      ]
+    },
+    "class_type": "TeaCacheForImgGen",
+    "_meta": {
+      "title": "TeaCache For Img Gen"
+    }
+  },
+  "65": {
+    "inputs": {
+      "lora_name": "Flux\\JordenFlux.safetensors",
+      "strength_model": 1.0000000000000002,
+      "model": [
+        "12",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderModelOnly",
+    "_meta": {
+      "title": "LoraLoaderModelOnly"
+    }
+  },
+  "66": {
+    "inputs": {
+      "image": "background_333520970739196.jpg",
+      "resize": true,
+      "width": [
+        "67",
+        0
+      ],
+      "height": [
+        "67",
+        0
+      ],
+      "repeat": 1,
+      "keep_proportion": true,
+      "divisible_by": 2,
+      "mask_channel": "alpha",
+      "background_color": ""
+    },
+    "class_type": "LoadAndResizeImage",
+    "_meta": {
+      "title": "Load & Resize Image"
+    }
+  },
+  "67": {
+    "inputs": {
+      "value": 1024
+    },
+    "class_type": "JWInteger",
+    "_meta": {
+      "title": "Integer"
+    }
+  },
+  "71": {
+    "inputs": {
+      "cfg": 1,
+      "model": [
+        "30",
+        0
+      ],
+      "positive": [
+        "26",
+        0
+      ],
+      "negative": [
+        "72",
+        0
+      ]
+    },
+    "class_type": "CFGGuider",
+    "_meta": {
+      "title": "CFGGuider"
+    }
+  },
+  "72": {
+    "inputs": {
+      "guidance": 3.5,
+      "conditioning": [
+        "38",
+        1
+      ]
+    },
+    "class_type": "FluxGuidance",
+    "_meta": {
+      "title": "FluxGuidance"
+    }
+  },
+  "73": {
+    "inputs": {
+      "output_path": "",
+      "filename_prefix": "api",
+      "filename_delimiter": "_",
+      "filename_number_padding": 4,
+      "filename_number_start": "false",
+      "extension": "jpg",
+      "dpi": 300,
+      "quality": 95,
+      "optimize_image": "true",
+      "lossless_webp": "false",
+      "overwrite_mode": "false",
+      "show_history": "false",
+      "show_history_by_prefix": "false",
+      "embed_workflow": "false",
+      "show_previews": "true",
+      "images": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "Image Save",
+    "_meta": {
+      "title": "Image Save"
+    }
+  },
+  "78": {
+    "inputs": {
+      "pixels": [
+        "66",
+        0
+      ],
+      "vae": [
+        "10",
+        0
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE Encode"
+    }
+  },
+  "79": {
+    "inputs": {
+      "ckpt_name": "depth_anything_v2_vitl.pth",
+      "resolution": [
+        "67",
+        0
+      ],
+      "image": [
+        "66",
+        0
+      ]
+    },
+    "class_type": "DepthAnythingV2Preprocessor",
+    "_meta": {
+      "title": "Depth Anything V2 - Relative"
+    }
+  },
+  "80": {
+    "inputs": {
+      "images": [
+        "81",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "81": {
+    "inputs": {
+      "blend_factor": 0.5,
+      "blend_mode": "normal",
+      "image1": [
+        "82",
+        0
+      ],
+      "image2": [
+        "79",
+        0
+      ]
+    },
+    "class_type": "ImageBlend",
+    "_meta": {
+      "title": "Image Blend"
+    }
+  },
+  "82": {
+    "inputs": {
+      "detect_hand": "enable",
+      "detect_body": "enable",
+      "detect_face": "disable",
+      "resolution": [
+        "67",
+        0
+      ],
+      "bbox_detector": "yolox_l.onnx",
+      "pose_estimator": "dw-ll_ucoco_384_bs5.torchscript.pt",
+      "scale_stick_for_xinsr_cn": "disable",
+      "image": [
+        "66",
+        0
+      ]
+    },
+    "class_type": "DWPreprocessor",
+    "_meta": {
+      "title": "DWPose Estimator"
+    }
+  }
+}

@@ -51,9 +51,26 @@ def format_time(seconds):
     minutes, seconds = divmod(int(seconds), 60)
     return f"{minutes:02d}:{seconds:02d}"
 
+def get_workflow_config():
+    config = {}
+    if os.path.exists(workflows_config_path):
+        with open(workflows_config_path, 'r') as f:
+            config.update(json.load(f))
+    workflows_dir = os.path.join(local_path, "workflows")
+    for root, dirs, files in os.walk(workflows_dir):
+        if "workflows.config.json" in files:
+            config_path = os.path.join(root, "workflows.config.json")
+            with open(config_path, 'r') as f:
+                config.update(json.load(f))
+    if not config:
+        raise KeyError("No workflows.config.json files found in workflows directory")
+    return config
+    
 def load_workflow_config(workflow_name):
-    with open(workflows_config_path, 'r') as f:
-        return json.load(f)[workflow_name]
+    config = get_workflow_config()
+    if workflow_name in config:
+        return config[workflow_name]
+    raise KeyError(f"Workflow '{workflow_name}' not found in any workflows.config.json")
 
 def set_workflow_value(d, path, key, data):
     for k in path[:-1]:
@@ -300,12 +317,7 @@ async def comfyui_runflow_handler(request: Request):
     if not workflow_name:
         raise HTTPException(status_code=400, detail="Workflow not specified")
     
-    with open(workflows_config_path, 'r') as f:
-        config = json.load(f)
-    
-    workflow_config = config.get(workflow_name)
-    if not workflow_config:
-        raise HTTPException(status_code=404, detail="Workflow not found")
+    workflow_config = load_workflow_config(workflow_name)
     
     # Process form data
     data = {}
@@ -384,15 +396,27 @@ async def comfyui_caption(request: Request):
 
 @app.get("/mode_config")
 async def get_mode_config():
+    config = []
+    # First check root mode_config.json if it exists
     if os.path.exists(mode_config_path):
         with open(mode_config_path, 'r') as f:
-            return json.load(f)
-    raise HTTPException(status_code=404, detail="Config file not found")
+            config.extend(json.load(f))
+    # Scan workflows directory for mode.config.json files
+    workflows_dir = os.path.join(local_path, "workflows")
+    for root, dirs, files in os.walk(workflows_dir):
+        if "mode.config.json" in files:
+            config_path = os.path.join(root, "mode.config.json")
+            with open(config_path, 'r') as f:
+                config.extend(json.load(f))
+    
+    if not config:
+        raise HTTPException(status_code=404, detail="No config files found")
+    
+    return config
 
 @app.get("/runflow", response_class=HTMLResponse)
 async def list_workflows(request: Request):
-    with open(workflows_config_path, 'r') as f:
-        config = json.load(f)
+    config = get_workflow_config()
     
     # Filter workflows to only those with inputs defined
     workflows_with_inputs = {
@@ -418,12 +442,7 @@ async def workflow_status_page(request: Request):
 @app.get("/runflow/{workflow}", response_class=HTMLResponse)
 async def run_workflow_form(request: Request, workflow: str):
     try:
-        with open(workflows_config_path, 'r') as f:
-            config = json.load(f)
-        
-        workflow_config = config.get(f"{workflow}_api")
-        if not workflow_config:
-            raise HTTPException(status_code=404, detail="Workflow not found")
+        workflow_config = load_workflow_config(f"{workflow}_api")
             
         if "inputs" not in workflow_config:
             raise HTTPException(status_code=400, detail="Workflow has no inputs defined")

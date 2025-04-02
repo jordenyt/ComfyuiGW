@@ -1,0 +1,260 @@
+[
+    {
+        "name": "ICLightText",
+        "title": "IC-Light Text",
+        "showT2I": false,
+        "show": true,
+        "configurable": false,
+        "default": {"type":"img2img", "baseImage":"background", "sdSize":1024},
+        "fields": {
+            "workflow": "iclight_text",
+            "background": "$background",
+            "paint": "$paint",
+            "positive": "$positive",
+            "negative": "$negative",
+            "batch_size": "$batchSize"
+        }
+    },
+    {
+        "name": "ICLightRelight",
+        "title": "IC-Light Relight",
+        "showT2I": false,
+        "show": true,
+        "configurable": false,
+        "default": {"type":"img2img", "baseImage":"background", "sdSize":1024},
+        "fields": {
+            "workflow": "iclight_relight",
+            "background": "$background",
+            "paint": "$paint",
+            "positive": "$positive",
+            "negative": "$negative"
+        }
+    },
+    {
+        "name": "ICLightBG",
+        "title": "IC-Light Merge Background",
+        "showT2I": false,
+        "show": true,
+        "configurable": false,
+        "default": {"type":"img2img", "baseImage":"background", "sdSize":1024},
+        "fields": {
+            "workflow": "iclight_bg",
+            "background": "$background",
+            "paint": "$paint",
+            "reference": "$reference",
+            "positive": "$positive",
+            "negative": "$negative"
+        }
+    },
+    {
+        "name": "sd35L",
+        "title": "SD3.5 Large txt2img",
+        "showT2I": true,
+        "show": true,
+        "configurable": true,
+        "default": {"type":"txt2img", "cfgScale":4.0, "steps":40, "sdSize":1024},
+        "fields": {
+            "workflow": "sd35_txt2img",
+            "positive": "$positive",
+            "negative": "$negative",
+            "batch_size": "$batchSize",
+            "width": "$width",
+            "height": "$height",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "checkpoint": "sd3\\sd3.5_large_fp8_scaled.safetensors"
+        }
+    },
+    {
+        "name": "PixelWave",
+        "title": "PixelWave txt2img",
+        "showT2I": false,
+        "show": false,
+        "configurable": false,
+        "default": {"type":"txt2img", "cfgScale":1, "guidance":3.5, "steps":20, "sdSize":1024},
+        "fields": {
+            "workflow": "pixelwave_txt2img",
+            "positive": "$positive",
+            "negative": "$negative",
+            "batch_size": "$batchSize",
+            "width": "$width",
+            "height": "$height",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "guidance": 3.5
+        }
+    },
+    {
+        "name": "Supir",
+        "title": "SUPIR",
+        "showT2I": false,
+        "show": true,
+        "configurable": false,
+        "default": {"type":"img2img", "sdSize":2560},
+        "fields": {
+            "workflow": "supir",
+            "positive": "$positive",
+            "negative": "$negative",
+            "background": "$background",
+            "size": 2560
+        }
+    },
+    {
+        "name": "SDXLImg2imgPose",
+        "title": "SDXL DensePose img2img",
+        "showT2I": false,
+        "show": true,
+        "configurable": true,
+        "default": {"type":"img2img", "denoise":1.0, "cfgScale":2, "steps":6, "baseImage":"background", "sdSize":1024},
+        "fields": {
+            "workflow": "sdxl_img2img_controlnet",
+            "background": "$background",
+            "positive": "$positive",
+            "negative": "$negative",
+            "batch_size": "$batchSize",
+            "size": "$size",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "denoise": 1,
+            "cnStrength":0.9,
+            "cnStart":0,
+            "cnEnd":1
+        }
+    },
+    {
+        "name": "SDXLInpaint",
+        "title": "SDXL Inpainting",
+        "showT2I": false,
+        "show": true,
+        "configurable": true,
+        "default": {"type":"inpaint", "inpaintPartial":1, "denoise":1.0, "cfgScale":2, "steps":6, "baseImage":"background", "sdSize":1024},
+        "fields": {
+            "workflow": "sdxl_inpaint",
+            "paint": "$mask",
+            "background": "$background",
+            "positive": "$positive",
+            "negative": "$negative",
+            "batch_size": "$batchSize",
+            "size": "$size",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "denoise": "$denoise",
+            "maskBlur": 5
+        }
+    },
+    {
+        "name": "SDXLOutpaint",
+        "title": "SDXL Outpainting",
+        "showT2I": false,
+        "show": false,
+        "configurable": false,
+        "default": {"type":"img2img", "cfgScale":1, "steps":8, "baseImage":"background", "left":0.0, "right":0.0, "top":0.0, "bottom":0.0, "feathering":0.1, "sdSize":1024},
+        "fields": {
+            "workflow": "sdxl_outpaint",
+            "background": "$background",
+            "positive": "$positive",
+            "negative": "$negative",
+            "batch_size": "$batchSize",
+            "size": "$size",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "left": 0.0,
+            "right": 0.0,
+            "top": 0.0,
+            "bottom": 0.0,
+            "feathering": 0.1
+        }
+    },
+    {
+        "name": "SDXLtxt2img",
+        "title": "SDXL txt2img",
+        "showT2I": true,
+        "show": true,
+        "configurable": true,
+        "default": {"type":"txt2img", "cfgScale":2.0, "steps":6, "sdSize":1024},
+        "fields": {
+            "workflow": "sdxl_txt2img",
+            "positive": "$positive",
+            "negative": "$negative",
+            "batch_size": "$batchSize",
+            "width": "$width",
+            "height": "$height",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "loraStrength": 0.0
+        }
+    },
+    {
+        "name": "SDXLInpaintFaceID",
+        "title": "SDXL FaceID+Pose Inpaint",
+        "showT2I": false,
+        "show": true,
+        "configurable": true,
+        "default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.6, "cfgScale":2, "steps":6, "maskBlur":20, "baseImage":"sketch", "sdSize":1024},
+        "fields": {
+            "workflow": "sdxl_inpaint_faceid_pose",
+            "paint": "$mask",
+            "background": "$background",
+            "positive": "$positive",
+            "negative": "$negative",
+            "batch_size": "$batchSize",
+            "size": "$size",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "denoise": "$denoise",
+            "maskBlur": "$maskBlur",
+            "reference": "$reference",
+            "loraStrength": 0.8,
+            "faceIDWeight": 0.8,
+            "poseStrength": 0.6
+        }
+    },
+    {
+        "name": "SDXLInpaintFaceIDRefine",
+        "title": "SDXL FaceID Refine",
+        "showT2I": false,
+        "show": true,
+        "configurable": true,
+        "default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.05, "cfgScale":2, "steps":6, "maskBlur":20, "baseImage":"background", "sdSize":1024},
+        "fields": {
+            "workflow": "sdxl_inpaint_faceid",
+            "paint": "$mask",
+            "background": "$background",
+            "positive": "$positive",
+            "negative": "$negative",
+            "batch_size": "$batchSize",
+            "size": "$size",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "denoise": "$denoise",
+            "maskBlur": "$maskBlur",
+            "reference": "$reference",
+            "loraStrength": 0.8,
+            "faceIDWeight": 1.0
+        }
+    },
+    {
+        "name": "livePortraitInpaint",
+        "title": "LivePortrait Advanced Inpaint",
+        "showT2I": false,
+        "show": true,
+        "configurable": true,
+        "default": {"type":"inpaint", "inpaintPartial":1, "baseImage":"background", "blink": 0, "eyebrow": 0, "wink": 0, "pupil_x": 0, "pupil_y": 0, "aaa": 0, "eee": 0, "woo": 0, "smile": 0, "src_ratio": 0,"sample_ratio": 0.7, "sdSize":1024},
+        "fields": {
+            "workflow": "livePortrait_inpaint",
+            "background": "$background",
+            "reference": "$reference",
+            "blink": 0,
+            "eyebrow": 0,
+            "wink": 0,
+            "pupil_x": 0,
+            "pupil_y": 0,
+            "aaa": 0,
+            "eee": 0,
+            "woo": 0,
+            "smile": 0,
+            "src_ratio": 0,
+            "sample_ratio": 0.7
+        }
+    }
+]

@@ -1,0 +1,45 @@
+[
+    {
+        "name": "FitImage",
+        "title": "Fit to Reference",
+        "showT2I": false,
+        "show": true,
+        "configurable": false,
+        "default": {"type":"img2img", "baseImage":"background"},
+        "fields": {
+            "workflow": "fit_to_reference",
+            "background": "$background",
+            "reference": "$reference"
+        }
+    },
+    {
+        "name": "ConcatImage",
+        "title": "Concat Images",
+        "showT2I": false,
+        "show": true,
+        "configurable": false,
+        "default": {"type":"img2img", "baseImage":"background"},
+        "fields": {
+            "workflow": "concat_image",
+            "background": "$background",
+            "reference": "$reference",
+            "direction": "right"
+        }
+    },
+    {
+        "name": "ImgSharpenPartial",
+        "title": "Partial Sharpen",
+        "showT2I": false,
+        "show": true,
+        "configurable": true,
+        "default": {"type":"inpaint", "inpaintPartial":1, "baseImage":"background", "sdSize":1024, "noise_radius": 10, "preserve_edges": 1, "sharpen": 15, "ratio": 0.5},
+        "fields": {
+            "workflow": "img_sharpen",
+            "background": "$background",
+            "noise_radius": 10,
+            "preserve_edges": 1,
+            "sharpen": 15,
+            "ratio": 0.5
+        }
+    }
+]
