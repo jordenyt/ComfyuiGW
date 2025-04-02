@@ -1,6 +1,6 @@
 {
     "iclight_text_api": {
-        "prompt_workflow": "workflows/iclight_txt_api.json",
+        "prompt_workflow": "iclight_txt_api.json",
         "fields": {
             "seed": "16.inputs.seed",
             "background": "54.inputs.image",
@@ -10,7 +10,7 @@
         }
     },
     "iclight_relight_api": {
-        "prompt_workflow": "workflows/iclight_relight_api.json",
+        "prompt_workflow": "iclight_relight_api.json",
         "fields": {
             "seed": "16.inputs.seed",
             "background": "54.inputs.image",
@@ -20,7 +20,7 @@
         }
     },
     "iclight_bg_api": {
-        "prompt_workflow": "workflows/iclight_bg_api.json",
+        "prompt_workflow": "iclight_bg_api.json",
         "fields": {
             "seed": "16.inputs.seed",
             "background": "70.inputs.image",
@@ -30,7 +30,7 @@
         }
     },
     "sd35_txt2img_api": {
-        "prompt_workflow": "workflows/sd35_txt2img_api.json",
+        "prompt_workflow": "sd35_txt2img_api.json",
         "fields": {
             "positive": "6.inputs.text",
             "negative": "71.inputs.text",
@@ -44,7 +44,7 @@
         }
     },
     "pixelwave_txt2img_api": {
-        "prompt_workflow": "workflows/pixelwave_txt2img_api.json",
+        "prompt_workflow": "pixelwave_txt2img_api.json",
         "fields": {
             "positive": "6.inputs.text",
             "negative": "29.inputs.text",
@@ -58,7 +58,7 @@
         }
     },
     "supir_api": {
-        "prompt_workflow": "workflows/supir_api.json",
+        "prompt_workflow": "supir_api.json",
         "fields": {
             "seed": "7.inputs.seed",
             "background": "27.inputs.image",
@@ -68,7 +68,7 @@
         }
     },
     "sdxl_img2img_controlnet_api": {
-        "prompt_workflow": "workflows/sdxl_i2i_controlnet_api.json",
+        "prompt_workflow": "sdxl_i2i_controlnet_api.json",
         "fields": {
             "background": "41.inputs.image",
             "positive": "6.inputs.text",
@@ -87,7 +87,7 @@
         }
     },
     "sdxl_inpaint_api": {
-        "prompt_workflow": "workflows/sdxl_inpaint_api.json",
+        "prompt_workflow": "sdxl_inpaint_api.json",
         "fields": {
             "background": "27.inputs.image",
             "paint": "28.inputs.image",
@@ -103,7 +103,7 @@
         }
     },
     "sdxl_outpaint_api": {
-        "prompt_workflow": "workflows/sdxl_outpaint_api.json",
+        "prompt_workflow": "sdxl_outpaint_api.json",
         "fields": {
             "background": "27.inputs.image",
             "positive": "6.inputs.text",
@@ -121,7 +121,7 @@
         }
     },
     "sdxl_txt2img_api": {
-        "prompt_workflow": "workflows/sdxl_lora_txt2img_api.json",
+        "prompt_workflow": "sdxl_lora_txt2img_api.json",
         "fields": {
             "positive": "6.inputs.text",
             "negative": "7.inputs.text",
@@ -136,7 +136,7 @@
         }
     },
     "sdxl_inpaint_faceid_pose_api": {
-        "prompt_workflow": "workflows/sdxl_inpaint_faceid_pose_api.json",
+        "prompt_workflow": "sdxl_inpaint_faceid_pose_api.json",
         "fields": {
             "background": "27.inputs.image",
             "paint": "28.inputs.image",
@@ -156,7 +156,7 @@
         }
     },
     "sdxl_inpaint_faceid_api": {
-        "prompt_workflow": "workflows/sdxl_inpaint_faceid_api.json",
+        "prompt_workflow": "sdxl_inpaint_faceid_api.json",
         "fields": {
             "background": "27.inputs.image",
             "paint": "28.inputs.image",
@@ -175,7 +175,7 @@
         }
     },
     "livePortrait_inpaint_api": {
-        "prompt_workflow": "workflows/advLivePortrait_img2img_api.json",
+        "prompt_workflow": "advLivePortrait_img2img_api.json",
         "fields": {
             "background": "20.inputs.image",
             "reference": "19.inputs.image",

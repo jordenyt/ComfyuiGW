@@ -1,6 +1,6 @@
 {
     "i2v_wan_480p_api": {
-        "prompt_workflow": "workflows/video/i2v_wan_480p_api.json",
+        "prompt_workflow": "i2v_wan_480p_api.json",
         "fields": {
             "seed": "48:0.inputs.noise_seed",
             "start_img": "26.inputs.image",
@@ -29,7 +29,7 @@
         }
     },
     "i2v_wan_fun_api": {
-        "prompt_workflow": "workflows/video/i2v_wan_fun_api.json",
+        "prompt_workflow": "i2v_wan_fun_api.json",
         "fields": {
             "seed": "48:0.inputs.noise_seed",
             "start_img": "26.inputs.image",
@@ -54,7 +54,7 @@
         }
     },
     "v2v_upscale_VFI_api": {
-        "prompt_workflow": "workflows/video/v2v_upscale_VFI_api.json",
+        "prompt_workflow": "v2v_upscale_VFI_api.json",
         "fields": {
             "video": "376.inputs.video",
             "force_rate": "376.inputs.force_rate"
@@ -66,7 +66,7 @@
         }
     },
     "iv2v_wan_flowedit_api": {
-        "prompt_workflow": "workflows/video/iv2v_wan_flowedit_api.json",
+        "prompt_workflow": "iv2v_wan_flowedit_api.json",
         "fields": {
             "seed": "73.inputs.seed",
             "skip_steps": "73.inputs.skip_steps",
@@ -101,7 +101,7 @@
         }
     },
     "t2v_wan_api": {
-        "prompt_workflow": "workflows/video/t2v_wan_api.json",
+        "prompt_workflow": "t2v_wan_api.json",
         "fields": {
             "seed": "48:0.inputs.noise_seed",
             "positive": "27.inputs.text",

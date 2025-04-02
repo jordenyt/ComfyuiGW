@@ -61,7 +61,15 @@ def get_workflow_config():
         if "workflows.config.json" in files:
             config_path = os.path.join(root, "workflows.config.json")
             with open(config_path, 'r') as f:
-                config.update(json.load(f))
+                workflow_config = json.load(f)
+                # For each workflow in this config, check if prompt_workflow needs path prepended
+                for name, wf in workflow_config.items():
+                    if "prompt_workflow" in wf and not os.path.isabs(wf["prompt_workflow"]):
+                        if "/" not in wf["prompt_workflow"] and "\\" not in wf["prompt_workflow"]:
+                            # Get relative path from workflows_dir to current config file
+                            rel_path = os.path.relpath(root, workflows_dir)
+                            wf["prompt_workflow"] = os.path.join("workflows", rel_path, wf["prompt_workflow"])
+                config.update(workflow_config)
     if not config:
         raise KeyError("No workflows.config.json files found in workflows directory")
     return config
@@ -389,7 +397,7 @@ async def comfyui_caption(request: Request):
         while not os.path.exists(caption_file):
             time.sleep(0.5)
         
-        with open(caption_file, 'r') as file:
+        with open(caption_file, 'r', encoding='utf-8', errors='replace') as file:
             return {"caption": file.read()}
               
     return {"caption": ""}

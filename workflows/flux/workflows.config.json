@@ -1,6 +1,6 @@
 {
     "flux_gguf_txt2img_api": {
-        "prompt_workflow": "workflows/flux/flux_gguf_txt2img_api.json",
+        "prompt_workflow": "flux_gguf_txt2img_api.json",
         "fields": {
             "positive": "6.inputs.text",
             "negative": "29.inputs.text",
@@ -14,7 +14,7 @@
         }
     },
     "flux_lora_txt2img_api": {
-        "prompt_workflow": "workflows/flux/flux_lora_txt2img_api.json",
+        "prompt_workflow": "flux_lora_txt2img_api.json",
         "fields": {
             "positive": "6.inputs.text",
             "negative": "29.inputs.text",
@@ -30,7 +30,7 @@
         }
     },
     "flux_dyna_cfg_txt2img_api": {
-        "prompt_workflow": "workflows/flux/flux_adaptiveCFG_txt2img_api.json",
+        "prompt_workflow": "flux_adaptiveCFG_txt2img_api.json",
         "fields": {
             "positive": "33.inputs.t5xxl",
             "negative": "34.inputs.clip_l",
@@ -45,7 +45,7 @@
         }
     },
     "flux_dyna_cfg_2lora_txt2img_api": {
-        "prompt_workflow": "workflows/flux/flux_adaptiveCFG_2lora_txt2img_api.json",
+        "prompt_workflow": "flux_adaptiveCFG_2lora_txt2img_api.json",
         "fields": {
             "positive": "33.inputs.t5xxl",
             "negative": "34.inputs.clip_l",
@@ -62,7 +62,7 @@
         }
     },
     "flux_dyna_cfg_img2img_api": {
-        "prompt_workflow": "workflows/flux/flux_adaptiveCFG_img2img_api.json",
+        "prompt_workflow": "flux_adaptiveCFG_img2img_api.json",
         "fields": {
             "background": "103.inputs.image",
             "positive": "33.inputs.t5xxl",
@@ -78,7 +78,7 @@
         }
     },
     "flux_lora_jorden_txt2img_api": {
-        "prompt_workflow": "workflows/flux/flux_lora_jorden_txt2img_api.json",
+        "prompt_workflow": "flux_lora_jorden_txt2img_api.json",
         "fields": {
             "positive": "6.inputs.text",
             "negative": "29.inputs.text",
@@ -94,7 +94,7 @@
         }
     },
     "flux_img2img_api": {
-        "prompt_workflow": "workflows/flux/flux_dev_img2img_api.json",
+        "prompt_workflow": "flux_dev_img2img_api.json",
         "fields": {
             "background": "41.inputs.image",
             "positive": "6.inputs.text",
@@ -111,7 +111,7 @@
         }
     },
     "flux_cn_pose_img2img_api": {
-        "prompt_workflow": "workflows/flux/flux_cn_pose_img2img_api.json",
+        "prompt_workflow": "flux_cn_pose_img2img_api.json",
         "fields": {
             "background": "66.inputs.image",
             "positive": "6.inputs.text",
@@ -130,7 +130,7 @@
         }
     },
     "flux_cn_pose_depth_img2img_api": {
-        "prompt_workflow": "workflows/flux/flux_cn_pose_depth_img2img_api.json",
+        "prompt_workflow": "flux_cn_pose_depth_img2img_api.json",
         "fields": {
             "background": "66.inputs.image",
             "positive": "6.inputs.text",
@@ -149,7 +149,7 @@
         }
     },
     "flux_canny_img2img_api": {
-        "prompt_workflow": "workflows/flux/flux_canny_img2img_api.json",
+        "prompt_workflow": "flux_canny_img2img_api.json",
         "fields": {
             "background": "41.inputs.image",
             "positive": "6.inputs.text",
@@ -166,7 +166,7 @@
         }
     },
     "flux_fill_bg_api": {
-        "prompt_workflow": "workflows/flux/flux_fill_bg_api.json",
+        "prompt_workflow": "flux_fill_bg_api.json",
         "fields": {
             "background": "1.inputs.image",
             "positive": "7.inputs.text",
@@ -181,7 +181,7 @@
         }
     },
     "flux_redux_fill_bg_api": {
-        "prompt_workflow": "workflows/flux/flux_redux_fill_bg_api.json",
+        "prompt_workflow": "flux_redux_fill_bg_api.json",
         "fields": {
             "background": "35.inputs.image",
             "reference": "68.inputs.image",
@@ -197,7 +197,7 @@
         }
     },
     "flux_inpaint_api": {
-        "prompt_workflow": "workflows/flux/flux_dev_inpaint_api.json",
+        "prompt_workflow": "flux_dev_inpaint_api.json",
         "fields": {
             "background": "35.inputs.image",
             "paint": "53.inputs.image",
@@ -216,7 +216,7 @@
         }
     },
     "flux_fill_api": {
-        "prompt_workflow": "workflows/flux/flux_dev_fill_api.json",
+        "prompt_workflow": "flux_dev_fill_api.json",
         "fields": {
             "background": "35.inputs.image",
             "paint": "53.inputs.image",
@@ -233,7 +233,7 @@
         }
     },
     "flux_redux_fill_api": {
-        "prompt_workflow": "workflows/flux/flux_redux_fill_api.json",
+        "prompt_workflow": "flux_redux_fill_api.json",
         "fields": {
             "background": "35.inputs.image",
             "paint": "53.inputs.image",
@@ -253,7 +253,7 @@
         }
     },
     "flux_outpaint_api": {
-        "prompt_workflow": "workflows/flux/flux_outpaint_api.json",
+        "prompt_workflow": "flux_outpaint_api.json",
         "fields": {
             "background": "27.inputs.image",
             "positive": "84.inputs.text",
@@ -272,7 +272,7 @@
         }
     },
     "flux_redux_api": {
-        "prompt_workflow": "workflows/flux/flux_redux_img2img_api.json",
+        "prompt_workflow": "flux_redux_img2img_api.json",
         "fields": {
             "background": "45.inputs.image",
             "positive": "6.inputs.text",
