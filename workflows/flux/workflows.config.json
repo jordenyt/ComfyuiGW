@@ -1,18 +1,4 @@
 {
-    "flux_gguf_txt2img_api": {
-        "prompt_workflow": "flux_gguf_txt2img_api.json",
-        "fields": {
-            "positive": "6.inputs.text",
-            "negative": "29.inputs.text",
-            "width": "44.inputs.value",
-            "height": "46.inputs.value",
-            "batch_size": "45.inputs.batch_size",
-            "steps": "17.inputs.steps",
-            "cfg": "31.inputs.cfg",
-            "seed": "25.inputs.noise_seed",
-            "guidance": ["41.inputs.guidance", "42.inputs.guidance"]
-        }
-    },
     "flux_lora_txt2img_api": {
         "prompt_workflow": "flux_lora_txt2img_api.json",
         "fields": {

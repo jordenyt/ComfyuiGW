@@ -1,0 +1,119 @@
+{
+    "supir_api": {
+        "prompt_workflow": "supir_api.json",
+        "fields": {
+            "seed": "7.inputs.seed",
+            "background": "27.inputs.image",
+            "size": "36.inputs.value",
+            "positive": "9.inputs.positive_prompt",
+            "negative": "9.inputs.negative_prompt"
+        }
+    },
+    "sdxl_img2img_controlnet_api": {
+        "prompt_workflow": "sdxl_i2i_controlnet_api.json",
+        "fields": {
+            "background": "41.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "29.inputs.text",
+            "size": ["41.inputs.width", "41.inputs.height"],
+            "batch_size": "55.inputs.batch_size",
+            "steps": "50.inputs.steps",
+            "cfg": "50.inputs.cfg",
+            "denoise": "50.inputs.denoise",
+            "seed": "50.inputs.seed",
+            "cnPreprocessor":"53.inputs.preprocessor",
+            "cnModel":"51.inputs.control_net_name",
+            "cnStrength":"52.inputs.strength",
+            "cnStart":"52.inputs.start_percent",
+            "cnEnd":"52.inputs.end_percent"
+        }
+    },
+    "sdxl_inpaint_api": {
+        "prompt_workflow": "sdxl_inpaint_api.json",
+        "fields": {
+            "background": "27.inputs.image",
+            "paint": "28.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "7.inputs.text",
+            "size": ["27.inputs.width", "27.inputs.height", "28.inputs.width", "28.inputs.height"],
+            "batch_size": "38.inputs.amount",
+            "steps": "3.inputs.steps",
+            "cfg": "3.inputs.cfg",
+            "denoise": "3.inputs.denoise",
+            "seed": "3.inputs.seed",
+            "maskBlur": "42.inputs.expand"
+        }
+    },
+    "sdxl_outpaint_api": {
+        "prompt_workflow": "sdxl_outpaint_api.json",
+        "fields": {
+            "background": "27.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "7.inputs.text",
+            "size": ["44.inputs.width","44.inputs.height"],
+            "batch_size": "38.inputs.amount",
+            "steps": "3.inputs.steps",
+            "cfg": "3.inputs.cfg",
+            "seed": "3.inputs.seed",
+            "left": "55.inputs.b",
+            "right": "60.inputs.b",
+            "top": "58.inputs.b",
+            "bottom": "62.inputs.b",
+            "feathering": "64.inputs.b"
+        }
+    },
+    "sdxl_txt2img_api": {
+        "prompt_workflow": "sdxl_lora_txt2img_api.json",
+        "fields": {
+            "positive": "6.inputs.text",
+            "negative": "7.inputs.text",
+            "width": "43.inputs.width",
+            "height": "43.inputs.height",
+            "batch_size": "38.inputs.amount",
+            "steps": "3.inputs.steps",
+            "cfg": "3.inputs.cfg",
+            "seed": "3.inputs.seed",
+            "lora": "44.inputs.lora_name",
+            "loraStrength": ["44.inputs.strength_model","44.inputs.strength_clip"]
+        }
+    },
+    "sdxl_inpaint_faceid_pose_api": {
+        "prompt_workflow": "sdxl_inpaint_faceid_pose_api.json",
+        "fields": {
+            "background": "27.inputs.image",
+            "paint": "28.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "7.inputs.text",
+            "size": ["27.inputs.width", "27.inputs.height", "28.inputs.width", "28.inputs.height", "55.inputs.resolution"],
+            "batch_size": "38.inputs.amount",
+            "steps": "3.inputs.steps",
+            "cfg": "3.inputs.cfg",
+            "denoise": "3.inputs.denoise",
+            "seed": "3.inputs.seed",
+            "maskBlur": "51.inputs.blur_radius",
+            "reference": "47.inputs.image",
+            "loraStrength": "45.inputs.strength_model",
+            "faceIDWeight": ["40.inputs.weight_faceidv2","40.inputs.weight"],
+            "poseStrength": "53.inputs.strength"
+        }
+    },
+    "sdxl_inpaint_faceid_api": {
+        "prompt_workflow": "sdxl_inpaint_faceid_api.json",
+        "fields": {
+            "background": "27.inputs.image",
+            "paint": "28.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "7.inputs.text",
+            "size": ["27.inputs.width", "27.inputs.height", "28.inputs.width", "28.inputs.height"],
+            "batch_size": "38.inputs.amount",
+            "steps": "3.inputs.steps",
+            "cfg": "3.inputs.cfg",
+            "denoise": "3.inputs.denoise",
+            "seed": "3.inputs.seed",
+            "maskBlur": "51.inputs.blur_radius",
+            "reference": "47.inputs.image",
+            "loraStrength": "45.inputs.strength_model",
+            "faceIDWeight": ["40.inputs.weight_faceidv2","40.inputs.weight"]
+        }
+    }
+}
