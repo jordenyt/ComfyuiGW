@@ -113,7 +113,7 @@
   },
   "25": {
     "inputs": {
-      "noise_seed": 793668191832301
+      "noise_seed": 597100974028033
     },
     "class_type": "RandomNoise",
     "_meta": {
@@ -135,8 +135,8 @@
   },
   "30": {
     "inputs": {
-      "max_shift": 0.5,
-      "base_shift": 0.5,
+      "max_shift": 0.5000000000000001,
+      "base_shift": 0.5000000000000001,
       "width": [
         "66",
         2
@@ -375,7 +375,7 @@
     "inputs": {
       "ckpt_name": "depth_anything_v2_vitl.pth",
       "resolution": [
-        "67",
+        "83",
         0
       ],
       "image": [
@@ -402,7 +402,7 @@
   },
   "81": {
     "inputs": {
-      "blend_factor": 0.5,
+      "blend_factor": 0.5000000000000001,
       "blend_mode": "normal",
       "image1": [
         "82",
@@ -424,7 +424,7 @@
       "detect_body": "enable",
       "detect_face": "disable",
       "resolution": [
-        "67",
+        "83",
         0
       ],
       "bbox_detector": "yolox_l.onnx",
@@ -438,6 +438,22 @@
     "class_type": "DWPreprocessor",
     "_meta": {
       "title": "DWPose Estimator"
+    }
+  },
+  "83": {
+    "inputs": {
+      "a": [
+        "66",
+        2
+      ],
+      "b": [
+        "66",
+        3
+      ]
+    },
+    "class_type": "JWIntegerMin",
+    "_meta": {
+      "title": "Integer Minimum"
     }
   }
 }

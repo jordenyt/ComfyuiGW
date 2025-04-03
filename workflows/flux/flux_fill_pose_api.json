@@ -1,0 +1,430 @@
+{
+  "6": {
+    "inputs": {
+      "text": "",
+      "clip": [
+        "11",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "8": {
+    "inputs": {
+      "samples": [
+        "62",
+        0
+      ],
+      "vae": [
+        "10",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "10": {
+    "inputs": {
+      "vae_name": "flux_vae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "11": {
+    "inputs": {
+      "clip_name1": "t5-v1_1-xxl-encoder-Q8_0.gguf",
+      "clip_name2": "clip_l.safetensors",
+      "type": "flux"
+    },
+    "class_type": "DualCLIPLoaderGGUF",
+    "_meta": {
+      "title": "DualCLIPLoader (GGUF)"
+    }
+  },
+  "35": {
+    "inputs": {
+      "image": "background_415121742114279.jpg",
+      "resize": true,
+      "width": 1024,
+      "height": 1024,
+      "repeat": 1,
+      "keep_proportion": true,
+      "divisible_by": 8,
+      "mask_channel": "alpha",
+      "background_color": ""
+    },
+    "class_type": "LoadAndResizeImage",
+    "_meta": {
+      "title": "Load & Resize Image"
+    }
+  },
+  "37": {
+    "inputs": {
+      "noise_mask": true,
+      "positive": [
+        "79",
+        0
+      ],
+      "negative": [
+        "79",
+        1
+      ],
+      "vae": [
+        "10",
+        0
+      ],
+      "pixels": [
+        "35",
+        0
+      ],
+      "mask": [
+        "52",
+        0
+      ]
+    },
+    "class_type": "InpaintModelConditioning",
+    "_meta": {
+      "title": "InpaintModelConditioning"
+    }
+  },
+  "39": {
+    "inputs": {
+      "guidance": 30,
+      "conditioning": [
+        "6",
+        0
+      ]
+    },
+    "class_type": "FluxGuidance",
+    "_meta": {
+      "title": "FluxGuidance"
+    }
+  },
+  "52": {
+    "inputs": {
+      "channel": "red",
+      "image": [
+        "53",
+        0
+      ]
+    },
+    "class_type": "ImageToMask",
+    "_meta": {
+      "title": "Convert Image to Mask"
+    }
+  },
+  "53": {
+    "inputs": {
+      "image": "paint_415121742114279.jpg",
+      "resize": true,
+      "width": 1024,
+      "height": 1024,
+      "repeat": 1,
+      "keep_proportion": true,
+      "divisible_by": 8,
+      "mask_channel": "alpha",
+      "background_color": ""
+    },
+    "class_type": "LoadAndResizeImage",
+    "_meta": {
+      "title": "Load & Resize Image"
+    }
+  },
+  "55": {
+    "inputs": {
+      "text": "",
+      "clip": [
+        "11",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "56": {
+    "inputs": {
+      "amount": 1,
+      "samples": [
+        "37",
+        2
+      ]
+    },
+    "class_type": "RepeatLatentBatch",
+    "_meta": {
+      "title": "Repeat Latent Batch"
+    }
+  },
+  "57": {
+    "inputs": {
+      "output_path": "",
+      "filename_prefix": "api",
+      "filename_delimiter": "_",
+      "filename_number_padding": 4,
+      "filename_number_start": "false",
+      "extension": "jpg",
+      "dpi": 300,
+      "quality": 95,
+      "optimize_image": "true",
+      "lossless_webp": "false",
+      "overwrite_mode": "false",
+      "show_history": "false",
+      "show_history_by_prefix": "true",
+      "embed_workflow": "true",
+      "show_previews": "true",
+      "images": [
+        "74",
+        0
+      ]
+    },
+    "class_type": "Image Save",
+    "_meta": {
+      "title": "Image Save"
+    }
+  },
+  "59": {
+    "inputs": {
+      "guidance": 0,
+      "conditioning": [
+        "55",
+        0
+      ]
+    },
+    "class_type": "FluxGuidance",
+    "_meta": {
+      "title": "FluxGuidance"
+    }
+  },
+  "62": {
+    "inputs": {
+      "seed": 447084666064223,
+      "steps": 20,
+      "cfg": 1,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1,
+      "model": [
+        "76",
+        0
+      ],
+      "positive": [
+        "37",
+        0
+      ],
+      "negative": [
+        "37",
+        1
+      ],
+      "latent_image": [
+        "56",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "64": {
+    "inputs": {
+      "grow": 0,
+      "blur": 0,
+      "mask": [
+        "52",
+        0
+      ]
+    },
+    "class_type": "INPAINT_ExpandMask",
+    "_meta": {
+      "title": "Expand Mask"
+    }
+  },
+  "69": {
+    "inputs": {
+      "unet_name": "fluxFillFP8_v10.safetensors",
+      "weight_dtype": "fp8_e4m3fn_fast"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "72": {
+    "inputs": {
+      "mask": [
+        "73",
+        0
+      ]
+    },
+    "class_type": "InvertMask",
+    "_meta": {
+      "title": "InvertMask"
+    }
+  },
+  "73": {
+    "inputs": {
+      "grow": 15,
+      "blur": 0,
+      "mask": [
+        "52",
+        0
+      ]
+    },
+    "class_type": "INPAINT_ExpandMask",
+    "_meta": {
+      "title": "Expand Mask"
+    }
+  },
+  "74": {
+    "inputs": {
+      "color_space": "RGB",
+      "luminance_factor": 0,
+      "color_intensity_factor": 1.0000000000000002,
+      "fade_factor": 0,
+      "neutralization_factor": 0,
+      "device": "auto",
+      "image": [
+        "8",
+        0
+      ],
+      "reference": [
+        "35",
+        0
+      ],
+      "reference_mask": [
+        "72",
+        0
+      ]
+    },
+    "class_type": "ImageColorMatchAdobe+",
+    "_meta": {
+      "title": "🔧 Image Color Match Adobe"
+    }
+  },
+  "75": {
+    "inputs": {
+      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "model": [
+        "69",
+        0
+      ]
+    },
+    "class_type": "PathchSageAttentionKJ",
+    "_meta": {
+      "title": "Patch Sage Attention KJ"
+    }
+  },
+  "76": {
+    "inputs": {
+      "model_type": "flux",
+      "rel_l1_thresh": 0.20000000000000004,
+      "model": [
+        "75",
+        0
+      ]
+    },
+    "class_type": "TeaCacheForImgGen",
+    "_meta": {
+      "title": "TeaCache For Img Gen"
+    }
+  },
+  "77": {
+    "inputs": {
+      "control_net_name": "flux\\Shakker-Labs_FLUX.1-dev-ControlNet-Union-Pro-fp8.safetensors"
+    },
+    "class_type": "ControlNetLoader",
+    "_meta": {
+      "title": "Load ControlNet Model"
+    }
+  },
+  "78": {
+    "inputs": {
+      "type": "openpose",
+      "control_net": [
+        "77",
+        0
+      ]
+    },
+    "class_type": "SetUnionControlNetType",
+    "_meta": {
+      "title": "SetUnionControlNetType"
+    }
+  },
+  "79": {
+    "inputs": {
+      "strength": 0.8000000000000002,
+      "start_percent": 0,
+      "end_percent": 0.6000000000000001,
+      "positive": [
+        "39",
+        0
+      ],
+      "negative": [
+        "59",
+        0
+      ],
+      "control_net": [
+        "78",
+        0
+      ],
+      "image": [
+        "80",
+        0
+      ],
+      "vae": [
+        "10",
+        0
+      ]
+    },
+    "class_type": "ControlNetApplyAdvanced",
+    "_meta": {
+      "title": "Apply ControlNet"
+    }
+  },
+  "80": {
+    "inputs": {
+      "detect_hand": "enable",
+      "detect_body": "enable",
+      "detect_face": "disable",
+      "resolution": [
+        "81",
+        0
+      ],
+      "bbox_detector": "yolox_l.onnx",
+      "pose_estimator": "dw-ll_ucoco_384_bs5.torchscript.pt",
+      "scale_stick_for_xinsr_cn": "disable",
+      "image": [
+        "35",
+        0
+      ]
+    },
+    "class_type": "DWPreprocessor",
+    "_meta": {
+      "title": "DWPose Estimator"
+    }
+  },
+  "81": {
+    "inputs": {
+      "a": [
+        "35",
+        2
+      ],
+      "b": [
+        "35",
+        3
+      ]
+    },
+    "class_type": "JWIntegerMin",
+    "_meta": {
+      "title": "Integer Minimum"
+    }
+  }
+}

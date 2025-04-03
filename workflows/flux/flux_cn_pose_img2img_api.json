@@ -135,8 +135,8 @@
   },
   "30": {
     "inputs": {
-      "max_shift": 0.5,
-      "base_shift": 0.5,
+      "max_shift": 0.5000000000000001,
+      "base_shift": 0.5000000000000001,
       "width": [
         "66",
         2
@@ -377,7 +377,7 @@
       "detect_body": "enable",
       "detect_face": "disable",
       "resolution": [
-        "67",
+        "83",
         0
       ],
       "bbox_detector": "yolox_l.onnx",
@@ -391,6 +391,22 @@
     "class_type": "DWPreprocessor",
     "_meta": {
       "title": "DWPose Estimator"
+    }
+  },
+  "83": {
+    "inputs": {
+      "a": [
+        "66",
+        2
+      ],
+      "b": [
+        "66",
+        3
+      ]
+    },
+    "class_type": "JWIntegerMin",
+    "_meta": {
+      "title": "Integer Minimum"
     }
   }
 }

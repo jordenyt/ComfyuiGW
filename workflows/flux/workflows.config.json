@@ -215,8 +215,29 @@
             "loraStrength": ["65.inputs.strength_model","65.inputs.strength_clip"]
         }
     },
+    "flux_cn_pose_inpaint_api": {
+        "prompt_workflow": "flux_cn_pose_inpaint_api.json",
+        "fields": {
+            "background": "35.inputs.image",
+            "paint": "53.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "55.inputs.text",
+            "size": "72.inputs.value",
+            "steps": "17.inputs.steps",
+            "cfg": "58.inputs.cfg",
+            "denoise": "17.inputs.denoise",
+            "seed": "25.inputs.noise_seed",
+            "guidance": ["39.inputs.guidance", "59.inputs.guidance"],
+            "maskBlur": ["63.inputs.blur_radius", "63.inputs.expand"],
+            "lora": "73.inputs.lora_name",
+            "loraStrength": "73.inputs.strength_model",
+            "cnStrength": "68.inputs.strength",
+            "cnEnd": "68.inputs.end_percent",
+            "cnStart": "68.inputs.start_percent"
+        }
+    },
     "flux_fill_api": {
-        "prompt_workflow": "flux_dev_fill_api.json",
+        "prompt_workflow": "flux_fill_api.json",
         "fields": {
             "background": "35.inputs.image",
             "paint": "53.inputs.image",
@@ -230,6 +251,25 @@
             "seed": "62.inputs.seed",
             "guidance": ["39.inputs.guidance", "59.inputs.guidance"],
             "maskBlur": ["73.inputs.grow","64.inputs.grow","64.inputs.blur"]
+        }
+    },
+    "flux_fill_pose_api": {
+        "prompt_workflow": "flux_fill_pose_api.json",
+        "fields": {
+            "background": "35.inputs.image",
+            "paint": "53.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "55.inputs.text",
+            "size": ["35.inputs.width", "35.inputs.height", "53.inputs.width", "53.inputs.height"],
+            "steps": "62.inputs.steps",
+            "cfg": "62.inputs.cfg",
+            "denoise": "62.inputs.denoise",
+            "seed": "62.inputs.seed",
+            "guidance": ["39.inputs.guidance", "59.inputs.guidance"],
+            "maskBlur": ["73.inputs.grow","64.inputs.grow","64.inputs.blur"],
+            "cnStrength": "79.inputs.strength",
+            "cnEnd": "79.inputs.end_percent",
+            "cnStart": "79.inputs.start_percent"
         }
     },
     "flux_redux_fill_api": {

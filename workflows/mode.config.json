@@ -49,9 +49,9 @@
     {
         "name": "sd35L",
         "title": "SD3.5 Large txt2img",
-        "showT2I": true,
-        "show": true,
-        "configurable": true,
+        "showT2I": false,
+        "show": false,
+        "configurable": false,
         "default": {"type":"txt2img", "cfgScale":4.0, "steps":40, "sdSize":1024},
         "fields": {
             "workflow": "sd35_txt2img",
@@ -100,11 +100,26 @@
         }
     },
     {
+        "name": "SupirPartial",
+        "title": "SUPIR Inpaint",
+        "showT2I": false,
+        "show": true,
+        "configurable": false,
+        "default": {"type":"inpaint", "baseImage":"background", "inpaintPartial":1, "sdSize":2560},
+        "fields": {
+            "workflow": "supir",
+            "positive": "$positive",
+            "negative": "$negative",
+            "background": "$background",
+            "size": 2560
+        }
+    },
+    {
         "name": "SDXLImg2imgPose",
         "title": "SDXL DensePose img2img",
         "showT2I": false,
-        "show": true,
-        "configurable": true,
+        "show": false,
+        "configurable": false,
         "default": {"type":"img2img", "denoise":1.0, "cfgScale":2, "steps":6, "baseImage":"background", "sdSize":1024},
         "fields": {
             "workflow": "sdxl_img2img_controlnet",
@@ -168,9 +183,9 @@
     {
         "name": "SDXLtxt2img",
         "title": "SDXL txt2img",
-        "showT2I": true,
-        "show": true,
-        "configurable": true,
+        "showT2I": false,
+        "show": false,
+        "configurable": false,
         "default": {"type":"txt2img", "cfgScale":2.0, "steps":6, "sdSize":1024},
         "fields": {
             "workflow": "sdxl_txt2img",
@@ -188,8 +203,8 @@
         "name": "SDXLInpaintFaceID",
         "title": "SDXL FaceID+Pose Inpaint",
         "showT2I": false,
-        "show": true,
-        "configurable": true,
+        "show": false,
+        "configurable": false,
         "default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.6, "cfgScale":2, "steps":6, "maskBlur":20, "baseImage":"sketch", "sdSize":1024},
         "fields": {
             "workflow": "sdxl_inpaint_faceid_pose",
@@ -213,8 +228,8 @@
         "name": "SDXLInpaintFaceIDRefine",
         "title": "SDXL FaceID Refine",
         "showT2I": false,
-        "show": true,
-        "configurable": true,
+        "show": false,
+        "configurable": false,
         "default": {"type":"inpaint", "inpaintPartial":1, "denoise":0.05, "cfgScale":2, "steps":6, "maskBlur":20, "baseImage":"background", "sdSize":1024},
         "fields": {
             "workflow": "sdxl_inpaint_faceid",
