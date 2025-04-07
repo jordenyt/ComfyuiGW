@@ -14,8 +14,8 @@
   },
   "24": {
     "inputs": {
-      "rel_l1_thresh": 0.20000000000000004,
-      "start_percent": 0.30000000000000004,
+      "rel_l1_thresh": 0.15000000000000002,
+      "start_percent": 0.3,
       "end_percent": 1,
       "cache_device": "offload_device",
       "coefficients": "i2v_480",
@@ -48,8 +48,8 @@
     "inputs": {
       "image": "sdsketch_6922_240828140158.jpg",
       "resize": true,
-      "width": 720,
-      "height": 720,
+      "width": 640,
+      "height": 640,
       "repeat": 1,
       "keep_proportion": true,
       "divisible_by": 2,
@@ -105,7 +105,7 @@
   },
   "32": {
     "inputs": {
-      "shift": 8.000000000000002,
+      "shift": 8,
       "model": [
         "23",
         0
@@ -208,7 +208,7 @@
   },
   "50": {
     "inputs": {
-      "weight": 2.0000000000000004,
+      "weight": 2,
       "model": [
         "24",
         0
@@ -267,7 +267,7 @@
   "53": {
     "inputs": {
       "blocks": "9",
-      "start_percent": 0.20000000000000004,
+      "start_percent": 0.2,
       "end_percent": 1,
       "model": [
         "25",
@@ -277,18 +277,6 @@
     "class_type": "SkipLayerGuidanceWanVideo",
     "_meta": {
       "title": "Skip Layer Guidance WanVideo"
-    }
-  },
-  "67": {
-    "inputs": {
-      "width": 832,
-      "height": 480,
-      "length": 81,
-      "batch_size": 1
-    },
-    "class_type": "WanImageToVideo",
-    "_meta": {
-      "title": "WanImageToVideo"
     }
   },
   "21:0": {
@@ -322,7 +310,7 @@
   },
   "48:0": {
     "inputs": {
-      "noise_seed": 462027262093711
+      "noise_seed": 838386305966732
     },
     "class_type": "RandomNoise",
     "_meta": {

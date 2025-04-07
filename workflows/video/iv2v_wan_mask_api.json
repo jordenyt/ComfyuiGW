@@ -1,0 +1,664 @@
+{
+  "23": {
+    "inputs": {
+      "unet_name": "wan2.1-i2v-14b-480p-Q6_K.gguf",
+      "device": "cuda:0",
+      "virtual_vram_gb": 0,
+      "use_other_vram": false,
+      "expert_mode_allocations": ""
+    },
+    "class_type": "UnetLoaderGGUFDisTorchMultiGPU",
+    "_meta": {
+      "title": "UnetLoaderGGUFDisTorchMultiGPU"
+    }
+  },
+  "24": {
+    "inputs": {
+      "rel_l1_thresh": 0.15000000000000002,
+      "start_percent": 0.30000000000000004,
+      "end_percent": 1,
+      "cache_device": "offload_device",
+      "coefficients": "14B",
+      "model": [
+        "143",
+        0
+      ]
+    },
+    "class_type": "WanVideoTeaCacheKJ",
+    "_meta": {
+      "title": "WanVideo Tea Cache (native)"
+    }
+  },
+  "26": {
+    "inputs": {
+      "image": "target_image_784190783704504.jpg",
+      "resize": true,
+      "width": 640,
+      "height": 640,
+      "repeat": 1,
+      "keep_proportion": true,
+      "divisible_by": 16,
+      "mask_channel": "alpha",
+      "background_color": ""
+    },
+    "class_type": "LoadAndResizeImage",
+    "_meta": {
+      "title": "Load & Resize Image"
+    }
+  },
+  "27": {
+    "inputs": {
+      "text": "Asian woman, long brown hair, pull off her shirt, playing with her breast",
+      "clip": [
+        "21:1",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "28": {
+    "inputs": {
+      "text": "overexposure, deformed, mutation, blurry, flashing",
+      "clip": [
+        "21:1",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "31": {
+    "inputs": {
+      "samples": [
+        "103:12",
+        1
+      ],
+      "vae": [
+        "21:2",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "32": {
+    "inputs": {
+      "shift": 8.000000000000002,
+      "model": [
+        "144",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingSD3",
+    "_meta": {
+      "title": "ModelSamplingSD3"
+    }
+  },
+  "39": {
+    "inputs": {
+      "frame_rate": 16,
+      "loop_count": 0,
+      "filename_prefix": "iv2v_wan_control_mask",
+      "format": "video/h264-mp4",
+      "pix_fmt": "yuv420p",
+      "crf": 19,
+      "save_metadata": false,
+      "trim_to_audio": false,
+      "pingpong": false,
+      "save_output": true,
+      "images": [
+        "31",
+        0
+      ],
+      "audio": [
+        "117",
+        2
+      ]
+    },
+    "class_type": "VHS_VideoCombine",
+    "_meta": {
+      "title": "Video Combine 🎥🅥🅗🅢"
+    }
+  },
+  "41": {
+    "inputs": {
+      "crop": "none",
+      "clip_vision": [
+        "21:0",
+        0
+      ],
+      "image": [
+        "26",
+        0
+      ]
+    },
+    "class_type": "CLIPVisionEncode",
+    "_meta": {
+      "title": "CLIP Vision Encode"
+    }
+  },
+  "49": {
+    "inputs": {
+      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "model": [
+        "72",
+        0
+      ]
+    },
+    "class_type": "PathchSageAttentionKJ",
+    "_meta": {
+      "title": "Patch Sage Attention KJ"
+    }
+  },
+  "50": {
+    "inputs": {
+      "weight": 2.0000000000000004,
+      "model": [
+        "24",
+        0
+      ],
+      "latent": [
+        "127",
+        0
+      ]
+    },
+    "class_type": "WanVideoEnhanceAVideoKJ",
+    "_meta": {
+      "title": "WanVideo Enhance A Video (native)"
+    }
+  },
+  "72": {
+    "inputs": {
+      "model": [
+        "32",
+        0
+      ]
+    },
+    "class_type": "CFGZeroStar",
+    "_meta": {
+      "title": "CFGZeroStar"
+    }
+  },
+  "117": {
+    "inputs": {
+      "video": "src_video_784190783704504.mp4",
+      "force_rate": 16,
+      "custom_width": 0,
+      "custom_height": 0,
+      "frame_load_cap": 161,
+      "skip_first_frames": 0,
+      "select_every_nth": 1,
+      "format": "AnimateDiff"
+    },
+    "class_type": "VHS_LoadVideo",
+    "_meta": {
+      "title": "Load Video (Upload) 🎥🅥🅗🅢"
+    }
+  },
+  "121": {
+    "inputs": {
+      "video_info": [
+        "117",
+        3
+      ]
+    },
+    "class_type": "VHS_VideoInfoLoaded",
+    "_meta": {
+      "title": "Video Info (Loaded) 🎥🅥🅗🅢"
+    }
+  },
+  "125": {
+    "inputs": {
+      "expand": 30,
+      "incremental_expandrate": 0,
+      "tapered_corners": true,
+      "flip_input": false,
+      "blur_radius": 10,
+      "lerp_alpha": 1,
+      "decay_factor": 1,
+      "fill_holes": true,
+      "mask": [
+        "139",
+        1
+      ]
+    },
+    "class_type": "GrowMaskWithBlur",
+    "_meta": {
+      "title": "Grow Mask With Blur"
+    }
+  },
+  "127": {
+    "inputs": {
+      "samples": [
+        "128",
+        0
+      ],
+      "mask": [
+        "125",
+        0
+      ]
+    },
+    "class_type": "SetLatentNoiseMask",
+    "_meta": {
+      "title": "Set Latent Noise Mask"
+    }
+  },
+  "128": {
+    "inputs": {
+      "pixels": [
+        "132",
+        0
+      ],
+      "vae": [
+        "21:2",
+        0
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE Encode"
+    }
+  },
+  "132": {
+    "inputs": {
+      "width": [
+        "26",
+        2
+      ],
+      "height": [
+        "26",
+        3
+      ],
+      "upscale_method": "nearest-exact",
+      "keep_proportion": false,
+      "divisible_by": 2,
+      "crop": "disabled",
+      "image": [
+        "117",
+        0
+      ]
+    },
+    "class_type": "ImageResizeKJ",
+    "_meta": {
+      "title": "Resize Image"
+    }
+  },
+  "133": {
+    "inputs": {
+      "mask": [
+        "139",
+        1
+      ]
+    },
+    "class_type": "MaskToImage",
+    "_meta": {
+      "title": "Convert Mask to Image"
+    }
+  },
+  "134": {
+    "inputs": {
+      "frame_rate": [
+        "121",
+        0
+      ],
+      "loop_count": 0,
+      "filename_prefix": "control_mask",
+      "format": "video/h264-mp4",
+      "pix_fmt": "yuv420p",
+      "crf": 19,
+      "save_metadata": true,
+      "trim_to_audio": false,
+      "pingpong": false,
+      "save_output": true,
+      "images": [
+        "135",
+        0
+      ]
+    },
+    "class_type": "VHS_VideoCombine",
+    "_meta": {
+      "title": "Video Combine 🎥🅥🅗🅢"
+    }
+  },
+  "135": {
+    "inputs": {
+      "x": 0,
+      "y": 0,
+      "resize_source": false,
+      "destination": [
+        "132",
+        0
+      ],
+      "source": [
+        "133",
+        0
+      ],
+      "mask": [
+        "139",
+        1
+      ]
+    },
+    "class_type": "ImageCompositeMasked",
+    "_meta": {
+      "title": "ImageCompositeMasked"
+    }
+  },
+  "139": {
+    "inputs": {
+      "prompt": "face, hair, woman",
+      "threshold": 0.3,
+      "sam_model": [
+        "140",
+        0
+      ],
+      "grounding_dino_model": [
+        "141",
+        0
+      ],
+      "image": [
+        "132",
+        0
+      ]
+    },
+    "class_type": "GroundingDinoSAM2Segment (segment anything2)",
+    "_meta": {
+      "title": "GroundingDinoSAM2Segment (segment anything2)"
+    }
+  },
+  "140": {
+    "inputs": {
+      "model_name": "sam2_1_hiera_large.pt"
+    },
+    "class_type": "SAM2ModelLoader (segment anything2)",
+    "_meta": {
+      "title": "SAM2ModelLoader (segment anything2)"
+    }
+  },
+  "141": {
+    "inputs": {
+      "model_name": "GroundingDINO_SwinB (938MB)"
+    },
+    "class_type": "GroundingDinoModelLoader (segment anything2)",
+    "_meta": {
+      "title": "GroundingDinoModelLoader (segment anything2)"
+    }
+  },
+  "142": {
+    "inputs": {
+      "width": [
+        "26",
+        2
+      ],
+      "height": [
+        "26",
+        3
+      ],
+      "length": [
+        "121",
+        1
+      ],
+      "batch_size": 1,
+      "positive": [
+        "27",
+        0
+      ],
+      "negative": [
+        "28",
+        0
+      ],
+      "vae": [
+        "21:2",
+        0
+      ],
+      "clip_vision_output": [
+        "41",
+        0
+      ],
+      "start_image": [
+        "26",
+        0
+      ]
+    },
+    "class_type": "WanImageToVideo",
+    "_meta": {
+      "title": "WanImageToVideo"
+    }
+  },
+  "143": {
+    "inputs": {
+      "blocks": "9",
+      "start_percent": 0.2,
+      "end_percent": 1,
+      "model": [
+        "49",
+        0
+      ]
+    },
+    "class_type": "SkipLayerGuidanceWanVideo",
+    "_meta": {
+      "title": "Skip Layer Guidance WanVideo"
+    }
+  },
+  "144": {
+    "inputs": {
+      "lora_name": "WAN21\\wan-nsfw-e14-fixed.safetensors",
+      "strength_model": 1,
+      "model": [
+        "23",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderModelOnly",
+    "_meta": {
+      "title": "LoraLoaderModelOnly"
+    }
+  },
+  "21:2": {
+    "inputs": {
+      "vae_name": "Wan2_1_VAE_bf16.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "21:1": {
+    "inputs": {
+      "clip_name": "t5xxl_um_fp8_e4m3fn_scaled.safetensors",
+      "type": "wan",
+      "device": "cpu"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP"
+    }
+  },
+  "21:0": {
+    "inputs": {
+      "clip_name": "clip_vision_h_fp8_e4m3fn.safetensors"
+    },
+    "class_type": "CLIPVisionLoader",
+    "_meta": {
+      "title": "Load CLIP Vision"
+    }
+  },
+  "103:0": {
+    "inputs": {
+      "noise_seed": 965454364217473
+    },
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "RandomNoise"
+    }
+  },
+  "103:1": {
+    "inputs": {
+      "Number": "20"
+    },
+    "class_type": "Int",
+    "_meta": {
+      "title": "Int"
+    }
+  },
+  "103:2": {
+    "inputs": {
+      "sampler_name": "euler_ancestral"
+    },
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "KSamplerSelect"
+    }
+  },
+  "103:3": {
+    "inputs": {
+      "expression": "round(a * 0.7)",
+      "a": [
+        "103:1",
+        0
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "103:7": {
+    "inputs": {
+      "cfg": 6,
+      "model": [
+        "50",
+        0
+      ],
+      "positive": [
+        "142",
+        0
+      ],
+      "negative": [
+        "142",
+        1
+      ]
+    },
+    "class_type": "CFGGuider",
+    "_meta": {
+      "title": "CFGGuider"
+    }
+  },
+  "103:8": {
+    "inputs": {
+      "cfg": 1,
+      "model": [
+        "50",
+        0
+      ],
+      "positive": [
+        "142",
+        0
+      ],
+      "negative": [
+        "142",
+        1
+      ]
+    },
+    "class_type": "CFGGuider",
+    "_meta": {
+      "title": "CFGGuider"
+    }
+  },
+  "103:9": {
+    "inputs": {
+      "scheduler": "simple",
+      "steps": [
+        "103:1",
+        0
+      ],
+      "denoise": 1,
+      "model": [
+        "50",
+        0
+      ]
+    },
+    "class_type": "BasicScheduler",
+    "_meta": {
+      "title": "BasicScheduler"
+    }
+  },
+  "103:10": {
+    "inputs": {
+      "step": [
+        "103:3",
+        0
+      ],
+      "sigmas": [
+        "103:9",
+        0
+      ]
+    },
+    "class_type": "SplitSigmas",
+    "_meta": {
+      "title": "SplitSigmas"
+    }
+  },
+  "103:11": {
+    "inputs": {
+      "noise": [
+        "103:0",
+        0
+      ],
+      "guider": [
+        "103:7",
+        0
+      ],
+      "sampler": [
+        "103:2",
+        0
+      ],
+      "sigmas": [
+        "103:10",
+        0
+      ],
+      "latent_image": [
+        "127",
+        0
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  },
+  "103:12": {
+    "inputs": {
+      "noise": [
+        "103:0",
+        0
+      ],
+      "guider": [
+        "103:8",
+        0
+      ],
+      "sampler": [
+        "103:2",
+        0
+      ],
+      "sigmas": [
+        "103:10",
+        1
+      ],
+      "latent_image": [
+        "103:11",
+        1
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  }
+}
