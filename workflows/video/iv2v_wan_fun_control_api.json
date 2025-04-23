@@ -14,8 +14,8 @@
   },
   "24": {
     "inputs": {
-      "rel_l1_thresh": 0.10000000000000002,
-      "start_percent": 0.30000000000000004,
+      "rel_l1_thresh": 0.2,
+      "start_percent": 0.3,
       "end_percent": 1,
       "cache_device": "offload_device",
       "coefficients": "14B",
@@ -92,7 +92,7 @@
     "inputs": {
       "shift": 8.000000000000002,
       "model": [
-        "23",
+        "123",
         0
       ]
     },
@@ -317,6 +317,20 @@
     "class_type": "VAEEncode",
     "_meta": {
       "title": "VAE Encode"
+    }
+  },
+  "123": {
+    "inputs": {
+      "lora_name": "WAN21\\Wan2.1-Fun-14B-InP-MPS.safetensors",
+      "strength_model": 1,
+      "model": [
+        "23",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderModelOnly",
+    "_meta": {
+      "title": "LoraLoaderModelOnly"
     }
   },
   "21:0": {

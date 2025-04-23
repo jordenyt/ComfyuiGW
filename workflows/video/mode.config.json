@@ -1,5 +1,22 @@
 [
     {
+        "name": "I2V_FramePack",
+        "title": "I2V FramePack",
+        "showT2I": false,
+        "show": true,
+        "configurable": false,
+        "default": {"type":"img2img", "baseImage":"background"},
+        "fields": {
+            "workflow": "i2v_framepack",
+            "start_img": "$background",
+            "positive": "$positive",
+            "length": 5.0,
+            "cfg": 1,
+            "steps": 30,
+            "size": 640
+        }
+    },
+    {
         "name": "I2V_WAN_480p",
         "title": "I2V WAN 480p",
         "showT2I": false,
@@ -7,7 +24,7 @@
         "configurable": false,
         "default": {"type":"img2img", "baseImage":"background"},
         "fields": {
-            "workflow": "i2v_wan_480p",
+            "workflow": "i2v_wan",
             "start_img": "$background",
             "positive": "$positive",
             "negative": "$negative",
@@ -25,7 +42,7 @@
         "configurable": false,
         "default": {"type":"img2img", "baseImage":"background"},
         "fields": {
-            "workflow": "i2v_wan_480p",
+            "workflow": "i2v_wan",
             "start_img": "$background",
             "positive": "$positive",
             "negative": "$negative",
@@ -35,48 +52,6 @@
             "size": 640,
             "lora": "WAN21\\wan-nsfw-e14-fixed.safetensors",
             "loraStrength": 1
-        }
-    },
-    {
-        "name": "I2V_WAN_720p",
-        "title": "I2V WAN 720p",
-        "showT2I": false,
-        "show": true,
-        "configurable": false,
-        "default": {"type":"img2img", "baseImage":"background"},
-        "fields": {
-            "workflow": "i2v_wan_480p",
-            "start_img": "$background",
-            "positive": "$positive",
-            "negative": "$negative",
-            "length": 81,
-            "cfg": 6,
-            "steps": 20,
-            "unet_name": "wan2.1-i2v-14b-720p-Q6_K.gguf",
-            "coefficients": "i2v_720",
-            "size": 720
-        }
-    },
-    {
-        "name": "I2V_WAN_720p_LORA",
-        "title": "I2V WAN 720p LORA",
-        "showT2I": false,
-        "show": true,
-        "configurable": false,
-        "default": {"type":"img2img", "baseImage":"background"},
-        "fields": {
-            "workflow": "i2v_wan_480p",
-            "start_img": "$background",
-            "positive": "$positive",
-            "negative": "$negative",
-            "length": 81,
-            "cfg": 6,
-            "steps": 20,
-            "lora": "WAN21\\wan-nsfw-e14-fixed.safetensors",
-            "loraStrength": 1,
-            "unet_name": "wan2.1-i2v-14b-720p-Q6_K.gguf",
-            "coefficients": "i2v_720",
-            "size": 720
         }
     },
     {

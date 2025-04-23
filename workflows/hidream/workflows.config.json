@@ -1,0 +1,35 @@
+{
+    "hidream_txt2img_api": {
+        "prompt_workflow": "t2i_hidream_api.json",
+        "fields": {
+            "positive": "16.inputs.text",
+            "negative": "40.inputs.text",
+            "width": "53.inputs.width",
+            "height": "53.inputs.height",
+            "steps": "3.inputs.steps",
+            "sampler": "3.inputs.sampler_name",
+            "scheduler": "3.inputs.scheduler",
+            "cfg": "3.inputs.cfg",
+            "seed": "3.inputs.seed",
+            "shift": "70.inputs.shift",
+            "unet": "69.inputs.unet_name"
+        }
+    },
+    "hidream_img2img_api": {
+        "prompt_workflow": "i2i_hidream_api.json",
+        "fields": {
+            "positive": "16.inputs.text",
+            "negative": "40.inputs.text",
+            "background": "76.inputs.image",
+            "size": ["76.inputs.width", "76.inputs.height"],
+            "steps": "3.inputs.steps",
+            "sampler": "3.inputs.sampler_name",
+            "scheduler": "3.inputs.scheduler",
+            "cfg": "3.inputs.cfg",
+            "seed": "3.inputs.seed",
+            "shift": "70.inputs.shift",
+            "unet": "69.inputs.unet_name",
+            "denoise": "3.inputs.denoise"
+        }
+    }
+}

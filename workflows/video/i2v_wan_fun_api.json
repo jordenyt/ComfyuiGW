@@ -75,7 +75,7 @@
     "inputs": {
       "shift": 8,
       "model": [
-        "23",
+        "77",
         0
       ]
     },
@@ -273,8 +273,8 @@
   },
   "76": {
     "inputs": {
-      "rel_l1_thresh": 0.10000000000000002,
-      "start_percent": 0.30000000000000004,
+      "rel_l1_thresh": 0.2,
+      "start_percent": 0.3,
       "end_percent": 1,
       "cache_device": "offload_device",
       "coefficients": "14B",
@@ -286,6 +286,20 @@
     "class_type": "WanVideoTeaCacheKJ",
     "_meta": {
       "title": "WanVideo Tea Cache (native)"
+    }
+  },
+  "77": {
+    "inputs": {
+      "lora_name": "WAN21\\Wan2.1-Fun-14B-InP-MPS.safetensors",
+      "strength_model": 1,
+      "model": [
+        "23",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderModelOnly",
+    "_meta": {
+      "title": "LoraLoaderModelOnly"
     }
   },
   "21:0": {

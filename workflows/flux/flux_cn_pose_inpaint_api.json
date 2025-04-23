@@ -409,7 +409,7 @@
   },
   "69": {
     "inputs": {
-      "control_net_name": "flux\\Shakker-Labs_FLUX.1-dev-ControlNet-Union-Pro-fp8.safetensors"
+      "control_net_name": "flux\\FLUX.1-dev-ControlNet-Union-Pro-2.0-fp8.safetensors"
     },
     "class_type": "ControlNetLoader",
     "_meta": {

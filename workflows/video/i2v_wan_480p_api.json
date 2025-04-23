@@ -14,7 +14,7 @@
   },
   "24": {
     "inputs": {
-      "rel_l1_thresh": 0.15000000000000002,
+      "rel_l1_thresh": 0.15,
       "start_percent": 0.3,
       "end_percent": 1,
       "cache_device": "offload_device",
@@ -27,21 +27,6 @@
     "class_type": "WanVideoTeaCacheKJ",
     "_meta": {
       "title": "WanVideo Tea Cache (native)"
-    }
-  },
-  "25": {
-    "inputs": {
-      "lora_name": "WAN21\\wan-nsfw-e14-fixed.safetensors",
-      "strength": 0,
-      "blocks_type": "all",
-      "model": [
-        "32",
-        0
-      ]
-    },
-    "class_type": "HunyuanVideoLoraLoader",
-    "_meta": {
-      "title": "Hunyuan Video LoRA Loader"
     }
   },
   "26": {
@@ -270,13 +255,27 @@
       "start_percent": 0.2,
       "end_percent": 1,
       "model": [
-        "25",
+        "68",
         0
       ]
     },
     "class_type": "SkipLayerGuidanceWanVideo",
     "_meta": {
       "title": "Skip Layer Guidance WanVideo"
+    }
+  },
+  "68": {
+    "inputs": {
+      "lora_name": "WAN21\\wan-nsfw-e14-fixed.safetensors",
+      "strength_model": 1,
+      "model": [
+        "32",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderModelOnly",
+    "_meta": {
+      "title": "LoraLoaderModelOnly"
     }
   },
   "21:0": {

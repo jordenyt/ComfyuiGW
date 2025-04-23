@@ -189,7 +189,8 @@
             "loraStrength": 1.0,
             "cnStrength": 0.8,
             "cnEnd": 0.6,
-            "cnStart": 0.0
+            "cnStart": 0.0,
+            "face": "disable"
         }
     },
     {
@@ -213,7 +214,8 @@
             "loraStrength": 1.0,
             "cnStrength": 0.8,
             "cnEnd": 0.6,
-            "cnStart": 0.0
+            "cnStart": 0.0,
+            "face": "disable"
         }
     },
     {
@@ -398,7 +400,8 @@
             "loraStrength": 1.0,
             "cnStrength": 0.8,
             "cnEnd": 0.6,
-            "cnStart": 0.0
+            "cnStart": 0.0,
+            "face": "disable"
         }
     },
     {
@@ -424,7 +427,8 @@
             "loraStrength": 1.0,
             "cnStrength": 0.8,
             "cnEnd": 0.6,
-            "cnStart": 0.0
+            "cnStart": 0.0,
+            "face": "disable"
         }
     },
     {
@@ -490,7 +494,8 @@
             "guidance": 30,
             "cnStrength": 0.8,
             "cnEnd": 0.6,
-            "cnStart": 0.0
+            "cnStart": 0.0,
+            "face": "disable"
         }
     },
     {
@@ -514,7 +519,8 @@
             "guidance": 30,
             "cnStrength": 0.8,
             "cnEnd": 0.6,
-            "cnStart": 0.0
+            "cnStart": 0.0,
+            "face": "disable"
         }
     },
     {
@@ -536,9 +542,7 @@
             "cfg": "$cfg",
             "denoise": "$denoise",
             "guidance": 30,
-            "ref_bg": false,
-            "lora": "Flux\\JordenFlux.safetensors",
-            "loraStrength": 0.0
+            "ref_bg": false
         }
     },
     {
@@ -560,9 +564,33 @@
             "cfg": "$cfg",
             "denoise": "$denoise",
             "guidance": 30,
+            "ref_bg": false
+        }
+    },
+    {
+        "name": "fluxReduxFillPose",
+        "title": "Flux Redux Fill Pose",
+        "showT2I": false,
+        "show": true,
+        "configurable": true,
+        "default": {"type":"inpaint", "baseImage":"background", "cfgScale":1.0, "steps":25, "denoise":1.0, "inpaintPartial":1, "sdSize":768},
+        "fields": {
+            "workflow": "flux_redux_fill_pose",
+            "paint": "$mask",
+            "reference": "$reference",
+            "background": "$background",
+            "size": "$size",
+            "positive": "$positive",
+            "batch_size": "$batchSize",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "denoise": "$denoise",
+            "guidance": 30,
             "ref_bg": false,
-            "lora": "Flux\\JordenFlux.safetensors",
-            "loraStrength": 0.0
+            "cnStrength": 0.8,
+            "cnEnd": 0.6,
+            "cnStart": 0.0,
+            "face": "disable"
         }
     },
     {

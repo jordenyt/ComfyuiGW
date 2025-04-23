@@ -14,11 +14,11 @@
   },
   "24": {
     "inputs": {
-      "rel_l1_thresh": 0.15000000000000002,
-      "start_percent": 0.30000000000000004,
+      "rel_l1_thresh": 0.15,
+      "start_percent": 0.3,
       "end_percent": 1,
       "cache_device": "offload_device",
-      "coefficients": "14B",
+      "coefficients": "i2v_480",
       "model": [
         "143",
         0

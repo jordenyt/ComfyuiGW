@@ -112,7 +112,8 @@
             "loraStrength": "65.inputs.strength_model",
             "cnStrength": "38.inputs.strength",
             "cnEnd": "38.inputs.end_percent",
-            "cnStart": "38.inputs.start_percent"
+            "cnStart": "38.inputs.start_percent",
+            "face": "82.inputs.detect_face"
         }
     },
     "flux_cn_pose_depth_img2img_api": {
@@ -131,7 +132,8 @@
             "loraStrength": "65.inputs.strength_model",
             "cnStrength": "38.inputs.strength",
             "cnEnd": "38.inputs.end_percent",
-            "cnStart": "38.inputs.start_percent"
+            "cnStart": "38.inputs.start_percent",
+            "face": "82.inputs.detect_face"
         }
     },
     "flux_canny_img2img_api": {
@@ -219,7 +221,8 @@
             "loraStrength": "73.inputs.strength_model",
             "cnStrength": "68.inputs.strength",
             "cnEnd": "68.inputs.end_percent",
-            "cnStart": "68.inputs.start_percent"
+            "cnStart": "68.inputs.start_percent",
+            "face": "71.inputs.detect_face"
         }
     },
     "flux_fill_api": {
@@ -255,7 +258,8 @@
             "maskBlur": ["73.inputs.grow","64.inputs.grow","64.inputs.blur"],
             "cnStrength": "79.inputs.strength",
             "cnEnd": "79.inputs.end_percent",
-            "cnStart": "79.inputs.start_percent"
+            "cnStart": "79.inputs.start_percent",
+            "face": "80.inputs.detect_face"
         }
     },
     "flux_redux_fill_api": {
@@ -273,9 +277,29 @@
             "denoise": "62.inputs.denoise",
             "seed": "62.inputs.seed",
             "guidance": ["39.inputs.guidance", "59.inputs.guidance"],
-            "lora": "85.inputs.lora_name",
-            "loraStrength": ["85.inputs.strength_model","85.inputs.strength_clip"],
             "ref_bg": "71.inputs.invert_output"
+        }
+    },
+    "flux_redux_fill_pose_api": {
+        "prompt_workflow": "flux_redux_fill_pose_api.json",
+        "fields": {
+            "background": "35.inputs.image",
+            "paint": "53.inputs.image",
+            "reference": "68.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "55.inputs.text",
+            "size": "81.inputs.value",
+            "batch_size": "84.inputs.a",
+            "steps": "62.inputs.steps",
+            "cfg": "62.inputs.cfg",
+            "denoise": "62.inputs.denoise",
+            "seed": "62.inputs.seed",
+            "guidance": ["39.inputs.guidance", "59.inputs.guidance"],
+            "ref_bg": "71.inputs.invert_output",
+            "cnStrength": "108.inputs.strength",
+            "cnEnd": "108.inputs.end_percent",
+            "cnStart": "108.inputs.start_percent",
+            "face": "114.inputs.detect_face"
         }
     },
     "flux_outpaint_api": {

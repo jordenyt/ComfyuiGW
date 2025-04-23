@@ -85,12 +85,12 @@
     "inputs": {
       "noise_mask": true,
       "positive": [
-        "6",
+        "108",
         0
       ],
       "negative": [
-        "55",
-        0
+        "108",
+        1
       ],
       "vae": [
         "10",
@@ -230,7 +230,7 @@
   },
   "62": {
     "inputs": {
-      "seed": 520820047672501,
+      "seed": 132025379600548,
       "steps": 25,
       "cfg": 1,
       "sampler_name": "euler",
@@ -450,7 +450,7 @@
   },
   "81": {
     "inputs": {
-      "value": 1024
+      "value": 768
     },
     "class_type": "JWInteger",
     "_meta": {
@@ -473,7 +473,7 @@
   "84": {
     "inputs": {
       "a": 1,
-      "b": 3
+      "b": 1
     },
     "class_type": "JWIntegerMin",
     "_meta": {
@@ -505,6 +505,99 @@
     "class_type": "TeaCacheForImgGen",
     "_meta": {
       "title": "TeaCache For Img Gen"
+    }
+  },
+  "107": {
+    "inputs": {
+      "control_net_name": "flux\\FLUX.1-dev-ControlNet-Union-Pro-2.0-fp8.safetensors",
+      "device": "cuda:0"
+    },
+    "class_type": "ControlNetLoaderMultiGPU",
+    "_meta": {
+      "title": "ControlNetLoaderMultiGPU"
+    }
+  },
+  "108": {
+    "inputs": {
+      "strength": 0.8000000000000002,
+      "start_percent": 0,
+      "end_percent": 0.6000000000000001,
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "55",
+        0
+      ],
+      "control_net": [
+        "107",
+        0
+      ],
+      "image": [
+        "117",
+        0
+      ],
+      "vae": [
+        "10",
+        0
+      ]
+    },
+    "class_type": "ControlNetApplyAdvanced",
+    "_meta": {
+      "title": "Apply ControlNet"
+    }
+  },
+  "114": {
+    "inputs": {
+      "detect_hand": "enable",
+      "detect_body": "enable",
+      "detect_face": "disable",
+      "resolution": [
+        "130",
+        0
+      ],
+      "bbox_detector": "yolox_l.onnx",
+      "pose_estimator": "dw-ll_ucoco_384_bs5.torchscript.pt",
+      "scale_stick_for_xinsr_cn": "disable",
+      "image": [
+        "35",
+        0
+      ]
+    },
+    "class_type": "DWPreprocessor",
+    "_meta": {
+      "title": "DWPose Estimator"
+    }
+  },
+  "117": {
+    "inputs": {
+      "direction": "right",
+      "match_image_size": true,
+      "image1": [
+        "79",
+        0
+      ],
+      "image2": [
+        "114",
+        0
+      ]
+    },
+    "class_type": "ImageConcanate",
+    "_meta": {
+      "title": "Image Concatenate"
+    }
+  },
+  "121": {
+    "inputs": {
+      "images": [
+        "117",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
     }
   },
   "122": {

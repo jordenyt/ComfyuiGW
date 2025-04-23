@@ -14,8 +14,8 @@
   },
   "24": {
     "inputs": {
-      "rel_l1_thresh": 0.2,
-      "start_percent": 0.3,
+      "rel_l1_thresh": 0.15000000000000002,
+      "start_percent": 0.30000000000000004,
       "end_percent": 1,
       "cache_device": "offload_device",
       "coefficients": "14B",
@@ -92,7 +92,7 @@
     "inputs": {
       "shift": 8.000000000000002,
       "model": [
-        "142",
+        "23",
         0
       ]
     },
@@ -103,7 +103,10 @@
   },
   "39": {
     "inputs": {
-      "frame_rate": 16,
+      "frame_rate": [
+        "121",
+        0
+      ],
       "loop_count": 0,
       "filename_prefix": "iv2v_wan_control_mask",
       "format": "video/h264-mp4",
@@ -165,7 +168,7 @@
         0
       ],
       "latent": [
-        "127",
+        "128",
         0
       ]
     },
@@ -222,7 +225,7 @@
         0
       ],
       "control_video": [
-        "118",
+        "177",
         0
       ]
     },
@@ -247,44 +250,6 @@
       "title": "Load Video (Upload) 🎥🅥🅗🅢"
     }
   },
-  "118": {
-    "inputs": {
-      "detect_hand": "enable",
-      "detect_body": "enable",
-      "detect_face": "disable",
-      "resolution": [
-        "119",
-        0
-      ],
-      "bbox_detector": "yolox_l.onnx",
-      "pose_estimator": "dw-ll_ucoco_384_bs5.torchscript.pt",
-      "scale_stick_for_xinsr_cn": "disable",
-      "image": [
-        "132",
-        0
-      ]
-    },
-    "class_type": "DWPreprocessor",
-    "_meta": {
-      "title": "DWPose Estimator"
-    }
-  },
-  "119": {
-    "inputs": {
-      "a": [
-        "26",
-        2
-      ],
-      "b": [
-        "26",
-        3
-      ]
-    },
-    "class_type": "JWIntegerMin",
-    "_meta": {
-      "title": "Integer Minimum"
-    }
-  },
   "121": {
     "inputs": {
       "video_info": [
@@ -295,42 +260,6 @@
     "class_type": "VHS_VideoInfoLoaded",
     "_meta": {
       "title": "Video Info (Loaded) 🎥🅥🅗🅢"
-    }
-  },
-  "125": {
-    "inputs": {
-      "expand": 30,
-      "incremental_expandrate": 0,
-      "tapered_corners": true,
-      "flip_input": false,
-      "blur_radius": 10,
-      "lerp_alpha": 1,
-      "decay_factor": 1,
-      "fill_holes": true,
-      "mask": [
-        "139",
-        1
-      ]
-    },
-    "class_type": "GrowMaskWithBlur",
-    "_meta": {
-      "title": "Grow Mask With Blur"
-    }
-  },
-  "127": {
-    "inputs": {
-      "samples": [
-        "128",
-        0
-      ],
-      "mask": [
-        "125",
-        0
-      ]
-    },
-    "class_type": "SetLatentNoiseMask",
-    "_meta": {
-      "title": "Set Latent Noise Mask"
     }
   },
   "128": {
@@ -359,7 +288,7 @@
         "26",
         3
       ],
-      "upscale_method": "nearest-exact",
+      "upscale_method": "lanczos",
       "keep_proportion": false,
       "divisible_by": 2,
       "crop": "disabled",
@@ -373,136 +302,32 @@
       "title": "Resize Image"
     }
   },
-  "133": {
+  "177": {
     "inputs": {
-      "mask": [
-        "139",
-        1
-      ]
-    },
-    "class_type": "MaskToImage",
-    "_meta": {
-      "title": "Convert Mask to Image"
-    }
-  },
-  "134": {
-    "inputs": {
-      "frame_rate": [
+      "video": "20250217_133654.mp4",
+      "force_rate": [
         "121",
         0
       ],
-      "loop_count": 0,
-      "filename_prefix": "control_mask",
-      "format": "video/h264-mp4",
-      "pix_fmt": "yuv420p",
-      "crf": 19,
-      "save_metadata": true,
-      "trim_to_audio": false,
-      "pingpong": false,
-      "save_output": true,
-      "images": [
-        "137",
-        0
-      ]
-    },
-    "class_type": "VHS_VideoCombine",
-    "_meta": {
-      "title": "Video Combine 🎥🅥🅗🅢"
-    }
-  },
-  "135": {
-    "inputs": {
-      "x": 0,
-      "y": 0,
-      "resize_source": false,
-      "destination": [
-        "132",
-        0
+      "custom_width": [
+        "26",
+        2
       ],
-      "source": [
-        "133",
-        0
+      "custom_height": [
+        "26",
+        3
       ],
-      "mask": [
-        "139",
+      "frame_load_cap": [
+        "121",
         1
-      ]
-    },
-    "class_type": "ImageCompositeMasked",
-    "_meta": {
-      "title": "ImageCompositeMasked"
-    }
-  },
-  "137": {
-    "inputs": {
-      "blend_factor": 1,
-      "blend_mode": "difference",
-      "image1": [
-        "135",
-        0
       ],
-      "image2": [
-        "118",
-        0
-      ]
+      "skip_first_frames": 0,
+      "select_every_nth": 1,
+      "format": "AnimateDiff"
     },
-    "class_type": "ImageBlend",
+    "class_type": "VHS_LoadVideo",
     "_meta": {
-      "title": "Image Blend"
-    }
-  },
-  "139": {
-    "inputs": {
-      "prompt": "face, hair",
-      "threshold": 0.3,
-      "sam_model": [
-        "140",
-        0
-      ],
-      "grounding_dino_model": [
-        "141",
-        0
-      ],
-      "image": [
-        "132",
-        0
-      ]
-    },
-    "class_type": "GroundingDinoSAM2Segment (segment anything2)",
-    "_meta": {
-      "title": "GroundingDinoSAM2Segment (segment anything2)"
-    }
-  },
-  "140": {
-    "inputs": {
-      "model_name": "sam2_1_hiera_large.pt"
-    },
-    "class_type": "SAM2ModelLoader (segment anything2)",
-    "_meta": {
-      "title": "SAM2ModelLoader (segment anything2)"
-    }
-  },
-  "141": {
-    "inputs": {
-      "model_name": "GroundingDINO_SwinB (938MB)"
-    },
-    "class_type": "GroundingDinoModelLoader (segment anything2)",
-    "_meta": {
-      "title": "GroundingDinoModelLoader (segment anything2)"
-    }
-  },
-  "142": {
-    "inputs": {
-      "lora_name": "WAN21\\Wan2.1-Fun-14B-InP-MPS.safetensors",
-      "strength_model": 1,
-      "model": [
-        "23",
-        0
-      ]
-    },
-    "class_type": "LoraLoaderModelOnly",
-    "_meta": {
-      "title": "LoraLoaderModelOnly"
+      "title": "Load Video (Upload) 🎥🅥🅗🅢"
     }
   },
   "21:2": {
@@ -514,6 +339,15 @@
       "title": "Load VAE"
     }
   },
+  "21:0": {
+    "inputs": {
+      "clip_name": "clip_vision_h_fp8_e4m3fn.safetensors"
+    },
+    "class_type": "CLIPVisionLoader",
+    "_meta": {
+      "title": "Load CLIP Vision"
+    }
+  },
   "21:1": {
     "inputs": {
       "clip_name": "t5xxl_um_fp8_e4m3fn_scaled.safetensors",
@@ -523,15 +357,6 @@
     "class_type": "CLIPLoader",
     "_meta": {
       "title": "Load CLIP"
-    }
-  },
-  "21:0": {
-    "inputs": {
-      "clip_name": "clip_vision_h_fp8_e4m3fn.safetensors"
-    },
-    "class_type": "CLIPVisionLoader",
-    "_meta": {
-      "title": "Load CLIP Vision"
     }
   },
   "103:0": {
@@ -669,7 +494,7 @@
         0
       ],
       "latent_image": [
-        "127",
+        "128",
         0
       ]
     },

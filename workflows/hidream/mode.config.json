@@ -1,0 +1,137 @@
+[
+    {
+        "name": "t2i_HiDreamFast",
+        "title": "HiDream Fast txt2img",
+        "showT2I": true,
+        "show": true,
+        "configurable": true,
+        "default": {"type":"txt2img", "cfgScale":4.0, "steps":16, "sdSize":1024},
+        "fields": {
+            "workflow": "hidream_txt2img",
+            "positive": "$positive",
+            "negative": "$negative",
+            "batch_size": "$batchSize",
+            "width": "$width",
+            "height": "$height",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "sampler": "uni_pc",
+            "scheduler": "simple",
+            "unet": "Hidream\\hidream_i1_fast_fp8.safetensors",
+            "shift": "3.0"
+        }
+    },
+    {
+        "name": "t2i_HiDreamDev",
+        "title": "HiDream Dev txt2img",
+        "showT2I": true,
+        "show": true,
+        "configurable": true,
+        "default": {"type":"txt2img", "cfgScale":2.0, "steps":28, "sdSize":1024},
+        "fields": {
+            "workflow": "hidream_txt2img",
+            "positive": "$positive",
+            "negative": "$negative",
+            "batch_size": "$batchSize",
+            "width": "$width",
+            "height": "$height",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "sampler": "uni_pc",
+            "scheduler": "simple",
+            "unet": "Hidream\\hidream_i1_dev_fp8.safetensors",
+            "shift": "6.0"
+        }
+    },
+    {
+        "name": "t2i_HiDreamFull",
+        "title": "HiDream Full txt2img",
+        "showT2I": true,
+        "show": true,
+        "configurable": true,
+        "default": {"type":"txt2img", "cfgScale":5.0, "steps":50, "sdSize":1024},
+        "fields": {
+            "workflow": "hidream_txt2img",
+            "positive": "$positive",
+            "negative": "$negative",
+            "batch_size": "$batchSize",
+            "width": "$width",
+            "height": "$height",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "sampler": "uni_pc",
+            "scheduler": "simple",
+            "unet": "Hidream\\hidream_i1_full_fp8.safetensors",
+            "shift": "3.0"
+        }
+    },
+    {
+        "name": "i2i_HiDreamFast",
+        "title": "HiDream Fast img2img",
+        "showT2I": false,
+        "show": true,
+        "configurable": true,
+        "default": {"type":"img2img", "denoise":0.5, "cfgScale":4.0, "steps":16, "sdSize":1024},
+        "fields": {
+            "workflow": "hidream_img2img",
+            "background": "$background",
+            "positive": "$positive",
+            "negative": "$negative",
+            "batch_size": "$batchSize",
+            "denoise": "$denoise",
+            "size": "$size",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "sampler": "uni_pc",
+            "scheduler": "simple",
+            "unet": "Hidream\\hidream_i1_fast_fp8.safetensors",
+            "shift": "3.0"
+        }
+    },
+    {
+        "name": "i2i_HiDreamDev",
+        "title": "HiDream Dev img2img",
+        "showT2I": false,
+        "show": true,
+        "configurable": true,
+        "default": {"type":"img2img", "denoise":0.5, "cfgScale":2.0, "steps":28, "sdSize":1024},
+        "fields": {
+            "workflow": "hidream_img2img",
+            "background": "$background",
+            "positive": "$positive",
+            "negative": "$negative",
+            "batch_size": "$batchSize",
+            "denoise": "$denoise",
+            "size": "$size",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "sampler": "uni_pc",
+            "scheduler": "simple",
+            "unet": "Hidream\\hidream_i1_dev_fp8.safetensors",
+            "shift": "6.0"
+        }
+    },
+    {
+        "name": "i2i_HiDreamFull",
+        "title": "HiDream Full img2img",
+        "showT2I": false,
+        "show": true,
+        "configurable": true,
+        "default": {"type":"img2img", "denoise":0.5, "cfgScale":5, "steps":50, "sdSize":1024},
+        "fields": {
+            "workflow": "hidream_img2img",
+            "background": "$background",
+            "positive": "$positive",
+            "negative": "$negative",
+            "batch_size": "$batchSize",
+            "denoise": "$denoise",
+            "size": "$size",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "sampler": "uni_pc",
+            "scheduler": "simple",
+            "unet": "Hidream\\hidream_i1_full_fp8.safetensors",
+            "shift": "3.0"
+        }
+    }
+]
