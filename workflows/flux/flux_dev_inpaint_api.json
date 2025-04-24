@@ -373,14 +373,15 @@
     "inputs": {
       "model_type": "flux",
       "rel_l1_thresh": 0.2,
+      "max_skip_steps": 3,
       "model": [
         "66",
         0
       ]
     },
-    "class_type": "TeaCacheForImgGen",
+    "class_type": "TeaCache",
     "_meta": {
-      "title": "TeaCache For Img Gen"
+      "title": "TeaCache"
     }
   }
 }
