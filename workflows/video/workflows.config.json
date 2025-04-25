@@ -442,5 +442,17 @@
             "steps": {"type": "integer","default": 30},
             "size": {"type": "integer","default": 640}
         }
+    },
+    "video_replace_audio_api": {
+        "prompt_workflow": "video_audio_replace_api.json",
+        "fields": {
+            "video": "1.inputs.video",
+            "audio": "6.inputs.audio"
+        },
+        "descriptions": "Replace audio track of a video",
+        "inputs": {
+            "video": {"type": "video", "default": null},
+            "audio": {"type": "audio", "default": null}
+        }
     }
 }

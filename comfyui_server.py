@@ -30,6 +30,7 @@ is_windows = platform.system() == 'Windows'
 
 # Global variables
 app = FastAPI()
+app.state.max_request_size = 50 * 1024 * 1024  # 50MB limit
 templates = Jinja2Templates(directory="templates")
 ws = None
 comfyui_process = None
@@ -152,7 +153,7 @@ def cleanup_images(prefixes):
     if os.path.exists(inputs_path):
         for f in os.listdir(inputs_path):
             for prefix in prefixes:
-                if f.startswith(prefix) and (f.endswith(".jpg") or f.endswith(".mp4")):
+                if f.startswith(prefix) and (f.endswith(".jpg") or f.endswith(".mp4") or f.endswith(".mp3") or f.endswith(".wav")):
                     os.remove(os.path.join(inputs_path, f))
 
 def ws_message(ws, msg):
@@ -336,7 +337,7 @@ async def comfyui_runflow_handler(request: Request):
         for field_name, field in workflow_config["inputs"].items():
             field_type = field["type"]
             
-            if field_type in ["image", "video"]:
+            if field_type in ["image", "video", "audio"]:
                 # Handle file upload
                 cleanup_images([field_name+"_"])
                 file = form_data.get(field_name)

@@ -35,8 +35,8 @@
             {% elif field.type == 'integer' or field.type == 'float' %}
                 <input type="number" name="{{ field.name }}" id="{{ field.name }}" 
                        value="{{ field.default }}" step="{{ '1' if field.type == 'integer' else 'any' }}">
-            {% elif field.type == 'image' or field.type == 'video' %}
-                <input type="file" name="{{ field.name }}" id="{{ field.name }}" accept="{{ 'image/*' if field.type == 'image' else 'video/*' }}">
+            {% elif field.type == 'image' or field.type == 'video' or field.type == 'audio' %}
+                <input type="file" name="{{ field.name }}" id="{{ field.name }}" accept="{{ 'image/*' if field.type == 'image' else 'video/*' if field.type == 'video' else 'audio/*' }}">
             {% elif field.type == 'array' %}
                 <input type="text" name="{{ field.name }}" id="{{ field.name }}" 
                        value="{{ field.default|join(',') }}" placeholder="Comma separated values">
