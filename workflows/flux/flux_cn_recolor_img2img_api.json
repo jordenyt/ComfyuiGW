@@ -1,7 +1,7 @@
 {
   "6": {
     "inputs": {
-      "text": "Taiwanese woman with long messy brown hair, sitting in cafe. she is showing her sexy collarbone, medium size breast and cleavage.",
+      "text": "Taiwanese woman with long messy blue hair, sitting in cafe. she is showing her sexy collarbone, medium size breast and cleavage. She is wearing a red top.",
       "clip": [
         "11",
         0
@@ -99,7 +99,7 @@
   "17": {
     "inputs": {
       "scheduler": "simple",
-      "steps": 30,
+      "steps": 28,
       "denoise": 1,
       "model": [
         "30",
@@ -113,7 +113,7 @@
   },
   "25": {
     "inputs": {
-      "noise_seed": 597100974028033
+      "noise_seed": 804721391720932
     },
     "class_type": "RandomNoise",
     "_meta": {
@@ -135,8 +135,8 @@
   },
   "30": {
     "inputs": {
-      "max_shift": 0.5000000000000001,
-      "base_shift": 0.5000000000000001,
+      "max_shift": 0.5,
+      "base_shift": 0.5,
       "width": [
         "66",
         2
@@ -146,7 +146,7 @@
         3
       ],
       "model": [
-        "64",
+        "79",
         0
       ]
     },
@@ -177,7 +177,7 @@
         0
       ],
       "image": [
-        "81",
+        "83",
         0
       ]
     },
@@ -188,7 +188,7 @@
   },
   "42": {
     "inputs": {
-      "text": "fat, bangs",
+      "text": "",
       "clip": [
         "11",
         0
@@ -210,7 +210,7 @@
   },
   "49": {
     "inputs": {
-      "type": "normal",
+      "type": "auto",
       "control_net": [
         "48",
         0
@@ -234,21 +234,6 @@
       "title": "Patch Sage Attention KJ"
     }
   },
-  "64": {
-    "inputs": {
-      "model_type": "flux",
-      "rel_l1_thresh": 0.2,
-      "max_skip_steps": 3,
-      "model": [
-        "62",
-        0
-      ]
-    },
-    "class_type": "TeaCache",
-    "_meta": {
-      "title": "TeaCache"
-    }
-  },
   "65": {
     "inputs": {
       "lora_name": "Flux\\JordenFlux.safetensors",
@@ -265,7 +250,7 @@
   },
   "66": {
     "inputs": {
-      "image": "background_333520970739196.jpg",
+      "image": "A young slim Taiwanese woman with long brown hair is in restaurant. She is smiling and seducing the photographer. She has sexy collarbone and cleavage.-b12c79_exported_0.jpg",
       "resize": true,
       "width": [
         "67",
@@ -374,87 +359,47 @@
   },
   "79": {
     "inputs": {
-      "ckpt_name": "depth_anything_v2_vitl.pth",
-      "resolution": [
-        "83",
-        0
-      ],
-      "image": [
-        "66",
+      "model_type": "flux",
+      "rel_l1_thresh": 0.2,
+      "max_skip_steps": 3,
+      "model": [
+        "62",
         0
       ]
     },
-    "class_type": "DepthAnythingV2Preprocessor",
+    "class_type": "TeaCache",
     "_meta": {
-      "title": "Depth Anything V2 - Relative"
-    }
-  },
-  "80": {
-    "inputs": {
-      "images": [
-        "81",
-        0
-      ]
-    },
-    "class_type": "PreviewImage",
-    "_meta": {
-      "title": "Preview Image"
+      "title": "TeaCache"
     }
   },
   "81": {
     "inputs": {
-      "blend_factor": 0.5000000000000001,
-      "blend_mode": "normal",
-      "image1": [
-        "82",
-        0
-      ],
-      "image2": [
-        "79",
-        0
-      ]
-    },
-    "class_type": "ImageBlend",
-    "_meta": {
-      "title": "Image Blend"
-    }
-  },
-  "82": {
-    "inputs": {
-      "detect_hand": "enable",
-      "detect_body": "enable",
-      "detect_face": "disable",
-      "resolution": [
-        "83",
-        0
-      ],
-      "bbox_detector": "yolox_l.onnx",
-      "pose_estimator": "dw-ll_ucoco_384_bs5.torchscript.pt",
-      "scale_stick_for_xinsr_cn": "disable",
+      "strength": 1,
+      "mode": "white",
+      "tint_color_hex": "#000000",
       "image": [
         "66",
         0
       ]
     },
-    "class_type": "DWPreprocessor",
+    "class_type": "CR Color Tint",
     "_meta": {
-      "title": "DWPose Estimator"
+      "title": "🎨 CR Color Tint"
     }
   },
   "83": {
     "inputs": {
-      "a": [
-        "66",
-        2
-      ],
-      "b": [
-        "66",
-        3
+      "black_level": 0,
+      "mid_level": 127.5,
+      "white_level": 255,
+      "image": [
+        "81",
+        0
       ]
     },
-    "class_type": "JWIntegerMin",
+    "class_type": "Image Levels Adjustment",
     "_meta": {
-      "title": "Integer Minimum"
+      "title": "Image Levels Adjustment"
     }
   }
 }

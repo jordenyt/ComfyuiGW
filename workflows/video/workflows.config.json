@@ -1,4 +1,40 @@
 {
+    "t2v_wan_api": {
+        "prompt_workflow": "t2v_wan_api.json",
+        "fields": {
+            "seed": "48:0.inputs.noise_seed",
+            "positive": "27.inputs.text",
+            "negative": "28.inputs.text",
+            "length": "53.inputs.length",
+            "cfg": "48:7.inputs.cfg",
+            "steps": "48:2.inputs.Number",
+            "loraStrength": "25.inputs.strength",
+            "lora": "25.inputs.lora_name",
+            "width": "53.inputs.width",
+            "height": "53.inputs.height"
+        }
+    },
+    "i2v_framepack_api": {
+        "prompt_workflow": "i2v_framepack_api.json",
+        "fields": {
+            "seed": "39.inputs.seed",
+            "start_img": "19.inputs.image",
+            "positive": "47.inputs.text",
+            "length": "39.inputs.total_second_length",
+            "cfg": "39.inputs.cfg",
+            "steps": "39.inputs.steps",
+            "size": "51.inputs.base_resolution"
+        },
+        "descriptions": "Start Image to Video with WAN 2.1 I2V 480p Model",
+        "inputs": {
+            "start_img": {"type": "image","default": null},
+            "positive": {"type": "text","default": ""},
+            "length": {"type": "float","default": 5.0},
+            "cfg": {"type": "float","default": 1.0},
+            "steps": {"type": "integer","default": 30},
+            "size": {"type": "integer","default": 640}
+        }
+    },
     "i2v_wan_api": {
         "prompt_workflow": "i2v_wan_480p_api.json",
         "fields": {
@@ -52,48 +88,12 @@
             "lora": {"type":"string", "default": "WAN21\\wan-nsfw-e14-fixed.safetensors"},
             "loraStrength": {"type":"float", "default": 0},
             "cfg": {"type":"float", "default":6},
-            "denoise": {"type":"float", "default":1},
+            "denoise": {"type":"float", "default":0.6},
             "size": {"type":"integer", "default":640},
             "frame_load_cap": {"type":"integer", "default":161}
         }
     },
-
     "iv2v_wan_mask_api": {
-        "prompt_workflow": "iv2v_wan_mask_api.json",
-        "fields": {
-            "seed": "103:0.inputs.seed",
-            "size": ["26.inputs.width", "26.inputs.height"],
-            "prompt": "27.inputs.text",
-            "negative_prompt": "28.inputs.text",
-            "cfg": "103:7.inputs.cfg",
-            "denoise": "103:9.inputs.denoise",
-            "src_video": "117.inputs.video",
-            "target_image": "26.inputs.image",
-            "frame_load_cap": "117.inputs.frame_load_cap",
-            "object_prompt":"139.inputs.prompt",
-            "expand":"125.inputs.expand",
-            "blur":"125.inputs.blur_radius",
-            "loraStrength": "144.inputs.strength",
-            "lora": "144.inputs.lora_name"
-        },
-        "descriptions": "Video (+ start image) to video by WAN 2.1 480p Model and SAM 2",
-        "inputs": {
-            "src_video": {"type":"video", "default":null},
-            "target_image": {"type":"image", "default":null},
-            "prompt": {"type":"text", "default":""},
-            "negative_prompt": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
-            "object_prompt": {"type":"string", "default":"face, hair, people"},
-            "lora": {"type":"string", "default": "WAN21\\wan-nsfw-e14-fixed.safetensors"},
-            "loraStrength": {"type":"float", "default": 0},
-            "cfg": {"type":"float", "default":6},
-            "denoise": {"type":"float", "default":1},
-            "size": {"type":"integer", "default":640},
-            "frame_load_cap": {"type":"integer", "default":161},
-            "expand": {"type":"integer", "default":30},
-            "blur": {"type":"integer", "default":10}
-        }
-    },
-    "iv2v_wan_mask_2_api": {
         "prompt_workflow": "iv2v_wan_mask_2_api.json",
         "fields": {
             "seed": "103:0.inputs.seed",
@@ -126,8 +126,7 @@
             "blur": {"type":"integer", "default":10}
         }
     },
-
-    "i2v_wan_fun_api": {
+    "i2v_wan_InP_api": {
         "prompt_workflow": "i2v_wan_fun_api.json",
         "fields": {
             "seed": "48:0.inputs.noise_seed",
@@ -156,110 +155,100 @@
             "size": {"type": "integer","default": 640}
         }
     },
-    "iv2v_wan_flowedit_api": {
-        "prompt_workflow": "iv2v_wan_flowedit_api.json",
+    "i2v_wan_FLF_api": {
+        "prompt_workflow": "i2v_wan_FLF_api.json",
         "fields": {
-            "seed": "73.inputs.seed",
-            "skip_steps": "73.inputs.skip_steps",
-            "drift_steps": "73.inputs.drift_steps",
-            "size": ["206.inputs.width", "206.inputs.height"],
-            "src_prompt": "70.inputs.text",
-            "target_prompt": "11.inputs.text",
-            "negative_prompt": "20.inputs.text",
-            "src_cfg": "141.inputs.source_cfg",
-            "target_cfg": "141.inputs.target_cfg",
-            "src_video": "212.inputs.video",
-            "target_image": "205.inputs.image",
-            "num_frame": "212.inputs.frame_load_cap",
-            "loraStrength": "229.inputs.strength",
-            "lora": "229.inputs.lora_name"
+            "seed": "91:0.inputs.noise_seed",
+            "start_img": "26.inputs.image",
+            "end_img": "71.inputs.image",
+            "positive": "27.inputs.text",
+            "negative": "28.inputs.text",
+            "length": "106.inputs.length",
+            "cfg": "91:7.inputs.cfg",
+            "steps": "91:2.inputs.Number",
+            "size": ["26.inputs.width","26.inputs.height"],
+            "loraStrength": "77.inputs.strength",
+            "lora": "77.inputs.lora_name"
         },
-        "descriptions": "Video (+ start image) to video by WAN 2.1 480p InP Model and FlowEdit",
-        "_inputs": {
-            "src_video": {"type":"video", "default":null},
-            "target_image": {"type":"image", "default":null},
-            "num_frame": {"type":"integer", "default":81},
-            "src_prompt": {"type":"text", "default":""},
-            "target_prompt": {"type":"text", "default":""},
-            "negative_prompt": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
+        "descriptions": "Images (start and end) to Video with WAN 2.1 FLF Model",
+        "inputs": {
+            "start_img": {"type": "image","default": null},
+            "end_img": {"type": "image","default": null},
+            "positive": {"type": "text","default": ""},
+            "negative": {"type": "text", "default": "chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
+            "length": {"type": "integer","default": 81},
             "lora": {"type":"string", "default": "WAN21\\wan-nsfw-e14-fixed.safetensors"},
-            "loraStrength": {"type":"float", "default": 0},
-            "skip_steps": {"type":"integer", "default":2},
-            "drift_steps": {"type":"integer", "default":22},
-            "size": {"type":"integer", "default":640},
-            "src_cfg": {"type":"float", "default":2},
-            "target_cfg": {"type":"float", "default":4.5}
+            "loraStrength": {"type":"float", "default": 1},
+            "cfg": {"type": "float","default": 6.0},
+            "steps": {"type": "integer","default": 20},
+            "size": {"type": "integer","default": 640}
         }
     },
-    "iv2v_wan_control_flowedit_api": {
-        "prompt_workflow": "iv2v_wan_control_flowedit_api.json",
+    "iv2v_wan_FLF_api": {
+        "prompt_workflow": "iv2v_wan_FLF_api.json",
         "fields": {
-            "seed": "73.inputs.seed",
-            "skip_steps": "73.inputs.skip_steps",
-            "drift_steps": "73.inputs.drift_steps",
-            "size": ["206.inputs.width", "206.inputs.height"],
-            "src_prompt": "70.inputs.text",
-            "target_prompt": "11.inputs.text",
-            "negative_prompt": "20.inputs.text",
-            "src_cfg": "141.inputs.source_cfg",
-            "target_cfg": "141.inputs.target_cfg",
-            "src_video": "212.inputs.video",
-            "target_image": "205.inputs.image",
-            "num_frame": "212.inputs.frame_load_cap"
-        },
-        "descriptions": "Video (+ start image) to video by WAN 2.1 Fun Control Model, DWPose and FlowEdit",
-        "_inputs": {
-            "src_video": {"type":"video", "default":null},
-            "target_image": {"type":"image", "default":null},
-            "num_frame": {"type":"integer", "default":81},
-            "src_prompt": {"type":"text", "default":""},
-            "target_prompt": {"type":"text", "default":""},
-            "negative_prompt": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
-            "skip_steps": {"type":"integer", "default":2},
-            "drift_steps": {"type":"integer", "default":22},
-            "size": {"type":"integer", "default":640},
-            "src_cfg": {"type":"float", "default":2},
-            "target_cfg": {"type":"float", "default":4.5}
-        }
-    },
-    "iv2v_wan_control_mask_api": {
-        "prompt_workflow": "iv2v_wan_fun_control_mask_api.json",
-        "fields": {
-            "seed": "103:0.inputs.seed",
+            "seed": "194.inputs.noise_seed",
             "size": ["26.inputs.width", "26.inputs.height"],
             "prompt": "27.inputs.text",
             "negative_prompt": "28.inputs.text",
-            "cfg": "103:7.inputs.cfg",
-            "denoise": "103:9.inputs.denoise",
+            "loraStrength": "187.inputs.strength",
+            "lora": "187.inputs.lora_name",
+            "cfg": "201.inputs.cfg",
+            "denoise": "203.inputs.denoise",
             "src_video": "117.inputs.video",
-            "target_image": "26.inputs.image",
-            "frame_load_cap": "117.inputs.frame_load_cap",
-            "object_prompt":"139.inputs.prompt",
-            "expand":"125.inputs.expand",
-            "blur":"125.inputs.blur_radius",
-            "loraStrength": "142.inputs.strength",
-            "lora": "142.inputs.lora_name",
-            "detect_face": "118.inputs.detect_face"
+            "start_image": "26.inputs.image",
+            "end_image": "191.inputs.image",
+            "frame_load_cap": "117.inputs.frame_load_cap"
         },
-        "descriptions": "Video (+ start image) to video by WAN 2.1 Fun Control Model, DWPose and SAM 2",
+        "descriptions": "Video (+ start & end image) to video by WAN 2.1 FLF Model",
         "inputs": {
             "src_video": {"type":"video", "default":null},
-            "target_image": {"type":"image", "default":null},
+            "start_image": {"type":"image", "default":null},
+            "end_image": {"type":"image", "default":null},
             "prompt": {"type":"text", "default":""},
             "negative_prompt": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
-            "object_prompt": {"type":"string", "default":"face, hair, people"},
-            "lora": {"type":"string", "default": "WAN21\\Wan2.1-Fun-14B-InP-MPS.safetensors"},
+            "lora": {"type":"string", "default": "WAN21\\wan-nsfw-e14-fixed.safetensors"},
             "loraStrength": {"type":"float", "default": 0},
             "cfg": {"type":"float", "default":6},
-            "denoise": {"type":"float", "default":1},
+            "denoise": {"type":"float", "default":0.6},
             "size": {"type":"integer", "default":640},
-            "frame_load_cap": {"type":"integer", "default":161},
-            "expand": {"type":"integer", "default":30},
-            "blur": {"type":"integer", "default":10},
-            "detect_face": {"type":"string", "default":"disable"}
+            "frame_load_cap": {"type":"integer", "default":0}
         }
     },
-    "iv2v_wan_control_mask_2_api": {
+    "iv2v_wan_FLF_mask_api": {
+        "prompt_workflow": "iv2v_wan_FLF_mask_api.json",
+        "fields": {
+            "seed": "209:0.inputs.noise_seed",
+            "size": ["26.inputs.width", "26.inputs.height"],
+            "prompt": "27.inputs.text",
+            "negative_prompt": "28.inputs.text",
+            "loraStrength": "187.inputs.strength",
+            "lora": "187.inputs.lora_name",
+            "cfg": "209:7.inputs.cfg",
+            "denoise": "209:9.inputs.denoise",
+            "src_video": "117.inputs.video",
+            "mask_video": "214.inputs.video",
+            "start_image": "26.inputs.image",
+            "end_image": "191.inputs.image",
+            "frame_load_cap": "117.inputs.frame_load_cap"
+        },
+        "descriptions": "Video (+ start & end image) to video by WAN 2.1 FLF Model with Mask",
+        "inputs": {
+            "src_video": {"type":"video", "default":null},
+            "start_image": {"type":"image", "default":null},
+            "end_image": {"type":"image", "default":null},
+            "mask_video": {"type":"video", "default":null},
+            "prompt": {"type":"text", "default":""},
+            "negative_prompt": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
+            "lora": {"type":"string", "default": "WAN21\\wan-nsfw-e14-fixed.safetensors"},
+            "loraStrength": {"type":"float", "default": 0},
+            "cfg": {"type":"float", "default":6},
+            "denoise": {"type":"float", "default":0.6},
+            "size": {"type":"integer", "default":640},
+            "frame_load_cap": {"type":"integer", "default":0}
+        }
+    },
+    "iv2v_wan_control_mask_api": {
         "prompt_workflow": "iv2v_wan_fun_control_mask_2_api.json",
         "fields": {
             "seed": "103:0.inputs.seed",
@@ -291,37 +280,6 @@
         }
     },
     "iv2v_wan_control_api": {
-        "prompt_workflow": "iv2v_wan_fun_control_api.json",
-        "fields": {
-            "seed": "103:0.inputs.seed",
-            "size": ["26.inputs.width", "26.inputs.height"],
-            "prompt": "27.inputs.text",
-            "negative_prompt": "28.inputs.text",
-            "cfg": "103:7.inputs.cfg",
-            "denoise": "103:9.inputs.denoise",
-            "src_video": "117.inputs.video",
-            "target_image": "26.inputs.image",
-            "frame_load_cap": "117.inputs.frame_load_cap",
-            "loraStrength": "123.inputs.strength",
-            "lora": "123.inputs.lora_name",
-            "detect_face": "118.inputs.detect_face"
-        },
-        "descriptions": "Video (+ start image) to video by WAN 2.1 Fun Control Model and DWPose",
-        "inputs": {
-            "src_video": {"type":"video", "default":null},
-            "target_image": {"type":"image", "default":null},
-            "prompt": {"type":"text", "default":""},
-            "negative_prompt": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
-            "lora": {"type":"string", "default": "WAN21\\Wan2.1-Fun-14B-InP-MPS.safetensors"},
-            "loraStrength": {"type":"float", "default": 0},
-            "cfg": {"type":"float", "default":6},
-            "denoise": {"type":"float", "default":1},
-            "size": {"type":"integer", "default":640},
-            "frame_load_cap": {"type":"integer", "default":161},
-            "detect_face": {"type":"string", "default":"disable"}
-        }
-    },
-    "iv2v_wan_control_2_api": {
         "prompt_workflow": "iv2v_wan_fun_control_2_api.json",
         "fields": {
             "seed": "103:0.inputs.seed",
@@ -348,7 +306,6 @@
             "frame_load_cap": {"type":"integer", "default":161}
         }
     },
-    
     "v2v_upscale_VFI_api": {
         "prompt_workflow": "v2v_upscale_VFI_api.json",
         "fields": {
@@ -405,42 +362,6 @@
             "force_rate": {"type":"integer", "default":16},
             "frame_load_cap": {"type":"integer", "default":0},
             "detect_face": {"type":"string", "default":"disable"}
-        }
-    },
-    "t2v_wan_api": {
-        "prompt_workflow": "t2v_wan_api.json",
-        "fields": {
-            "seed": "48:0.inputs.noise_seed",
-            "positive": "27.inputs.text",
-            "negative": "28.inputs.text",
-            "length": "53.inputs.length",
-            "cfg": "48:7.inputs.cfg",
-            "steps": "48:2.inputs.Number",
-            "loraStrength": "25.inputs.strength",
-            "lora": "25.inputs.lora_name",
-            "width": "53.inputs.width",
-            "height": "53.inputs.height"
-        }
-    },
-    "i2v_framepack_api": {
-        "prompt_workflow": "i2v_framepack_api.json",
-        "fields": {
-            "seed": "39.inputs.seed",
-            "start_img": "19.inputs.image",
-            "positive": "47.inputs.text",
-            "length": "39.inputs.total_second_length",
-            "cfg": "39.inputs.cfg",
-            "steps": "39.inputs.steps",
-            "size": "51.inputs.base_resolution"
-        },
-        "descriptions": "Start Image to Video with WAN 2.1 I2V 480p Model",
-        "inputs": {
-            "start_img": {"type": "image","default": null},
-            "positive": {"type": "text","default": ""},
-            "length": {"type": "float","default": 5.0},
-            "cfg": {"type": "float","default": 1.0},
-            "steps": {"type": "integer","default": 30},
-            "size": {"type": "integer","default": 640}
         }
     },
     "video_replace_audio_api": {

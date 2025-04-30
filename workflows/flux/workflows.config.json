@@ -136,6 +136,25 @@
             "face": "82.inputs.detect_face"
         }
     },
+    "flux_cn_recolor_img2img_api": {
+        "prompt_workflow": "flux_cn_recolor_img2img_api.json",
+        "fields": {
+            "background": "66.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "42.inputs.text",
+            "size": "67.inputs.value",
+            "steps": "17.inputs.steps",
+            "cfg": "71.inputs.cfg",
+            "denoise": "17.inputs.denoise",
+            "seed": "25.inputs.noise_seed",
+            "guidance": ["26.inputs.guidance", "72.inputs.guidance"],
+            "lora": "65.inputs.lora_name",
+            "loraStrength": "65.inputs.strength_model",
+            "cnStrength": "38.inputs.strength",
+            "cnEnd": "38.inputs.end_percent",
+            "cnStart": "38.inputs.start_percent"
+        }
+    },
     "flux_canny_img2img_api": {
         "prompt_workflow": "flux_canny_img2img_api.json",
         "fields": {
