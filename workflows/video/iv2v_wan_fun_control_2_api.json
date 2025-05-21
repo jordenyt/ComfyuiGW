@@ -14,7 +14,7 @@
   },
   "24": {
     "inputs": {
-      "rel_l1_thresh": 0.15000000000000002,
+      "rel_l1_thresh": 0.12000000000000002,
       "start_percent": 0.30000000000000004,
       "end_percent": 1,
       "cache_device": "offload_device",

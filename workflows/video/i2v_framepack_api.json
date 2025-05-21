@@ -259,6 +259,7 @@
       "model": "FramePackI2V_HY_fp8_e4m3fn.safetensors",
       "base_precision": "bf16",
       "quantization": "fp8_e4m3fn",
+      "load_device": "offload_device",
       "attention_mode": "sageattn"
     },
     "class_type": "LoadFramePackModel",

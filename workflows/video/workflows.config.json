@@ -67,7 +67,7 @@
     "iv2v_wan_api": {
         "prompt_workflow": "iv2v_wan_api.json",
         "fields": {
-            "seed": "103:0.inputs.seed",
+            "seed": "103:0.inputs.noise_seed",
             "size": ["26.inputs.width", "26.inputs.height"],
             "prompt": "27.inputs.text",
             "negative_prompt": "28.inputs.text",
@@ -251,7 +251,7 @@
     "iv2v_wan_control_mask_api": {
         "prompt_workflow": "iv2v_wan_fun_control_mask_2_api.json",
         "fields": {
-            "seed": "103:0.inputs.seed",
+            "seed": "103:0.inputs.noise_seed",
             "size": ["26.inputs.width", "26.inputs.height"],
             "prompt": "27.inputs.text",
             "negative_prompt": "28.inputs.text",
@@ -279,10 +279,136 @@
             "blur": {"type":"integer", "default":10}
         }
     },
+    "iv2v_wan_vace_pose_mask_api": {
+        "prompt_workflow": "iv2v_wan_vace_pose_mask_api.json",
+        "fields": {
+            "seed": "200:0.inputs.noise_seed",
+            "size": ["132.inputs.width", "132.inputs.height"],
+            "prompt": "27.inputs.text",
+            "negative_prompt": "28.inputs.text",
+            "cfg": "200:7.inputs.cfg",
+            "src_video": "117.inputs.video",
+            "pose_video": "177.inputs.video",
+            "mask_video": "180.inputs.video",
+            "target_image": "26.inputs.image",
+            "frame_load_cap": "117.inputs.frame_load_cap",
+            "blur":"172.inputs.blur_radius"            
+        },
+        "descriptions": "Video (+ ref image) to video by WAN VACE Model, pose and mask video",
+        "inputs": {
+            "src_video": {"type":"video", "default":null},
+            "target_image": {"type":"image", "default":null},
+            "mask_video": {"type":"video", "default":null},
+            "pose_video": {"type":"video", "default":null},
+            "prompt": {"type":"text", "default":""},
+            "negative_prompt": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
+            "cfg": {"type":"float", "default":6},
+            "denoise": {"type":"float", "default":1},
+            "size": {"type":"integer", "default":640},
+            "frame_load_cap": {"type":"integer", "default":161},
+            "blur": {"type":"integer", "default":1}
+        }
+    },
+    "iv2v_wan_vace_mask_keyframe_api": {
+        "prompt_workflow": "iv2v_wan_vace_mask_keyframe_api.json",
+        "fields": {
+            "seed": "200:0.inputs.noise_seed",
+            "size": ["132.inputs.width", "132.inputs.height"],
+            "prompt": "27.inputs.text",
+            "negative_prompt": "28.inputs.text",
+            "cfg": "200:7.inputs.cfg",
+            "src_video": "117.inputs.video",
+            "mask_video": "180.inputs.video",
+            "target_image": "26.inputs.image",
+            "keyframe": "208.inputs.image",
+            "keyframe_index": "207.inputs.start_index",
+            "frame_load_cap": "117.inputs.frame_load_cap",
+            "blur":"172.inputs.blur_radius"            
+        },
+        "descriptions": "Video (+ ref image + keyframe) to video by WAN VACE Model and mask video",
+        "inputs": {
+            "src_video": {"type":"video", "default":null},
+            "target_image": {"type":"image", "default":null},
+            "mask_video": {"type":"video", "default":null},
+            "keyframe": {"type":"image", "default":null},
+            "keyframe_index": {"type":"integer", "default":0},
+            "prompt": {"type":"text", "default":""},
+            "negative_prompt": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
+            "cfg": {"type":"float", "default":6},
+            "denoise": {"type":"float", "default":1},
+            "size": {"type":"integer", "default":640},
+            "frame_load_cap": {"type":"integer", "default":161},
+            "blur": {"type":"integer", "default":1}
+        }
+    },
+    "iv2v_wan_vace_pose_keyframe_api": {
+        "prompt_workflow": "iv2v_wan_vace_pose_keyframe_api.json",
+        "fields": {
+            "seed": "200:0.inputs.noise_seed",
+            "size": ["132.inputs.width", "132.inputs.height"],
+            "prompt": "27.inputs.text",
+            "negative_prompt": "28.inputs.text",
+            "cfg": "200:7.inputs.cfg",
+            "src_video": "117.inputs.video",
+            "pose_video": "177.inputs.video",
+            "target_image": "26.inputs.image",
+            "keyframe": "207.inputs.image",
+            "keyframe_index": "210.inputs.start_index",
+            "frame_load_cap": "117.inputs.frame_load_cap"
+        },
+        "descriptions": "Video (+ ref image + keyframe) to video by WAN VACE Model, pose video",
+        "inputs": {
+            "src_video": {"type":"video", "default":null},
+            "target_image": {"type":"image", "default":null},
+            "pose_video": {"type":"video", "default":null},
+            "keyframe": {"type":"image", "default":null},
+            "keyframe_index": {"type":"integer", "default":0},
+            "prompt": {"type":"text", "default":""},
+            "negative_prompt": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
+            "cfg": {"type":"float", "default":6},
+            "denoise": {"type":"float", "default":1},
+            "size": {"type":"integer", "default":640},
+            "frame_load_cap": {"type":"integer", "default":161}
+        }
+    },
+    "iv2v_wan_vace_pose_mask_keyframe_api": {
+        "prompt_workflow": "iv2v_wan_vace_pose_mask_keyframe_api.json",
+        "fields": {
+            "seed": "200:0.inputs.noise_seed",
+            "size": ["132.inputs.width", "132.inputs.height"],
+            "prompt": "27.inputs.text",
+            "negative_prompt": "28.inputs.text",
+            "cfg": "200:7.inputs.cfg",
+            "src_video": "117.inputs.video",
+            "pose_video": "177.inputs.video",
+            "mask_video": "180.inputs.video",
+            "target_image": "26.inputs.image",
+            "keyframe": "208.inputs.image",
+            "keyframe_index": "207.inputs.start_index",
+            "frame_load_cap": "117.inputs.frame_load_cap",
+            "blur":"172.inputs.blur_radius"            
+        },
+        "descriptions": "Video (+ ref image + keyframe) to video by WAN VACE Model, pose and mask video",
+        "inputs": {
+            "src_video": {"type":"video", "default":null},
+            "target_image": {"type":"image", "default":null},
+            "mask_video": {"type":"video", "default":null},
+            "pose_video": {"type":"video", "default":null},
+            "keyframe": {"type":"image", "default":null},
+            "keyframe_index": {"type":"integer", "default":0},
+            "prompt": {"type":"text", "default":""},
+            "negative_prompt": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
+            "cfg": {"type":"float", "default":6},
+            "denoise": {"type":"float", "default":1},
+            "size": {"type":"integer", "default":640},
+            "frame_load_cap": {"type":"integer", "default":161},
+            "blur": {"type":"integer", "default":1}
+        }
+    },
     "iv2v_wan_control_api": {
         "prompt_workflow": "iv2v_wan_fun_control_2_api.json",
         "fields": {
-            "seed": "103:0.inputs.seed",
+            "seed": "103:0.inputs.noise_seed",
             "size": ["26.inputs.width", "26.inputs.height"],
             "prompt": "27.inputs.text",
             "negative_prompt": "28.inputs.text",
@@ -306,74 +432,31 @@
             "frame_load_cap": {"type":"integer", "default":161}
         }
     },
-    "v2v_upscale_VFI_api": {
-        "prompt_workflow": "v2v_upscale_VFI_api.json",
+    "v2v_wan_vace_extend_api": {
+        "prompt_workflow": "v2v_wan_vace_extend_api.json",
         "fields": {
-            "video": "376.inputs.video",
-            "force_rate": "376.inputs.force_rate"
+            "seed": "242:0.inputs.noise_seed",
+            "video": "117.inputs.video",
+            "force_rate": "117.inputs.force_rate",
+            "size": ["132.inputs.width", "132.inputs.height"],
+            "tail_frame": "213.inputs.value",
+            "new_frame": "218.inputs.value",
+            "steps": "242:2.inputs.Number",
+            "cfg": "242:7.inputs.cfg",
+            "positive": "27.inputs.text",
+            "negative": "28.inputs.text"
         },
-        "descriptions": "Upscale and Up-rate Video",
+        "descriptions": "Extend a Video by WAN VACE model",
         "inputs": {
             "video": {"type": "video", "default": null},
-            "force_rate": {"type": "integer", "default": 16}
-        }
-    },
-    "video_get_mask_api": {
-        "prompt_workflow": "video_get_mask_api.json",
-        "descriptions": "Get mask from video by prompt",
-        "fields": {
-            "src_video": "9.inputs.video",
-            "size": ["10.inputs.width", "10.inputs.height"],
-            "force_rate": "9.inputs.force_rate",
-            "frame_load_cap": "9.inputs.frame_load_cap",
-            "mask_prompt_1": "3.inputs.prompt",
-            "mask_threshold_1": "3.inputs.threshold",
-            "mask_expand_1": "5.inputs.expand",
-            "mask_prompt_2": "4.inputs.prompt",
-            "mask_threshold_2": "4.inputs.threshold",
-            "mask_expand_2": "6.inputs.expand"
-        },
-        "inputs": {
-            "src_video": {"type":"video", "default":null},
+            "positive": {"type":"text", "default":""},
+            "negative": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
             "size": {"type":"integer", "default":640},
-            "force_rate": {"type":"integer", "default":16},
-            "frame_load_cap": {"type":"integer", "default":0},
-            "mask_prompt_1": {"type":"string", "default":"face, hair, neck"},
-            "mask_threshold_1": {"type":"float", "default":0.3},
-            "mask_expand_1": {"type":"integer", "default":30},
-            "mask_prompt_2": {"type":"string", "default":"man, woman"},
-            "mask_threshold_2": {"type":"float", "default":0.1},
-            "mask_expand_2": {"type":"integer", "default":10}
-        }
-    },
-    "video_get_pose_api": {
-        "prompt_workflow": "video_get_pose_api.json",
-        "descriptions": "Get mask from video by prompt",
-        "fields": {
-            "src_video": "9.inputs.video",
-            "size": ["10.inputs.width", "10.inputs.height"],
-            "force_rate": "9.inputs.force_rate",
-            "frame_load_cap": "9.inputs.frame_load_cap",
-            "detect_face": "14.inputs.detect_face"
-        },
-        "inputs": {
-            "src_video": {"type":"video", "default":null},
-            "size": {"type":"integer", "default":640},
-            "force_rate": {"type":"integer", "default":16},
-            "frame_load_cap": {"type":"integer", "default":0},
-            "detect_face": {"type":"string", "default":"disable"}
-        }
-    },
-    "video_replace_audio_api": {
-        "prompt_workflow": "video_audio_replace_api.json",
-        "fields": {
-            "video": "1.inputs.video",
-            "audio": "6.inputs.audio"
-        },
-        "descriptions": "Replace audio track of a video",
-        "inputs": {
-            "video": {"type": "video", "default": null},
-            "audio": {"type": "audio", "default": null}
+            "tail_frame": {"type": "integer", "default": 16},
+            "new_frame": {"type": "integer", "default": 81},
+            "force_rate": {"type": "integer", "default": 16},
+            "steps": {"type": "integer", "default": 20},
+            "cfg": {"type":"float", "default":6}
         }
     }
 }

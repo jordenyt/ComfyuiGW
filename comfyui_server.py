@@ -175,7 +175,7 @@ def ws_message(ws, msg):
                     avg_time_per_step = elapsed_time / current_step
                 remaining_steps = data['max'] - current_step
                 estimated_time = remaining_steps * avg_time_per_step
-                msg_step = f"--> Step: {current_step}/{data['max']} [{format_time(elapsed_time)}<{format_time(estimated_time)}]"
+                msg_step = f"--> Step: {current_step}/{data['max']} [{format_time(avg_time_per_step * current_step)}<{format_time(estimated_time)}]"
             else:
                 last_node = cur_node
                 last_time = time.time()

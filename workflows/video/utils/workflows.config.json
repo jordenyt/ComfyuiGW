@@ -1,0 +1,86 @@
+{
+    "v2v_upscale_VFI_api": {
+        "prompt_workflow": "v2v_upscale_VFI_api.json",
+        "fields": {
+            "video": "117.inputs.video",
+            "force_rate": "117.inputs.force_rate"
+        },
+        "descriptions": "Upscale and Up-rate Video",
+        "inputs": {
+            "video": {"type": "video", "default": null},
+            "force_rate": {"type": "integer", "default": 16}
+        }
+    },
+    "video_get_mask_api": {
+        "prompt_workflow": "video_get_mask_api.json",
+        "descriptions": "Get mask from video by prompt",
+        "fields": {
+            "src_video": "9.inputs.video",
+            "size": ["10.inputs.width", "10.inputs.height"],
+            "force_rate": "9.inputs.force_rate",
+            "frame_load_cap": "9.inputs.frame_load_cap",
+            "mask_prompt_1": "3.inputs.prompt",
+            "mask_threshold_1": "3.inputs.threshold",
+            "mask_expand_1": "5.inputs.expand",
+            "mask_prompt_2": "4.inputs.prompt",
+            "mask_threshold_2": "4.inputs.threshold",
+            "mask_expand_2": "6.inputs.expand"
+        },
+        "inputs": {
+            "src_video": {"type":"video", "default":null},
+            "size": {"type":"integer", "default":640},
+            "force_rate": {"type":"integer", "default":16},
+            "frame_load_cap": {"type":"integer", "default":0},
+            "mask_prompt_1": {"type":"string", "default":"face, hair, neck"},
+            "mask_threshold_1": {"type":"float", "default":0.3},
+            "mask_expand_1": {"type":"integer", "default":30},
+            "mask_prompt_2": {"type":"string", "default":"man, woman"},
+            "mask_threshold_2": {"type":"float", "default":0.1},
+            "mask_expand_2": {"type":"integer", "default":10}
+        }
+    },
+    "video_get_pose_api": {
+        "prompt_workflow": "video_get_pose_api.json",
+        "descriptions": "Get mask from video by prompt",
+        "fields": {
+            "src_video": "9.inputs.video",
+            "size": ["10.inputs.width", "10.inputs.height"],
+            "force_rate": "9.inputs.force_rate",
+            "frame_load_cap": "9.inputs.frame_load_cap",
+            "detect_face": "14.inputs.detect_face"
+        },
+        "inputs": {
+            "src_video": {"type":"video", "default":null},
+            "size": {"type":"integer", "default":640},
+            "force_rate": {"type":"integer", "default":16},
+            "frame_load_cap": {"type":"integer", "default":0},
+            "detect_face": {"type":"string", "default":"disable"}
+        }
+    },
+    "extract_frame_api": {
+        "prompt_workflow": "extract_frame.json",
+        "descriptions": "Get an image from video by index",
+        "fields": {
+            "src_video": "1.inputs.video",
+            "force_rate": "1.inputs.force_rate",
+            "index": "2.inputs.start_index"
+        },
+        "inputs": {
+            "src_video": {"type":"video", "default":null},
+            "force_rate": {"type":"integer", "default":16},
+            "index": {"type":"integer", "default":0}
+        }
+    },
+    "video_replace_audio_api": {
+        "prompt_workflow": "video_audio_replace_api.json",
+        "fields": {
+            "video": "1.inputs.video",
+            "audio": "6.inputs.audio"
+        },
+        "descriptions": "Replace audio track of a video",
+        "inputs": {
+            "video": {"type": "video", "default": null},
+            "audio": {"type": "audio", "default": null}
+        }
+    }
+}
