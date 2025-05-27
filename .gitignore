@@ -1,6 +1,10 @@
 *.pyc
 *.jpg
 *.png
+*.mp4
+*.avi
+*.mp3
+*.wav
 
 # Python
 venv

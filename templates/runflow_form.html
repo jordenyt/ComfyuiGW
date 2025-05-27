@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Run Workflow: {{ workflow }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        .form-group { margin-bottom: 15px; }
+        label { display: inline-block; margin-bottom: 5px; font-weight: bold; width: 45% }
+        input[type="text"], input[type="number"], textarea { 
+            padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+        }
+        input[type="text"], input[type="number"] {
+            display: inline-block; width: 48%
+        }
+        textarea { 
+            width: 100%;
+            display: block; 
+        }
+        input[type="file"] { margin-top: 5px; width: 53% }
+        button { 
+            background-color: #4CAF50; color: white; padding: 10px 15px; 
+            border: none; border-radius: 4px; cursor: pointer; 
+        }
+        button:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+    <h1>Run Workflow: <br/> {{ workflow.replace('_api', '').replace('_', ' ') }}</h1>
+    <form method="post" action="/comfyui_runflow" enctype="multipart/form-data">
+        <input type="hidden" name="workflow" value="{{ workflow }}">
+        {% for field in form_fields %}
+        <div class="form-group">
+            <label for="{{ field.name }}">{{ field.name.replace('_', ' ') }}:</label>
+            {% if field.type == 'string' or field.type == 'text' %}
+                {% if field.type == 'text' %}
+                <textarea name="{{ field.name }}" id="{{ field.name }}" rows="4">{{ field.default }}</textarea>
+                {% else %}
+                <input type="text" name="{{ field.name }}" id="{{ field.name }}" value="{{ field.default }}">
+                {% endif %}
+            {% elif field.type == 'integer' or field.type == 'float' %}
+                <input type="number" name="{{ field.name }}" id="{{ field.name }}" 
+                       value="{{ field.default }}" step="{{ '1' if field.type == 'integer' else 'any' }}">
+            {% elif field.type == 'image' or field.type == 'video' or field.type == 'audio' %}
+                <input type="file" name="{{ field.name }}" id="{{ field.name }}" accept="{{ 'image/*' if field.type == 'image' else 'video/*' if field.type == 'video' else 'audio/*' }}">
+            {% elif field.type == 'array' %}
+                <input type="text" name="{{ field.name }}" id="{{ field.name }}" 
+                       value="{{ field.default|join(',') }}" placeholder="Comma separated values">
+            {% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
