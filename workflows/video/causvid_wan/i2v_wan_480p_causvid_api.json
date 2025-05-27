@@ -1,0 +1,466 @@
+{
+  "23": {
+    "inputs": {
+      "unet_name": "wan2.1-i2v-14b-480p-Q6_K.gguf",
+      "device": "cuda:0",
+      "virtual_vram_gb": 0,
+      "use_other_vram": false,
+      "expert_mode_allocations": ""
+    },
+    "class_type": "UnetLoaderGGUFDisTorchMultiGPU",
+    "_meta": {
+      "title": "UnetLoaderGGUFDisTorchMultiGPU"
+    }
+  },
+  "26": {
+    "inputs": {
+      "image": "sdsketch_6922_240828140158.jpg",
+      "resize": true,
+      "width": 640,
+      "height": 640,
+      "repeat": 1,
+      "keep_proportion": true,
+      "divisible_by": 16,
+      "mask_channel": "alpha",
+      "background_color": ""
+    },
+    "class_type": "LoadAndResizeImage",
+    "_meta": {
+      "title": "Load & Resize Image"
+    }
+  },
+  "27": {
+    "inputs": {
+      "text": "a man and a woman are kissing and hugging in wedding ceremony",
+      "clip": [
+        "21:1",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "28": {
+    "inputs": {
+      "text": "overexposure, deformed, mutation, blurry, flashing",
+      "clip": [
+        "21:1",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "31": {
+    "inputs": {
+      "samples": [
+        "83:12",
+        1
+      ],
+      "vae": [
+        "21:2",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "32": {
+    "inputs": {
+      "shift": 8,
+      "model": [
+        "23",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingSD3",
+    "_meta": {
+      "title": "ModelSamplingSD3"
+    }
+  },
+  "39": {
+    "inputs": {
+      "frame_rate": 16,
+      "loop_count": 0,
+      "filename_prefix": "i2v_wan",
+      "format": "video/h264-mp4",
+      "pix_fmt": "yuv420p",
+      "crf": 19,
+      "save_metadata": false,
+      "trim_to_audio": false,
+      "pingpong": false,
+      "save_output": true,
+      "images": [
+        "31",
+        0
+      ]
+    },
+    "class_type": "VHS_VideoCombine",
+    "_meta": {
+      "title": "Video Combine 🎥🅥🅗🅢"
+    }
+  },
+  "40": {
+    "inputs": {
+      "width": [
+        "26",
+        2
+      ],
+      "height": [
+        "26",
+        3
+      ],
+      "length": 81,
+      "batch_size": 1,
+      "positive": [
+        "27",
+        0
+      ],
+      "negative": [
+        "28",
+        0
+      ],
+      "vae": [
+        "21:2",
+        0
+      ],
+      "clip_vision_output": [
+        "41",
+        0
+      ],
+      "start_image": [
+        "26",
+        0
+      ]
+    },
+    "class_type": "WanImageToVideo",
+    "_meta": {
+      "title": "WanImageToVideo"
+    }
+  },
+  "41": {
+    "inputs": {
+      "crop": "none",
+      "clip_vision": [
+        "21:0",
+        0
+      ],
+      "image": [
+        "26",
+        0
+      ]
+    },
+    "class_type": "CLIPVisionEncode",
+    "_meta": {
+      "title": "CLIP Vision Encode"
+    }
+  },
+  "49": {
+    "inputs": {
+      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "model": [
+        "69",
+        0
+      ]
+    },
+    "class_type": "PathchSageAttentionKJ",
+    "_meta": {
+      "title": "Patch Sage Attention KJ"
+    }
+  },
+  "50": {
+    "inputs": {
+      "weight": 2,
+      "model": [
+        "49",
+        0
+      ],
+      "latent": [
+        "40",
+        2
+      ]
+    },
+    "class_type": "WanVideoEnhanceAVideoKJ",
+    "_meta": {
+      "title": "WanVideo Enhance A Video (native)"
+    }
+  },
+  "51": {
+    "inputs": {
+      "start_index": -1,
+      "num_frames": 1,
+      "images": [
+        "31",
+        0
+      ]
+    },
+    "class_type": "GetImageRangeFromBatch",
+    "_meta": {
+      "title": "Get Image or Mask Range From Batch"
+    }
+  },
+  "52": {
+    "inputs": {
+      "output_path": "",
+      "filename_prefix": "api",
+      "filename_delimiter": "_",
+      "filename_number_padding": 4,
+      "filename_number_start": "false",
+      "extension": "jpg",
+      "dpi": 300,
+      "quality": 95,
+      "optimize_image": "true",
+      "lossless_webp": "false",
+      "overwrite_mode": "false",
+      "show_history": "false",
+      "show_history_by_prefix": "false",
+      "embed_workflow": "false",
+      "show_previews": "false",
+      "images": [
+        "51",
+        0
+      ]
+    },
+    "class_type": "Image Save",
+    "_meta": {
+      "title": "Image Save"
+    }
+  },
+  "69": {
+    "inputs": {
+      "lora_name": "WAN21\\Wan21_CausVid_14B_T2V_lora_rank32.safetensors",
+      "strength": 0.25,
+      "blocks_type": "all",
+      "model": [
+        "84",
+        0
+      ]
+    },
+    "class_type": "HunyuanVideoLoraLoader",
+    "_meta": {
+      "title": "Hunyuan Video LoRA Loader"
+    }
+  },
+  "84": {
+    "inputs": {
+      "lora_name": "WAN21\\AmorousWanKisses.safetensors",
+      "strength": 0.5000000000000001,
+      "blocks_type": "all",
+      "model": [
+        "32",
+        0
+      ]
+    },
+    "class_type": "HunyuanVideoLoraLoader",
+    "_meta": {
+      "title": "Hunyuan Video LoRA Loader"
+    }
+  },
+  "21:0": {
+    "inputs": {
+      "clip_name": "clip_vision_h_fp8_e4m3fn.safetensors"
+    },
+    "class_type": "CLIPVisionLoader",
+    "_meta": {
+      "title": "Load CLIP Vision"
+    }
+  },
+  "21:1": {
+    "inputs": {
+      "clip_name": "t5xxl_um_fp8_e4m3fn_scaled.safetensors",
+      "type": "wan",
+      "device": "cpu"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP"
+    }
+  },
+  "21:2": {
+    "inputs": {
+      "vae_name": "Wan2_1_VAE_bf16.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "83:0": {
+    "inputs": {
+      "noise_seed": 549817161470217
+    },
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "RandomNoise"
+    }
+  },
+  "83:1": {
+    "inputs": {
+      "sampler_name": "euler_ancestral"
+    },
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "KSamplerSelect"
+    }
+  },
+  "83:2": {
+    "inputs": {
+      "Number": "10"
+    },
+    "class_type": "Int",
+    "_meta": {
+      "title": "Int"
+    }
+  },
+  "83:3": {
+    "inputs": {
+      "expression": "round(a * 0.5)",
+      "a": [
+        "83:2",
+        0
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "83:7": {
+    "inputs": {
+      "cfg": 6,
+      "model": [
+        "50",
+        0
+      ],
+      "positive": [
+        "40",
+        0
+      ],
+      "negative": [
+        "40",
+        1
+      ]
+    },
+    "class_type": "CFGGuider",
+    "_meta": {
+      "title": "CFGGuider"
+    }
+  },
+  "83:8": {
+    "inputs": {
+      "cfg": 1,
+      "model": [
+        "50",
+        0
+      ],
+      "positive": [
+        "40",
+        0
+      ],
+      "negative": [
+        "40",
+        1
+      ]
+    },
+    "class_type": "CFGGuider",
+    "_meta": {
+      "title": "CFGGuider"
+    }
+  },
+  "83:9": {
+    "inputs": {
+      "scheduler": "simple",
+      "steps": [
+        "83:2",
+        0
+      ],
+      "denoise": 1,
+      "model": [
+        "50",
+        0
+      ]
+    },
+    "class_type": "BasicScheduler",
+    "_meta": {
+      "title": "BasicScheduler"
+    }
+  },
+  "83:10": {
+    "inputs": {
+      "step": [
+        "83:3",
+        0
+      ],
+      "sigmas": [
+        "83:9",
+        0
+      ]
+    },
+    "class_type": "SplitSigmas",
+    "_meta": {
+      "title": "SplitSigmas"
+    }
+  },
+  "83:11": {
+    "inputs": {
+      "noise": [
+        "83:0",
+        0
+      ],
+      "guider": [
+        "83:7",
+        0
+      ],
+      "sampler": [
+        "83:1",
+        0
+      ],
+      "sigmas": [
+        "83:10",
+        0
+      ],
+      "latent_image": [
+        "40",
+        2
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  },
+  "83:12": {
+    "inputs": {
+      "noise": [
+        "83:0",
+        0
+      ],
+      "guider": [
+        "83:8",
+        0
+      ],
+      "sampler": [
+        "83:1",
+        0
+      ],
+      "sigmas": [
+        "83:10",
+        1
+      ],
+      "latent_image": [
+        "83:11",
+        1
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  }
+}

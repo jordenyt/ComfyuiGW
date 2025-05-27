@@ -1,0 +1,775 @@
+{
+  "23": {
+    "inputs": {
+      "unet_name": "Wan2.1-VACE-14B-Q6_K.gguf",
+      "device": "cuda:0",
+      "virtual_vram_gb": 0,
+      "use_other_vram": false,
+      "expert_mode_allocations": ""
+    },
+    "class_type": "UnetLoaderGGUFDisTorchMultiGPU",
+    "_meta": {
+      "title": "UnetLoaderGGUFDisTorchMultiGPU"
+    }
+  },
+  "27": {
+    "inputs": {
+      "text": "Asian woman, long brown hair, sexy collarbone and cleavage. looking at viewer, making seductive expression and pose",
+      "clip": [
+        "21:1",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "28": {
+    "inputs": {
+      "text": "overexposure, deformed, mutation, blurry, flashing",
+      "clip": [
+        "21:1",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "31": {
+    "inputs": {
+      "samples": [
+        "266",
+        0
+      ],
+      "vae": [
+        "21:2",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "32": {
+    "inputs": {
+      "shift": 8.000000000000002,
+      "model": [
+        "278",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingSD3",
+    "_meta": {
+      "title": "ModelSamplingSD3"
+    }
+  },
+  "39": {
+    "inputs": {
+      "frame_rate": [
+        "121",
+        0
+      ],
+      "loop_count": 0,
+      "filename_prefix": "v2v_wan_vace_extend",
+      "format": "video/h264-mp4",
+      "pix_fmt": "yuv420p",
+      "crf": 19,
+      "save_metadata": false,
+      "trim_to_audio": false,
+      "pingpong": false,
+      "save_output": true,
+      "images": [
+        "250",
+        0
+      ]
+    },
+    "class_type": "VHS_VideoCombine",
+    "_meta": {
+      "title": "Video Combine 🎥🅥🅗🅢"
+    }
+  },
+  "49": {
+    "inputs": {
+      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "model": [
+        "32",
+        0
+      ]
+    },
+    "class_type": "PathchSageAttentionKJ",
+    "_meta": {
+      "title": "Patch Sage Attention KJ"
+    }
+  },
+  "50": {
+    "inputs": {
+      "weight": 2.0000000000000004,
+      "model": [
+        "274",
+        0
+      ],
+      "latent": [
+        "260",
+        2
+      ]
+    },
+    "class_type": "WanVideoEnhanceAVideoKJ",
+    "_meta": {
+      "title": "WanVideo Enhance A Video (native)"
+    }
+  },
+  "117": {
+    "inputs": {
+      "video": "Standard_Mode_Woman_taking_selfie_in_outdoors_ (1).mp4",
+      "force_rate": 16,
+      "custom_width": 0,
+      "custom_height": 0,
+      "frame_load_cap": 0,
+      "skip_first_frames": 0,
+      "select_every_nth": 1,
+      "format": "AnimateDiff"
+    },
+    "class_type": "VHS_LoadVideo",
+    "_meta": {
+      "title": "Load Video (Upload) 🎥🅥🅗🅢"
+    }
+  },
+  "121": {
+    "inputs": {
+      "video_info": [
+        "117",
+        3
+      ]
+    },
+    "class_type": "VHS_VideoInfoLoaded",
+    "_meta": {
+      "title": "Video Info (Loaded) 🎥🅥🅗🅢"
+    }
+  },
+  "132": {
+    "inputs": {
+      "width": 640,
+      "height": 640,
+      "upscale_method": "lanczos",
+      "keep_proportion": true,
+      "divisible_by": 16,
+      "crop": "center",
+      "image": [
+        "117",
+        0
+      ]
+    },
+    "class_type": "ImageResizeKJ",
+    "_meta": {
+      "title": "Resize Image (deprecated)"
+    }
+  },
+  "185": {
+    "inputs": {
+      "channel": "red",
+      "image": [
+        "225",
+        0
+      ]
+    },
+    "class_type": "ImageToMask",
+    "_meta": {
+      "title": "Convert Image to Mask"
+    }
+  },
+  "205": {
+    "inputs": {
+      "width": [
+        "132",
+        1
+      ],
+      "height": [
+        "132",
+        2
+      ],
+      "red": 0,
+      "green": 0,
+      "blue": 0
+    },
+    "class_type": "Image Blank",
+    "_meta": {
+      "title": "Image Blank"
+    }
+  },
+  "210": {
+    "inputs": {
+      "start": [
+        "212",
+        0
+      ],
+      "length": [
+        "213",
+        0
+      ],
+      "image": [
+        "132",
+        0
+      ]
+    },
+    "class_type": "ImageFromBatch+",
+    "_meta": {
+      "title": "🔧 Image From Batch"
+    }
+  },
+  "212": {
+    "inputs": {
+      "expression": "a-b-1",
+      "a": [
+        "121",
+        1
+      ],
+      "b": [
+        "213",
+        0
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "213": {
+    "inputs": {
+      "value": 16
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "Int"
+    }
+  },
+  "214": {
+    "inputs": {
+      "frame_rate": [
+        "121",
+        0
+      ],
+      "loop_count": 0,
+      "filename_prefix": "iv2v_wan_control_mask",
+      "format": "video/h264-mp4",
+      "pix_fmt": "yuv420p",
+      "crf": 19,
+      "save_metadata": false,
+      "trim_to_audio": false,
+      "pingpong": false,
+      "save_output": false,
+      "images": [
+        "215",
+        0
+      ]
+    },
+    "class_type": "VHS_VideoCombine",
+    "_meta": {
+      "title": "Video Combine 🎥🅥🅗🅢"
+    }
+  },
+  "215": {
+    "inputs": {
+      "image1": [
+        "210",
+        0
+      ],
+      "image2": [
+        "216",
+        0
+      ]
+    },
+    "class_type": "ImageBatch",
+    "_meta": {
+      "title": "Batch Images"
+    }
+  },
+  "216": {
+    "inputs": {
+      "amount": [
+        "218",
+        0
+      ],
+      "image": [
+        "276",
+        0
+      ]
+    },
+    "class_type": "RepeatImageBatch",
+    "_meta": {
+      "title": "RepeatImageBatch"
+    }
+  },
+  "218": {
+    "inputs": {
+      "value": 80
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "Int"
+    }
+  },
+  "223": {
+    "inputs": {
+      "amount": [
+        "213",
+        0
+      ],
+      "image": [
+        "205",
+        0
+      ]
+    },
+    "class_type": "RepeatImageBatch",
+    "_meta": {
+      "title": "RepeatImageBatch"
+    }
+  },
+  "224": {
+    "inputs": {
+      "amount": [
+        "218",
+        0
+      ],
+      "image": [
+        "275",
+        0
+      ]
+    },
+    "class_type": "RepeatImageBatch",
+    "_meta": {
+      "title": "RepeatImageBatch"
+    }
+  },
+  "225": {
+    "inputs": {
+      "image1": [
+        "223",
+        0
+      ],
+      "image2": [
+        "224",
+        0
+      ]
+    },
+    "class_type": "ImageBatch",
+    "_meta": {
+      "title": "Batch Images"
+    }
+  },
+  "227": {
+    "inputs": {
+      "batch": [
+        "215",
+        0
+      ]
+    },
+    "class_type": "BatchCount+",
+    "_meta": {
+      "title": "🔧 Batch Count"
+    }
+  },
+  "250": {
+    "inputs": {
+      "image1": [
+        "132",
+        0
+      ],
+      "image2": [
+        "251",
+        0
+      ]
+    },
+    "class_type": "ImageBatch",
+    "_meta": {
+      "title": "Batch Images"
+    }
+  },
+  "251": {
+    "inputs": {
+      "start_index": [
+        "254",
+        0
+      ],
+      "num_frames": [
+        "218",
+        0
+      ],
+      "images": [
+        "31",
+        0
+      ]
+    },
+    "class_type": "GetImageRangeFromBatch",
+    "_meta": {
+      "title": "Get Image or Mask Range From Batch"
+    }
+  },
+  "254": {
+    "inputs": {
+      "expression": "b-a-1",
+      "a": [
+        "218",
+        0
+      ],
+      "b": [
+        "227",
+        0
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "260": {
+    "inputs": {
+      "width": [
+        "132",
+        1
+      ],
+      "height": [
+        "132",
+        2
+      ],
+      "length": [
+        "227",
+        0
+      ],
+      "batch_size": 1,
+      "strength": 1.0000000000000002,
+      "positive": [
+        "27",
+        0
+      ],
+      "negative": [
+        "28",
+        0
+      ],
+      "vae": [
+        "21:2",
+        0
+      ],
+      "control_video": [
+        "215",
+        0
+      ],
+      "control_masks": [
+        "185",
+        0
+      ]
+    },
+    "class_type": "WanVaceToVideo",
+    "_meta": {
+      "title": "WanVaceToVideo"
+    }
+  },
+  "266": {
+    "inputs": {
+      "trim_amount": [
+        "260",
+        3
+      ],
+      "samples": [
+        "242:12",
+        1
+      ]
+    },
+    "class_type": "TrimVideoLatent",
+    "_meta": {
+      "title": "TrimVideoLatent"
+    }
+  },
+  "272": {
+    "inputs": {
+      "enable_fp16_accumulation": true,
+      "model": [
+        "23",
+        0
+      ]
+    },
+    "class_type": "ModelPatchTorchSettings",
+    "_meta": {
+      "title": "Model Patch Torch Settings"
+    }
+  },
+  "274": {
+    "inputs": {
+      "self_structural": 1,
+      "self_temporal": 1,
+      "cross_structural": 1.2,
+      "cross_temporal": 1.3,
+      "model": [
+        "49",
+        0
+      ]
+    },
+    "class_type": "UNetTemporalAttentionMultiply",
+    "_meta": {
+      "title": "UNetTemporalAttentionMultiply"
+    }
+  },
+  "275": {
+    "inputs": {
+      "width": [
+        "132",
+        1
+      ],
+      "height": [
+        "132",
+        2
+      ],
+      "red": 255,
+      "green": 255,
+      "blue": 255
+    },
+    "class_type": "Image Blank",
+    "_meta": {
+      "title": "Image Blank"
+    }
+  },
+  "276": {
+    "inputs": {
+      "width": [
+        "132",
+        1
+      ],
+      "height": [
+        "132",
+        2
+      ],
+      "red": 127,
+      "green": 127,
+      "blue": 127
+    },
+    "class_type": "Image Blank",
+    "_meta": {
+      "title": "Image Blank"
+    }
+  },
+  "277": {
+    "inputs": {
+      "lora_name": "WAN21\\wan-nsfw-e14-fixed.safetensors",
+      "strength": 0.5000000000000001,
+      "blocks_type": "all",
+      "model": [
+        "272",
+        0
+      ]
+    },
+    "class_type": "HunyuanVideoLoraLoader",
+    "_meta": {
+      "title": "Hunyuan Video LoRA Loader"
+    }
+  },
+  "278": {
+    "inputs": {
+      "lora_name": "WAN21\\Wan21_CausVid_14B_T2V_lora_rank32.safetensors",
+      "strength": 0.5000000000000001,
+      "blocks_type": "all",
+      "model": [
+        "277",
+        0
+      ]
+    },
+    "class_type": "HunyuanVideoLoraLoader",
+    "_meta": {
+      "title": "Hunyuan Video LoRA Loader"
+    }
+  },
+  "21:2": {
+    "inputs": {
+      "vae_name": "Wan2_1_VAE_bf16.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "21:1": {
+    "inputs": {
+      "clip_name": "t5xxl_um_fp8_e4m3fn_scaled.safetensors",
+      "type": "wan",
+      "device": "cpu"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP"
+    }
+  },
+  "242:0": {
+    "inputs": {
+      "noise_seed": 447445279888801
+    },
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "RandomNoise"
+    }
+  },
+  "242:1": {
+    "inputs": {
+      "sampler_name": "euler_ancestral"
+    },
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "KSamplerSelect"
+    }
+  },
+  "242:2": {
+    "inputs": {
+      "Number": "10"
+    },
+    "class_type": "Int",
+    "_meta": {
+      "title": "Int"
+    }
+  },
+  "242:3": {
+    "inputs": {
+      "expression": "round(a * 0.5)",
+      "a": [
+        "242:2",
+        0
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "242:7": {
+    "inputs": {
+      "cfg": 6,
+      "model": [
+        "50",
+        0
+      ],
+      "positive": [
+        "260",
+        0
+      ],
+      "negative": [
+        "260",
+        1
+      ]
+    },
+    "class_type": "CFGGuider",
+    "_meta": {
+      "title": "CFGGuider"
+    }
+  },
+  "242:8": {
+    "inputs": {
+      "cfg": 1,
+      "model": [
+        "50",
+        0
+      ],
+      "positive": [
+        "260",
+        0
+      ],
+      "negative": [
+        "260",
+        1
+      ]
+    },
+    "class_type": "CFGGuider",
+    "_meta": {
+      "title": "CFGGuider"
+    }
+  },
+  "242:9": {
+    "inputs": {
+      "scheduler": "simple",
+      "steps": [
+        "242:2",
+        0
+      ],
+      "denoise": 1,
+      "model": [
+        "50",
+        0
+      ]
+    },
+    "class_type": "BasicScheduler",
+    "_meta": {
+      "title": "BasicScheduler"
+    }
+  },
+  "242:10": {
+    "inputs": {
+      "step": [
+        "242:3",
+        0
+      ],
+      "sigmas": [
+        "242:9",
+        0
+      ]
+    },
+    "class_type": "SplitSigmas",
+    "_meta": {
+      "title": "SplitSigmas"
+    }
+  },
+  "242:11": {
+    "inputs": {
+      "noise": [
+        "242:0",
+        0
+      ],
+      "guider": [
+        "242:7",
+        0
+      ],
+      "sampler": [
+        "242:1",
+        0
+      ],
+      "sigmas": [
+        "242:10",
+        0
+      ],
+      "latent_image": [
+        "260",
+        2
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  },
+  "242:12": {
+    "inputs": {
+      "noise": [
+        "242:0",
+        0
+      ],
+      "guider": [
+        "242:8",
+        0
+      ],
+      "sampler": [
+        "242:1",
+        0
+      ],
+      "sigmas": [
+        "242:10",
+        1
+      ],
+      "latent_image": [
+        "242:11",
+        1
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  }
+}

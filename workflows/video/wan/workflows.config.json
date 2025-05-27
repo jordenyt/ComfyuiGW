@@ -26,41 +26,12 @@
             "size": "51.inputs.base_resolution"
         },
         "descriptions": "Start Image to Video with WAN 2.1 I2V 480p Model",
-        "inputs": {
+        "_inputs": {
             "start_img": {"type": "image","default": null},
             "positive": {"type": "text","default": ""},
             "length": {"type": "float","default": 5.0},
             "cfg": {"type": "float","default": 1.0},
             "steps": {"type": "integer","default": 30},
-            "size": {"type": "integer","default": 640}
-        }
-    },
-    "i2v_wan_api": {
-        "prompt_workflow": "i2v_wan_480p_api.json",
-        "fields": {
-            "seed": "48:0.inputs.noise_seed",
-            "start_img": "26.inputs.image",
-            "positive": "27.inputs.text",
-            "negative": "28.inputs.text",
-            "length": "40.inputs.length",
-            "cfg": "48:7.inputs.cfg",
-            "steps": "48:2.inputs.Number",
-            "loraStrength": "68.inputs.strength",
-            "lora": "68.inputs.lora_name",
-            "unet_name": "23.inputs.unet_name",
-            "coefficients": "24.inputs.coefficients",
-            "size": ["26.inputs.width","26.inputs.height"]
-        },
-        "descriptions": "Start Image to Video with WAN 2.1 I2V 480p Model",
-        "inputs": {
-            "start_img": {"type": "image","default": null},
-            "positive": {"type": "text","default": ""},
-            "negative": {"type": "text", "default": "chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
-            "length": {"type": "integer","default": 81},
-            "lora": {"type":"string", "default": "WAN21\\wan-nsfw-e14-fixed.safetensors"},
-            "loraStrength": {"type":"float", "default": 0},
-            "cfg": {"type": "float","default": 6.0},
-            "steps": {"type": "integer","default": 20},
             "size": {"type": "integer","default": 640}
         }
     },
@@ -80,7 +51,7 @@
             "frame_load_cap": "117.inputs.frame_load_cap"
         },
         "descriptions": "Video (+ start image) to video by WAN 2.1 I2V 480p Model",
-        "inputs": {
+        "_inputs": {
             "src_video": {"type":"video", "default":null},
             "target_image": {"type":"image", "default":null},
             "prompt": {"type":"text", "default":""},
@@ -111,7 +82,7 @@
             "lora": "186.inputs.lora_name"            
         },
         "descriptions": "Video (+ start image) to video by WAN 2.1 I2V 480p Model and mask video",
-        "inputs": {
+        "_inputs": {
             "src_video": {"type":"video", "default":null},
             "target_image": {"type":"image", "default":null},
             "mask_video": {"type":"video", "default":null},
@@ -142,7 +113,7 @@
             "lora": "77.inputs.lora_name"
         },
         "descriptions": "Images (start and end) to Video with WAN 2.1 Fun InP Model",
-        "inputs": {
+        "_inputs": {
             "start_img": {"type": "image","default": null},
             "end_img": {"type": "image","default": null},
             "positive": {"type": "text","default": ""},
@@ -171,7 +142,7 @@
             "lora": "77.inputs.lora_name"
         },
         "descriptions": "Images (start and end) to Video with WAN 2.1 FLF Model",
-        "inputs": {
+        "_inputs": {
             "start_img": {"type": "image","default": null},
             "end_img": {"type": "image","default": null},
             "positive": {"type": "text","default": ""},
@@ -201,7 +172,7 @@
             "frame_load_cap": "117.inputs.frame_load_cap"
         },
         "descriptions": "Video (+ start & end image) to video by WAN 2.1 FLF Model",
-        "inputs": {
+        "_inputs": {
             "src_video": {"type":"video", "default":null},
             "start_image": {"type":"image", "default":null},
             "end_image": {"type":"image", "default":null},
@@ -233,7 +204,7 @@
             "frame_load_cap": "117.inputs.frame_load_cap"
         },
         "descriptions": "Video (+ start & end image) to video by WAN 2.1 FLF Model with Mask",
-        "inputs": {
+        "_inputs": {
             "src_video": {"type":"video", "default":null},
             "start_image": {"type":"image", "default":null},
             "end_image": {"type":"image", "default":null},
@@ -265,7 +236,7 @@
             "blur":"172.inputs.blur_radius"            
         },
         "descriptions": "Video (+ start image) to video by WAN 2.1 Fun Control Model, pose and mask video",
-        "inputs": {
+        "_inputs": {
             "src_video": {"type":"video", "default":null},
             "target_image": {"type":"image", "default":null},
             "mask_video": {"type":"video", "default":null},
@@ -277,36 +248,6 @@
             "size": {"type":"integer", "default":640},
             "frame_load_cap": {"type":"integer", "default":161},
             "blur": {"type":"integer", "default":10}
-        }
-    },
-    "iv2v_wan_vace_pose_mask_api": {
-        "prompt_workflow": "iv2v_wan_vace_pose_mask_api.json",
-        "fields": {
-            "seed": "200:0.inputs.noise_seed",
-            "size": ["132.inputs.width", "132.inputs.height"],
-            "prompt": "27.inputs.text",
-            "negative_prompt": "28.inputs.text",
-            "cfg": "200:7.inputs.cfg",
-            "src_video": "117.inputs.video",
-            "pose_video": "177.inputs.video",
-            "mask_video": "180.inputs.video",
-            "target_image": "26.inputs.image",
-            "frame_load_cap": "117.inputs.frame_load_cap",
-            "blur":"172.inputs.blur_radius"            
-        },
-        "descriptions": "Video (+ ref image) to video by WAN VACE Model, pose and mask video",
-        "inputs": {
-            "src_video": {"type":"video", "default":null},
-            "target_image": {"type":"image", "default":null},
-            "mask_video": {"type":"video", "default":null},
-            "pose_video": {"type":"video", "default":null},
-            "prompt": {"type":"text", "default":""},
-            "negative_prompt": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
-            "cfg": {"type":"float", "default":6},
-            "denoise": {"type":"float", "default":1},
-            "size": {"type":"integer", "default":640},
-            "frame_load_cap": {"type":"integer", "default":161},
-            "blur": {"type":"integer", "default":1}
         }
     },
     "iv2v_wan_vace_mask_keyframe_api": {
@@ -326,7 +267,7 @@
             "blur":"172.inputs.blur_radius"            
         },
         "descriptions": "Video (+ ref image + keyframe) to video by WAN VACE Model and mask video",
-        "inputs": {
+        "_inputs": {
             "src_video": {"type":"video", "default":null},
             "target_image": {"type":"image", "default":null},
             "mask_video": {"type":"video", "default":null},
@@ -357,7 +298,7 @@
             "frame_load_cap": "117.inputs.frame_load_cap"
         },
         "descriptions": "Video (+ ref image + keyframe) to video by WAN VACE Model, pose video",
-        "inputs": {
+        "_inputs": {
             "src_video": {"type":"video", "default":null},
             "target_image": {"type":"image", "default":null},
             "pose_video": {"type":"video", "default":null},
@@ -389,7 +330,7 @@
             "blur":"172.inputs.blur_radius"            
         },
         "descriptions": "Video (+ ref image + keyframe) to video by WAN VACE Model, pose and mask video",
-        "inputs": {
+        "_inputs": {
             "src_video": {"type":"video", "default":null},
             "target_image": {"type":"image", "default":null},
             "mask_video": {"type":"video", "default":null},
@@ -420,7 +361,7 @@
             "frame_load_cap": "117.inputs.frame_load_cap"
         },
         "descriptions": "Video (+ start image) to video by WAN 2.1 Fun Control Model and pose video",
-        "inputs": {
+        "_inputs": {
             "src_video": {"type":"video", "default":null},
             "target_image": {"type":"image", "default":null},
             "pose_video": {"type":"video", "default":null},
@@ -430,33 +371,6 @@
             "denoise": {"type":"float", "default":1},
             "size": {"type":"integer", "default":640},
             "frame_load_cap": {"type":"integer", "default":161}
-        }
-    },
-    "v2v_wan_vace_extend_api": {
-        "prompt_workflow": "v2v_wan_vace_extend_api.json",
-        "fields": {
-            "seed": "242:0.inputs.noise_seed",
-            "video": "117.inputs.video",
-            "force_rate": "117.inputs.force_rate",
-            "size": ["132.inputs.width", "132.inputs.height"],
-            "tail_frame": "213.inputs.value",
-            "new_frame": "218.inputs.value",
-            "steps": "242:2.inputs.Number",
-            "cfg": "242:7.inputs.cfg",
-            "positive": "27.inputs.text",
-            "negative": "28.inputs.text"
-        },
-        "descriptions": "Extend a Video by WAN VACE model",
-        "inputs": {
-            "video": {"type": "video", "default": null},
-            "positive": {"type":"text", "default":""},
-            "negative": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
-            "size": {"type":"integer", "default":640},
-            "tail_frame": {"type": "integer", "default": 16},
-            "new_frame": {"type": "integer", "default": 81},
-            "force_rate": {"type": "integer", "default": 16},
-            "steps": {"type": "integer", "default": 20},
-            "cfg": {"type":"float", "default":6}
         }
     }
 }

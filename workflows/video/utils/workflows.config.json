@@ -2,13 +2,25 @@
     "v2v_upscale_VFI_api": {
         "prompt_workflow": "v2v_upscale_VFI_api.json",
         "fields": {
-            "video": "117.inputs.video",
-            "force_rate": "117.inputs.force_rate"
+            "video": "376.inputs.video",
+            "force_rate": "376.inputs.force_rate"
         },
         "descriptions": "Upscale and Up-rate Video",
         "inputs": {
             "video": {"type": "video", "default": null},
             "force_rate": {"type": "integer", "default": 16}
+        }
+    },
+    "v2v_color_match_api": {
+        "prompt_workflow": "v2v_color_match_api.json",
+        "fields": {
+            "video": "12.inputs.video",
+            "ref_image": "11.inputs.image"
+        },
+        "descriptions": "Match video to reference image.",
+        "inputs": {
+            "video": {"type": "video", "default": null},
+            "ref_image": {"type": "image", "default": null}
         }
     },
     "video_get_mask_api": {
@@ -58,7 +70,7 @@
         }
     },
     "extract_frame_api": {
-        "prompt_workflow": "extract_frame.json",
+        "prompt_workflow": "extract_frame_api.json",
         "descriptions": "Get an image from video by index",
         "fields": {
             "src_video": "1.inputs.video",

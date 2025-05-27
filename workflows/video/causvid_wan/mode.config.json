@@ -1,0 +1,42 @@
+[
+    {
+        "name": "I2V_WAN_480p",
+        "title": "I2V WAN 480p",
+        "showT2I": false,
+        "show": true,
+        "configurable": false,
+        "default": {"type":"img2img", "baseImage":"background"},
+        "fields": {
+            "workflow": "i2v_wan",
+            "start_img": "$background",
+            "positive": "$positive",
+            "negative": "$negative",
+            "length": 81,
+            "cfg": 4,
+            "steps": 10,
+            "size": 640,
+            "lora": "WAN21\\wan-nsfw-e14-fixed.safetensors",
+            "loraStrength": 0
+        }
+    },
+    {
+        "name": "I2V_WAN_480p_LORA",
+        "title": "I2V WAN 480p LORA",
+        "showT2I": false,
+        "show": true,
+        "configurable": false,
+        "default": {"type":"img2img", "baseImage":"background"},
+        "fields": {
+            "workflow": "i2v_wan",
+            "start_img": "$background",
+            "positive": "$positive",
+            "negative": "$negative",
+            "length": 81,
+            "cfg": 4,
+            "steps": 10,
+            "size": 640,
+            "lora": "WAN21\\wan-nsfw-e14-fixed.safetensors",
+            "loraStrength": 0.7
+        }
+    }
+]
