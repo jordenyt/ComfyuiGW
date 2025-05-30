@@ -14,10 +14,10 @@
   },
   "26": {
     "inputs": {
-      "image": "sdsketch_11329_250522231715.jpg",
+      "image": "reference_image_146385623753472.jpg",
       "resize": true,
-      "width": 640,
-      "height": 640,
+      "width": 1024,
+      "height": 1024,
       "repeat": 1,
       "keep_proportion": true,
       "divisible_by": 16,
@@ -31,7 +31,7 @@
   },
   "27": {
     "inputs": {
-      "text": "slim Asian woman, with long dark brown hair, selfie, collarbone, medium sized breasts, cleavage, denim shorts, looking at viewer",
+      "text": "slim Asian woman, with long dark brown hair, selfie, collarbone, medium sized breasts, cleavage, naked, looking at viewer, in bathroom",
       "clip": [
         "21:1",
         0
@@ -87,11 +87,11 @@
   "39": {
     "inputs": {
       "frame_rate": [
-        "233",
+        "121",
         0
       ],
       "loop_count": 0,
-      "filename_prefix": "iv2v_wan_vace_pose_mask",
+      "filename_prefix": "iv2v_wan_vace_pose",
       "format": "video/h264-mp4",
       "pix_fmt": "yuv420p",
       "crf": 19,
@@ -100,8 +100,12 @@
       "pingpong": false,
       "save_output": true,
       "images": [
-        "31",
+        "265",
         0
+      ],
+      "audio": [
+        "117",
+        2
       ]
     },
     "class_type": "VHS_VideoCombine",
@@ -139,18 +143,105 @@
       "title": "WanVideo Enhance A Video (native)"
     }
   },
+  "117": {
+    "inputs": {
+      "video": "src_video_146385623753472.mp4",
+      "force_rate": 16,
+      "custom_width": 0,
+      "custom_height": 0,
+      "frame_load_cap": 0,
+      "skip_first_frames": 0,
+      "select_every_nth": 1,
+      "format": "AnimateDiff"
+    },
+    "class_type": "VHS_LoadVideo",
+    "_meta": {
+      "title": "Load Video (Upload) 🎥🅥🅗🅢"
+    }
+  },
+  "121": {
+    "inputs": {
+      "video_info": [
+        "117",
+        3
+      ]
+    },
+    "class_type": "VHS_VideoInfoLoaded",
+    "_meta": {
+      "title": "Video Info (Loaded) 🎥🅥🅗🅢"
+    }
+  },
+  "132": {
+    "inputs": {
+      "width": 640,
+      "height": 640,
+      "upscale_method": "lanczos",
+      "keep_proportion": true,
+      "divisible_by": 2,
+      "crop": 0,
+      "image": [
+        "117",
+        0
+      ]
+    },
+    "class_type": "ImageResizeKJ",
+    "_meta": {
+      "title": "Resize Image (deprecated)"
+    }
+  },
+  "177": {
+    "inputs": {
+      "video": "pose_video_146385623753472.mp4",
+      "force_rate": [
+        "121",
+        0
+      ],
+      "custom_width": [
+        "132",
+        1
+      ],
+      "custom_height": [
+        "132",
+        2
+      ],
+      "frame_load_cap": [
+        "121",
+        1
+      ],
+      "skip_first_frames": 0,
+      "select_every_nth": 1,
+      "format": "AnimateDiff"
+    },
+    "class_type": "VHS_LoadVideo",
+    "_meta": {
+      "title": "Load Video (Upload) 🎥🅥🅗🅢"
+    }
+  },
+  "185": {
+    "inputs": {
+      "channel": "red",
+      "image": [
+        "228",
+        0
+      ]
+    },
+    "class_type": "ImageToMask",
+    "_meta": {
+      "title": "Convert Image to Mask"
+    }
+  },
   "186": {
     "inputs": {
       "width": [
-        "26",
-        2
+        "132",
+        1
       ],
       "height": [
-        "26",
-        3
+        "132",
+        2
       ],
       "length": [
-        "236",
+        "259",
         0
       ],
       "batch_size": 1,
@@ -168,11 +259,11 @@
         0
       ],
       "control_video": [
-        "223",
+        "257",
         0
       ],
       "control_masks": [
-        "223",
+        "257",
         1
       ],
       "reference_image": [
@@ -192,7 +283,7 @@
         3
       ],
       "samples": [
-        "237:9",
+        "247:9",
         0
       ]
     },
@@ -232,9 +323,9 @@
   },
   "207": {
     "inputs": {
-      "start_index": 0,
+      "start_index": 32,
       "original_images": [
-        "228",
+        "177",
         0
       ],
       "replacement_images": [
@@ -242,7 +333,7 @@
         0
       ],
       "original_masks": [
-        "231",
+        "185",
         0
       ],
       "replacement_masks": [
@@ -257,15 +348,15 @@
   },
   "208": {
     "inputs": {
-      "image": "sdsketch_11323_250522231952.jpg",
+      "image": "keyframe_1_146385623753472.jpg",
       "resize": true,
       "width": [
-        "26",
-        2
+        "132",
+        1
       ],
       "height": [
-        "26",
-        3
+        "132",
+        2
       ],
       "repeat": 1,
       "keep_proportion": false,
@@ -281,12 +372,12 @@
   "209": {
     "inputs": {
       "width": [
-        "26",
-        2
+        "132",
+        1
       ],
       "height": [
-        "26",
-        3
+        "132",
+        2
       ],
       "red": 0,
       "green": 0,
@@ -312,7 +403,7 @@
   },
   "220": {
     "inputs": {
-      "image": "sdsketch_11329_250522231715.jpg",
+      "image": "keyframe_2_146385623753472.jpg",
       "resize": true,
       "width": [
         "208",
@@ -335,7 +426,7 @@
   },
   "221": {
     "inputs": {
-      "start_index": 16,
+      "start_index": 32,
       "original_images": [
         "207",
         0
@@ -360,7 +451,7 @@
   },
   "222": {
     "inputs": {
-      "image": "sdsketch_11336_250523003411.jpg",
+      "image": "keyframe_3_146385623753472.jpg",
       "resize": true,
       "width": [
         "220",
@@ -409,7 +500,7 @@
   "224": {
     "inputs": {
       "lora_name": "WAN21\\wan-nsfw-e14-fixed.safetensors",
-      "strength": 0.5000000000000001,
+      "strength": 0.7000000000000002,
       "blocks_type": "all",
       "model": [
         "204",
@@ -424,16 +515,16 @@
   "227": {
     "inputs": {
       "width": [
-        "26",
-        2
+        "132",
+        1
       ],
       "height": [
-        "26",
-        3
+        "132",
+        2
       ],
-      "red": 127,
-      "green": 127,
-      "blue": 127
+      "red": 255,
+      "green": 255,
+      "blue": 255
     },
     "class_type": "Image Blank",
     "_meta": {
@@ -443,8 +534,8 @@
   "228": {
     "inputs": {
       "amount": [
-        "236",
-        0
+        "121",
+        1
       ],
       "image": [
         "227",
@@ -456,30 +547,42 @@
       "title": "RepeatImageBatch"
     }
   },
-  "229": {
+  "250": {
     "inputs": {
-      "width": [
-        "26",
-        2
-      ],
-      "height": [
-        "26",
-        3
-      ],
-      "red": 255,
-      "green": 255,
-      "blue": 255
+      "video": "iv2v_wan_vace_pose_mask_00070-audio.mp4",
+      "force_rate": 16,
+      "custom_width": 0,
+      "custom_height": 0,
+      "frame_load_cap": 0,
+      "skip_first_frames": 0,
+      "select_every_nth": 1,
+      "format": "AnimateDiff"
     },
-    "class_type": "Image Blank",
+    "class_type": "VHS_LoadVideo",
     "_meta": {
-      "title": "Image Blank"
+      "title": "Load Video (Upload) 🎥🅥🅗🅢"
     }
   },
-  "230": {
+  "251": {
     "inputs": {
-      "amount": 1,
+      "video_info": [
+        "250",
+        3
+      ]
+    },
+    "class_type": "VHS_VideoInfo",
+    "_meta": {
+      "title": "Video Info 🎥🅥🅗🅢"
+    }
+  },
+  "253": {
+    "inputs": {
+      "amount": [
+        "251",
+        6
+      ],
       "image": [
-        "229",
+        "209",
         0
       ]
     },
@@ -488,11 +591,11 @@
       "title": "RepeatImageBatch"
     }
   },
-  "231": {
+  "255": {
     "inputs": {
       "channel": "red",
       "image": [
-        "230",
+        "253",
         0
       ]
     },
@@ -501,22 +604,134 @@
       "title": "Convert Image to Mask"
     }
   },
-  "233": {
+  "256": {
     "inputs": {
-      "value": 16
+      "start_index": 0,
+      "original_images": [
+        "223",
+        0
+      ],
+      "replacement_images": [
+        "250",
+        0
+      ],
+      "original_masks": [
+        "223",
+        1
+      ],
+      "replacement_masks": [
+        "255",
+        0
+      ]
     },
-    "class_type": "PrimitiveFloat",
+    "class_type": "ReplaceImagesInBatch",
     "_meta": {
-      "title": "Float"
+      "title": "Replace Images In Batch"
     }
   },
-  "236": {
+  "257": {
     "inputs": {
-      "value": 81
+      "start_index": [
+        "258",
+        0
+      ],
+      "num_frames": [
+        "259",
+        0
+      ],
+      "images": [
+        "256",
+        0
+      ],
+      "masks": [
+        "256",
+        1
+      ]
+    },
+    "class_type": "GetImageRangeFromBatch",
+    "_meta": {
+      "title": "Get Image or Mask Range From Batch"
+    }
+  },
+  "258": {
+    "inputs": {
+      "value": 160
     },
     "class_type": "PrimitiveInt",
     "_meta": {
       "title": "Int"
+    }
+  },
+  "259": {
+    "inputs": {
+      "expression": "min(c-a-1, b)",
+      "a": [
+        "258",
+        0
+      ],
+      "b": [
+        "261",
+        0
+      ],
+      "c": [
+        "121",
+        1
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "261": {
+    "inputs": {
+      "value": 160
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "Int"
+    }
+  },
+  "265": {
+    "inputs": {
+      "image1": [
+        "266",
+        0
+      ],
+      "image2": [
+        "31",
+        0
+      ]
+    },
+    "class_type": "ImageBatch",
+    "_meta": {
+      "title": "Batch Images"
+    }
+  },
+  "266": {
+    "inputs": {
+      "start_index": 0,
+      "num_frames": [
+        "258",
+        0
+      ],
+      "images": [
+        "250",
+        0
+      ]
+    },
+    "class_type": "GetImageRangeFromBatch",
+    "_meta": {
+      "title": "Get Image or Mask Range From Batch"
+    }
+  },
+  "21:2": {
+    "inputs": {
+      "vae_name": "Wan2_1_VAE_bf16.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
     }
   },
   "21:1": {
@@ -530,16 +745,7 @@
       "title": "Load CLIP"
     }
   },
-  "21:2": {
-    "inputs": {
-      "vae_name": "Wan2_1_VAE_bf16.safetensors"
-    },
-    "class_type": "VAELoader",
-    "_meta": {
-      "title": "Load VAE"
-    }
-  },
-  "237:0": {
+  "247:0": {
     "inputs": {
       "Number": "10"
     },
@@ -548,24 +754,24 @@
       "title": "Int"
     }
   },
-  "237:1": {
+  "247:1": {
     "inputs": {
-      "Number": "0.3"
+      "Number": "0.4"
     },
     "class_type": "Float",
     "_meta": {
       "title": "Float"
     }
   },
-  "237:2": {
+  "247:2": {
     "inputs": {
       "expression": "round(a * b)",
       "a": [
-        "237:0",
+        "247:0",
         0
       ],
       "b": [
-        "237:1",
+        "247:1",
         0
       ]
     },
@@ -574,15 +780,15 @@
       "title": "Math Expression 🐍"
     }
   },
-  "237:3": {
+  "247:3": {
     "inputs": {
       "expression": "a - round(a * b)",
       "a": [
-        "237:0",
+        "247:0",
         0
       ],
       "b": [
-        "237:1",
+        "247:1",
         0
       ]
     },
@@ -591,10 +797,10 @@
       "title": "Math Expression 🐍"
     }
   },
-  "237:7": {
+  "247:7": {
     "inputs": {
       "lora_name": "WAN21\\Wan21_CausVid_14B_T2V_lora_rank32.safetensors",
-      "strength": 0.10000000000000002,
+      "strength": 0.20000000000000004,
       "blocks_type": "all",
       "model": [
         "50",
@@ -606,11 +812,11 @@
       "title": "Hunyuan Video LoRA Loader"
     }
   },
-  "237:8": {
+  "247:8": {
     "inputs": {
-      "seed": 872491008498603,
+      "seed": 528498740567279,
       "steps": [
-        "237:2",
+        "247:2",
         0
       ],
       "cfg": 4,
@@ -639,11 +845,11 @@
       "title": "KSampler"
     }
   },
-  "237:9": {
+  "247:9": {
     "inputs": {
-      "seed": 860419600816617,
+      "seed": 671470825797594,
       "steps": [
-        "237:3",
+        "247:3",
         0
       ],
       "cfg": 1,
@@ -651,7 +857,7 @@
       "scheduler": "simple",
       "denoise": 1,
       "model": [
-        "237:7",
+        "247:7",
         0
       ],
       "positive": [
@@ -663,7 +869,7 @@
         1
       ],
       "latent_image": [
-        "237:8",
+        "247:8",
         0
       ]
     },

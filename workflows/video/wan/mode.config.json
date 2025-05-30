@@ -15,43 +15,5 @@
             "steps": 30,
             "size": 640
         }
-    },
-    {
-        "name": "T2V_WAN",
-        "title": "T2V WAN",
-        "showT2I": true,
-        "show": true,
-        "configurable": false,
-        "default": {"type":"txt2img", "sdSize":640, "cfgScale":6.0, "steps":20},
-        "fields": {
-            "workflow": "t2v_wan",
-            "positive": "$positive",
-            "negative": "$negative",
-            "length": 81,
-            "cfg": 6,
-            "steps": 20,
-            "width": "$width",
-            "height": "$height"
-        }
-    },
-    {
-        "name": "T2V_WAN LORA",
-        "title": "T2V WAN LORA",
-        "showT2I": true,
-        "show": true,
-        "configurable": false,
-        "default": {"type":"txt2img", "sdSize":640, "cfgScale":6.0, "steps":20},
-        "fields": {
-            "workflow": "t2v_wan",
-            "positive": "$positive",
-            "negative": "$negative",
-            "length": 81,
-            "cfg": "$cfg",
-            "steps": "$steps",
-            "width": "$width",
-            "height": "$height",
-            "lora": "WAN21\\wan-nsfw-e14-fixed.safetensors",
-            "loraStrength": 1
-        }
     }
 ]

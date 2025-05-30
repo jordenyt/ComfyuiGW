@@ -58,7 +58,7 @@
     "inputs": {
       "shift": 8.000000000000002,
       "model": [
-        "278",
+        "277",
         0
       ]
     },
@@ -156,7 +156,7 @@
       "height": 640,
       "upscale_method": "lanczos",
       "keep_proportion": true,
-      "divisible_by": 16,
+      "divisible_by": 8,
       "crop": "center",
       "image": [
         "117",
@@ -474,8 +474,8 @@
         3
       ],
       "samples": [
-        "242:12",
-        1
+        "280:9",
+        0
       ]
     },
     "class_type": "TrimVideoLatent",
@@ -565,21 +565,6 @@
       "title": "Hunyuan Video LoRA Loader"
     }
   },
-  "278": {
-    "inputs": {
-      "lora_name": "WAN21\\Wan21_CausVid_14B_T2V_lora_rank32.safetensors",
-      "strength": 0.5000000000000001,
-      "blocks_type": "all",
-      "model": [
-        "277",
-        0
-      ]
-    },
-    "class_type": "HunyuanVideoLoraLoader",
-    "_meta": {
-      "title": "Hunyuan Video LoRA Loader"
-    }
-  },
   "21:2": {
     "inputs": {
       "vae_name": "Wan2_1_VAE_bf16.safetensors"
@@ -600,25 +585,7 @@
       "title": "Load CLIP"
     }
   },
-  "242:0": {
-    "inputs": {
-      "noise_seed": 447445279888801
-    },
-    "class_type": "RandomNoise",
-    "_meta": {
-      "title": "RandomNoise"
-    }
-  },
-  "242:1": {
-    "inputs": {
-      "sampler_name": "euler_ancestral"
-    },
-    "class_type": "KSamplerSelect",
-    "_meta": {
-      "title": "KSamplerSelect"
-    }
-  },
-  "242:2": {
+  "280:0": {
     "inputs": {
       "Number": "10"
     },
@@ -627,11 +594,24 @@
       "title": "Int"
     }
   },
-  "242:3": {
+  "280:1": {
     "inputs": {
-      "expression": "round(a * 0.5)",
+      "Number": "0.3"
+    },
+    "class_type": "Float",
+    "_meta": {
+      "title": "Float"
+    }
+  },
+  "280:2": {
+    "inputs": {
+      "expression": "round(a * b)",
       "a": [
-        "242:2",
+        "280:0",
+        0
+      ],
+      "b": [
+        "280:1",
         0
       ]
     },
@@ -640,136 +620,102 @@
       "title": "Math Expression 🐍"
     }
   },
-  "242:7": {
+  "280:3": {
     "inputs": {
-      "cfg": 6,
+      "expression": "a - round(a * b)",
+      "a": [
+        "280:0",
+        0
+      ],
+      "b": [
+        "280:1",
+        0
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "280:7": {
+    "inputs": {
+      "lora_name": "WAN21\\Wan21_CausVid_14B_T2V_lora_rank32.safetensors",
+      "strength": 0,
+      "blocks_type": "all",
       "model": [
         "50",
         0
-      ],
-      "positive": [
-        "260",
-        0
-      ],
-      "negative": [
-        "260",
-        1
       ]
     },
-    "class_type": "CFGGuider",
+    "class_type": "HunyuanVideoLoraLoader",
     "_meta": {
-      "title": "CFGGuider"
+      "title": "Hunyuan Video LoRA Loader"
     }
   },
-  "242:8": {
+  "280:8": {
     "inputs": {
-      "cfg": 1,
-      "model": [
-        "50",
-        0
-      ],
-      "positive": [
-        "260",
-        0
-      ],
-      "negative": [
-        "260",
-        1
-      ]
-    },
-    "class_type": "CFGGuider",
-    "_meta": {
-      "title": "CFGGuider"
-    }
-  },
-  "242:9": {
-    "inputs": {
-      "scheduler": "simple",
+      "seed": 816222857540484,
       "steps": [
-        "242:2",
+        "280:2",
         0
       ],
+      "cfg": 4,
+      "sampler_name": "euler_ancestral",
+      "scheduler": "simple",
       "denoise": 1,
       "model": [
         "50",
         0
-      ]
-    },
-    "class_type": "BasicScheduler",
-    "_meta": {
-      "title": "BasicScheduler"
-    }
-  },
-  "242:10": {
-    "inputs": {
-      "step": [
-        "242:3",
+      ],
+      "positive": [
+        "260",
         0
       ],
-      "sigmas": [
-        "242:9",
-        0
-      ]
-    },
-    "class_type": "SplitSigmas",
-    "_meta": {
-      "title": "SplitSigmas"
-    }
-  },
-  "242:11": {
-    "inputs": {
-      "noise": [
-        "242:0",
-        0
-      ],
-      "guider": [
-        "242:7",
-        0
-      ],
-      "sampler": [
-        "242:1",
-        0
-      ],
-      "sigmas": [
-        "242:10",
-        0
+      "negative": [
+        "260",
+        1
       ],
       "latent_image": [
         "260",
         2
       ]
     },
-    "class_type": "SamplerCustomAdvanced",
+    "class_type": "KSampler",
     "_meta": {
-      "title": "SamplerCustomAdvanced"
+      "title": "KSampler"
     }
   },
-  "242:12": {
+  "280:9": {
     "inputs": {
-      "noise": [
-        "242:0",
+      "seed": 1056423606067934,
+      "steps": [
+        "280:3",
         0
       ],
-      "guider": [
-        "242:8",
+      "cfg": 1,
+      "sampler_name": "euler_ancestral",
+      "scheduler": "simple",
+      "denoise": 1,
+      "model": [
+        "280:7",
         0
       ],
-      "sampler": [
-        "242:1",
+      "positive": [
+        "260",
         0
       ],
-      "sigmas": [
-        "242:10",
+      "negative": [
+        "260",
         1
       ],
       "latent_image": [
-        "242:11",
-        1
+        "280:8",
+        0
       ]
     },
-    "class_type": "SamplerCustomAdvanced",
+    "class_type": "KSampler",
     "_meta": {
-      "title": "SamplerCustomAdvanced"
+      "title": "KSampler"
     }
   }
 }

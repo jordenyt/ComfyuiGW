@@ -1,19 +1,4 @@
 {
-    "t2v_wan_api": {
-        "prompt_workflow": "t2v_wan_api.json",
-        "fields": {
-            "seed": "48:0.inputs.noise_seed",
-            "positive": "27.inputs.text",
-            "negative": "28.inputs.text",
-            "length": "53.inputs.length",
-            "cfg": "48:7.inputs.cfg",
-            "steps": "48:2.inputs.Number",
-            "loraStrength": "25.inputs.strength",
-            "lora": "25.inputs.lora_name",
-            "width": "53.inputs.width",
-            "height": "53.inputs.height"
-        }
-    },
     "i2v_framepack_api": {
         "prompt_workflow": "i2v_framepack_api.json",
         "fields": {

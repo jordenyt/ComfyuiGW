@@ -1,7 +1,7 @@
 {
   "10": {
     "inputs": {
-      "method": "mkl",
+      "method": "mvgd",
       "image_output": "Hide",
       "save_prefix": "ComfyUI",
       "image_ref": [
@@ -20,7 +20,7 @@
   },
   "11": {
     "inputs": {
-      "image": "sdsketch_11355_250527015301.jpg"
+      "image": "keyframe_1_1077225783009040.jpg"
     },
     "class_type": "LoadImage",
     "_meta": {
@@ -29,7 +29,7 @@
   },
   "12": {
     "inputs": {
-      "video": "iv2v_wan_vace_pose_mask_00052-audio.mp4",
+      "video": "iv2v_wan_vace_pose_mask_00059-audio.mp4",
       "force_rate": 0,
       "custom_width": 0,
       "custom_height": 0,
@@ -50,7 +50,7 @@
         5
       ],
       "loop_count": 0,
-      "filename_prefix": "color_match",
+      "filename_prefix": "color match",
       "format": "video/h264-mp4",
       "pix_fmt": "yuv420p",
       "crf": 19,

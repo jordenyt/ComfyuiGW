@@ -14,6 +14,8 @@
             "length": 81,
             "cfg": 4,
             "steps": 10,
+            "split": 0.3,
+            "causvidStrength": 0.2,
             "size": 640,
             "lora": "WAN21\\wan-nsfw-e14-fixed.safetensors",
             "loraStrength": 0
@@ -34,7 +36,53 @@
             "length": 81,
             "cfg": 4,
             "steps": 10,
+            "split": 0.3,
+            "causvidStrength": 0.2,
             "size": 640,
+            "lora": "WAN21\\wan-nsfw-e14-fixed.safetensors",
+            "loraStrength": 0.7
+        }
+    },
+    {
+        "name": "T2V_WAN",
+        "title": "T2V WAN",
+        "showT2I": true,
+        "show": true,
+        "configurable": false,
+        "default": {"type":"txt2img", "sdSize":640},
+        "fields": {
+            "workflow": "t2v_wan",
+            "positive": "$positive",
+            "negative": "$negative",
+            "length": 81,
+            "cfg": 6,
+            "steps": 14,
+            "split": 0.6,
+            "causvidStrength": 0.2,
+            "width": "$width",
+            "height": "$height",
+            "lora": "WAN21\\wan-nsfw-e14-fixed.safetensors",
+            "loraStrength": 0
+        }
+    },
+    {
+        "name": "T2V_WAN LORA",
+        "title": "T2V WAN LORA",
+        "showT2I": true,
+        "show": true,
+        "configurable": false,
+        "default": {"type":"txt2img", "sdSize":640},
+        "fields": {
+            "workflow": "t2v_wan",
+            "positive": "$positive",
+            "negative": "$negative",
+            "length": 81,
+            "cfg": 6,
+            "steps": 14,
+            "split": 0.6,
+            "causvidStrength": 0.2,
+            "width": "$width",
+            "height": "$height",
             "lora": "WAN21\\wan-nsfw-e14-fixed.safetensors",
             "loraStrength": 0.7
         }

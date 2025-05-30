@@ -75,7 +75,7 @@
     "inputs": {
       "shift": 8.000000000000002,
       "model": [
-        "226",
+        "224",
         0
       ]
     },
@@ -177,7 +177,7 @@
       "height": 640,
       "upscale_method": "lanczos",
       "keep_proportion": true,
-      "divisible_by": 16,
+      "divisible_by": 2,
       "crop": 0,
       "image": [
         "117",
@@ -303,8 +303,8 @@
         3
       ],
       "samples": [
-        "200:12",
-        1
+        "229:9",
+        0
       ]
     },
     "class_type": "TrimVideoLatent",
@@ -403,7 +403,7 @@
       ],
       "repeat": 1,
       "keep_proportion": false,
-      "divisible_by": 16,
+      "divisible_by": 2,
       "mask_channel": "alpha",
       "background_color": ""
     },
@@ -458,7 +458,7 @@
       ],
       "repeat": 1,
       "keep_proportion": false,
-      "divisible_by": 16,
+      "divisible_by": 2,
       "mask_channel": "alpha",
       "background_color": ""
     },
@@ -506,7 +506,7 @@
       ],
       "repeat": 1,
       "keep_proportion": false,
-      "divisible_by": 16,
+      "divisible_by": 2,
       "mask_channel": "alpha",
       "background_color": ""
     },
@@ -547,21 +547,6 @@
       "blocks_type": "all",
       "model": [
         "204",
-        0
-      ]
-    },
-    "class_type": "HunyuanVideoLoraLoader",
-    "_meta": {
-      "title": "Hunyuan Video LoRA Loader"
-    }
-  },
-  "226": {
-    "inputs": {
-      "lora_name": "WAN21\\Wan21_CausVid_14B_T2V_lora_rank32.safetensors",
-      "strength": 0.5000000000000001,
-      "blocks_type": "all",
-      "model": [
-        "224",
         0
       ]
     },
@@ -625,25 +610,7 @@
       "title": "Load CLIP"
     }
   },
-  "200:0": {
-    "inputs": {
-      "noise_seed": 719394362951573
-    },
-    "class_type": "RandomNoise",
-    "_meta": {
-      "title": "RandomNoise"
-    }
-  },
-  "200:1": {
-    "inputs": {
-      "sampler_name": "euler_ancestral"
-    },
-    "class_type": "KSamplerSelect",
-    "_meta": {
-      "title": "KSamplerSelect"
-    }
-  },
-  "200:2": {
+  "229:0": {
     "inputs": {
       "Number": "10"
     },
@@ -652,11 +619,24 @@
       "title": "Int"
     }
   },
-  "200:3": {
+  "229:1": {
     "inputs": {
-      "expression": "round(a * 0.5)",
+      "Number": "0.3"
+    },
+    "class_type": "Float",
+    "_meta": {
+      "title": "Float"
+    }
+  },
+  "229:2": {
+    "inputs": {
+      "expression": "round(a * b)",
       "a": [
-        "200:2",
+        "229:0",
+        0
+      ],
+      "b": [
+        "229:1",
         0
       ]
     },
@@ -665,136 +645,102 @@
       "title": "Math Expression 🐍"
     }
   },
-  "200:7": {
+  "229:3": {
     "inputs": {
-      "cfg": 6,
+      "expression": "a - round(a * b)",
+      "a": [
+        "229:0",
+        0
+      ],
+      "b": [
+        "229:1",
+        0
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "229:7": {
+    "inputs": {
+      "lora_name": "WAN21\\Wan21_CausVid_14B_T2V_lora_rank32.safetensors",
+      "strength": 0.10000000000000002,
+      "blocks_type": "all",
       "model": [
         "50",
         0
-      ],
-      "positive": [
-        "186",
-        0
-      ],
-      "negative": [
-        "186",
-        1
       ]
     },
-    "class_type": "CFGGuider",
+    "class_type": "HunyuanVideoLoraLoader",
     "_meta": {
-      "title": "CFGGuider"
+      "title": "Hunyuan Video LoRA Loader"
     }
   },
-  "200:8": {
+  "229:8": {
     "inputs": {
-      "cfg": 1,
-      "model": [
-        "50",
-        0
-      ],
-      "positive": [
-        "186",
-        0
-      ],
-      "negative": [
-        "186",
-        1
-      ]
-    },
-    "class_type": "CFGGuider",
-    "_meta": {
-      "title": "CFGGuider"
-    }
-  },
-  "200:9": {
-    "inputs": {
-      "scheduler": "simple",
+      "seed": 872491008498603,
       "steps": [
-        "200:2",
+        "229:2",
         0
       ],
+      "cfg": 4,
+      "sampler_name": "euler_ancestral",
+      "scheduler": "simple",
       "denoise": 1,
       "model": [
         "50",
         0
-      ]
-    },
-    "class_type": "BasicScheduler",
-    "_meta": {
-      "title": "BasicScheduler"
-    }
-  },
-  "200:10": {
-    "inputs": {
-      "step": [
-        "200:3",
+      ],
+      "positive": [
+        "186",
         0
       ],
-      "sigmas": [
-        "200:9",
-        0
-      ]
-    },
-    "class_type": "SplitSigmas",
-    "_meta": {
-      "title": "SplitSigmas"
-    }
-  },
-  "200:11": {
-    "inputs": {
-      "noise": [
-        "200:0",
-        0
-      ],
-      "guider": [
-        "200:7",
-        0
-      ],
-      "sampler": [
-        "200:1",
-        0
-      ],
-      "sigmas": [
-        "200:10",
-        0
+      "negative": [
+        "186",
+        1
       ],
       "latent_image": [
         "186",
         2
       ]
     },
-    "class_type": "SamplerCustomAdvanced",
+    "class_type": "KSampler",
     "_meta": {
-      "title": "SamplerCustomAdvanced"
+      "title": "KSampler"
     }
   },
-  "200:12": {
+  "229:9": {
     "inputs": {
-      "noise": [
-        "200:0",
+      "seed": 860419600816617,
+      "steps": [
+        "229:3",
         0
       ],
-      "guider": [
-        "200:8",
+      "cfg": 1,
+      "sampler_name": "euler_ancestral",
+      "scheduler": "simple",
+      "denoise": 1,
+      "model": [
+        "229:7",
         0
       ],
-      "sampler": [
-        "200:1",
+      "positive": [
+        "186",
         0
       ],
-      "sigmas": [
-        "200:10",
+      "negative": [
+        "186",
         1
       ],
       "latent_image": [
-        "200:11",
-        1
+        "229:8",
+        0
       ]
     },
-    "class_type": "SamplerCustomAdvanced",
+    "class_type": "KSampler",
     "_meta": {
-      "title": "SamplerCustomAdvanced"
+      "title": "KSampler"
     }
   }
 }

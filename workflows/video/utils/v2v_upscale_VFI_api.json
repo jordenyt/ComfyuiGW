@@ -40,7 +40,7 @@
       "ensemble": true,
       "scale_factor": 1,
       "frames": [
-        "390:2",
+        "404",
         0
       ]
     },
@@ -51,7 +51,7 @@
   },
   "376": {
     "inputs": {
-      "video": "i2v_wan_00008 (1).mp4",
+      "video": "video_395172306510605.mp4",
       "force_rate": 0,
       "custom_width": 0,
       "custom_height": 0,
@@ -105,7 +105,7 @@
   },
   "400": {
     "inputs": {
-      "expression": "round(c / (max(a, b) * 4) * 10) / 10",
+      "expression": "c/ (max(a, b) * 4)",
       "a": [
         "394",
         8
@@ -133,7 +133,24 @@
       "title": "Integer"
     }
   },
-  "390:0": {
+  "402": {
+    "inputs": {
+      "per_batch": 16,
+      "upscale_model": [
+        "403",
+        0
+      ],
+      "images": [
+        "376",
+        0
+      ]
+    },
+    "class_type": "ImageUpscaleWithModelBatched",
+    "_meta": {
+      "title": "Image Upscale With Model Batched"
+    }
+  },
+  "403": {
     "inputs": {
       "model_name": "4xPurePhoto-RealPLSKR.pth"
     },
@@ -142,23 +159,7 @@
       "title": "Load Upscale Model"
     }
   },
-  "390:1": {
-    "inputs": {
-      "upscale_model": [
-        "390:0",
-        0
-      ],
-      "image": [
-        "376",
-        0
-      ]
-    },
-    "class_type": "ImageUpscaleWithModel",
-    "_meta": {
-      "title": "Upscale Image (using Model)"
-    }
-  },
-  "390:2": {
+  "404": {
     "inputs": {
       "upscale_method": "lanczos",
       "scale_by": [
@@ -166,7 +167,7 @@
         1
       ],
       "image": [
-        "390:1",
+        "402",
         0
       ]
     },

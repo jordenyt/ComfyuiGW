@@ -1,7 +1,7 @@
 {
   "23": {
     "inputs": {
-      "unet_name": "wan2.1-i2v-14b-480p-Q6_K.gguf",
+      "unet_name": "wan2.1-t2v-14b-Q6_K.gguf",
       "device": "cuda:0",
       "virtual_vram_gb": 0,
       "use_other_vram": false,
@@ -12,28 +12,11 @@
       "title": "UnetLoaderGGUFDisTorchMultiGPU"
     }
   },
-  "26": {
-    "inputs": {
-      "image": "sdsketch_6922_240828140158.jpg",
-      "resize": true,
-      "width": 640,
-      "height": 640,
-      "repeat": 1,
-      "keep_proportion": true,
-      "divisible_by": 2,
-      "mask_channel": "alpha",
-      "background_color": ""
-    },
-    "class_type": "LoadAndResizeImage",
-    "_meta": {
-      "title": "Load & Resize Image"
-    }
-  },
   "27": {
     "inputs": {
       "text": "a man and a woman are kissing and hugging in wedding ceremony",
       "clip": [
-        "21:1",
+        "90",
         0
       ]
     },
@@ -46,7 +29,7 @@
     "inputs": {
       "text": "overexposure, deformed, mutation, blurry, flashing",
       "clip": [
-        "21:1",
+        "90",
         0
       ]
     },
@@ -62,7 +45,7 @@
         0
       ],
       "vae": [
-        "21:2",
+        "91",
         0
       ]
     },
@@ -88,7 +71,7 @@
     "inputs": {
       "frame_rate": 16,
       "loop_count": 0,
-      "filename_prefix": "i2v_wan",
+      "filename_prefix": "t2v_wan",
       "format": "video/h264-mp4",
       "pix_fmt": "yuv420p",
       "crf": 19,
@@ -104,61 +87,6 @@
     "class_type": "VHS_VideoCombine",
     "_meta": {
       "title": "Video Combine 🎥🅥🅗🅢"
-    }
-  },
-  "40": {
-    "inputs": {
-      "width": [
-        "26",
-        2
-      ],
-      "height": [
-        "26",
-        3
-      ],
-      "length": 81,
-      "batch_size": 1,
-      "positive": [
-        "27",
-        0
-      ],
-      "negative": [
-        "28",
-        0
-      ],
-      "vae": [
-        "21:2",
-        0
-      ],
-      "clip_vision_output": [
-        "41",
-        0
-      ],
-      "start_image": [
-        "26",
-        0
-      ]
-    },
-    "class_type": "WanImageToVideo",
-    "_meta": {
-      "title": "WanImageToVideo"
-    }
-  },
-  "41": {
-    "inputs": {
-      "crop": "none",
-      "clip_vision": [
-        "21:0",
-        0
-      ],
-      "image": [
-        "26",
-        0
-      ]
-    },
-    "class_type": "CLIPVisionEncode",
-    "_meta": {
-      "title": "CLIP Vision Encode"
     }
   },
   "49": {
@@ -182,8 +110,8 @@
         0
       ],
       "latent": [
-        "40",
-        2
+        "88",
+        0
       ]
     },
     "class_type": "WanVideoEnhanceAVideoKJ",
@@ -247,16 +175,19 @@
       "title": "Hunyuan Video LoRA Loader"
     }
   },
-  "21:0": {
+  "88": {
     "inputs": {
-      "clip_name": "clip_vision_h_fp8_e4m3fn.safetensors"
+      "width": 480,
+      "height": 640,
+      "length": 81,
+      "batch_size": 1
     },
-    "class_type": "CLIPVisionLoader",
+    "class_type": "EmptyHunyuanLatentVideo",
     "_meta": {
-      "title": "Load CLIP Vision"
+      "title": "EmptyHunyuanLatentVideo"
     }
   },
-  "21:1": {
+  "90": {
     "inputs": {
       "clip_name": "t5xxl_um_fp8_e4m3fn_scaled.safetensors",
       "type": "wan",
@@ -267,7 +198,7 @@
       "title": "Load CLIP"
     }
   },
-  "21:2": {
+  "91": {
     "inputs": {
       "vae_name": "Wan2_1_VAE_bf16.safetensors"
     },
@@ -287,7 +218,7 @@
   },
   "85:1": {
     "inputs": {
-      "Number": "0.3"
+      "Number": "0.4"
     },
     "class_type": "Float",
     "_meta": {
@@ -331,7 +262,7 @@
   "85:7": {
     "inputs": {
       "lora_name": "WAN21\\Wan21_CausVid_14B_T2V_lora_rank32.safetensors",
-      "strength": 0.10000000000000002,
+      "strength": 0.20000000000000004,
       "blocks_type": "all",
       "model": [
         "50",
@@ -345,7 +276,7 @@
   },
   "85:8": {
     "inputs": {
-      "seed": 872491008498603,
+      "seed": 27097030713614,
       "steps": [
         "85:2",
         0
@@ -359,16 +290,16 @@
         0
       ],
       "positive": [
-        "40",
+        "27",
         0
       ],
       "negative": [
-        "40",
-        1
+        "28",
+        0
       ],
       "latent_image": [
-        "40",
-        2
+        "88",
+        0
       ]
     },
     "class_type": "KSampler",
@@ -378,7 +309,7 @@
   },
   "85:9": {
     "inputs": {
-      "seed": 860419600816617,
+      "seed": 295497255746807,
       "steps": [
         "85:3",
         0
@@ -392,12 +323,12 @@
         0
       ],
       "positive": [
-        "40",
+        "27",
         0
       ],
       "negative": [
-        "40",
-        1
+        "28",
+        0
       ],
       "latent_image": [
         "85:8",
