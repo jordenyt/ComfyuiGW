@@ -16,7 +16,7 @@
         }
     },
     "i2v_wan_api": {
-        "prompt_workflow": "i2v_wan_480p_causvid_api.json",
+        "prompt_workflow": "i2v_wan_480p_causvid_llm_api.json",
         "fields": {
             "seed": ["85:8.inputs.seed", "85:9.inputs.seed"],
             "cfg": "85:8.inputs.cfg",
@@ -24,7 +24,7 @@
             "split": "85:1.inputs.Number",
             "causvidStrength": "85:7.inputs.strength",
             "start_img": "26.inputs.image",
-            "positive": "27.inputs.text",
+            "positive": "91.inputs.text",
             "negative": "28.inputs.text",
             "length": "40.inputs.length",
             "loraStrength": "84.inputs.strength",
@@ -39,10 +39,10 @@
             "length": {"type": "integer","default": 81},
             "lora": {"type":"string", "default": "WAN21\\wan-nsfw-e14-fixed.safetensors"},
             "loraStrength": {"type":"float", "default": 0.7},
-            "cfg": {"type": "float","default": 4.0},
-            "split": {"type": "float","default": 0.3},
-            "causvidStrength": {"type": "float","default": 0.3},
-            "steps": {"type": "integer","default": 10},
+            "cfg": {"type": "float","default": 6.0},
+            "split": {"type": "float","default": 0.4},
+            "causvidStrength": {"type": "float","default": 0.25},
+            "steps": {"type": "integer","default": 14},
             "size": {"type": "integer","default": 640}
         }
     },
@@ -114,8 +114,7 @@
             "keyframe_3_index": "223.inputs.start_index",
             "frame_load_cap": "117.inputs.frame_load_cap",
             "lora": "224.inputs.lora_name",
-            "loraStrength": "224.inputs.strength",
-            "blur":"172.inputs.blur_radius"            
+            "loraStrength": "224.inputs.strength"    
         },
         "descriptions": "Video (+ ref image + keyframes) to video by WAN VACE Model, pose and mask video",
         "inputs": {
@@ -139,8 +138,7 @@
             "split": {"type": "float","default": 0.3},
             "causvidStrength": {"type": "float","default": 0.2},
             "size": {"type":"integer", "default":640},
-            "frame_load_cap": {"type":"integer", "default":0},
-            "blur": {"type":"integer", "default":1}
+            "frame_load_cap": {"type":"integer", "default":0}
         }
     },
     "iv2v_wan_vace_pose_mask_extend_api": {
@@ -168,8 +166,7 @@
             "num_frame_max": "244.inputs.value",
             "start_frame": "243.inputs.value",
             "lora": "224.inputs.lora_name",
-            "loraStrength": "224.inputs.strength",
-            "blur":"172.inputs.blur_radius"            
+            "loraStrength": "224.inputs.strength"         
         },
         "descriptions": "Extend Video (+ ref image + keyframes) to video by WAN VACE Model, pose and mask video",
         "inputs": {
@@ -195,8 +192,7 @@
             "denoise": {"type":"float", "default":1},
             "split": {"type": "float","default": 0.3},
             "causvidStrength": {"type": "float","default": 0.2},
-            "size": {"type":"integer", "default":640},
-            "blur": {"type":"integer", "default":1}
+            "size": {"type":"integer", "default":640}
         }
     },
     "iv2v_wan_vace_pose_api": {
@@ -322,8 +318,7 @@
             "keyframe_3_index": "223.inputs.start_index",
             "frame_load_cap": "117.inputs.frame_load_cap",
             "lora": "224.inputs.lora_name",
-            "loraStrength": "224.inputs.strength",
-            "blur":"172.inputs.blur_radius"            
+            "loraStrength": "224.inputs.strength"      
         },
         "descriptions": "Video (+ ref image + keyframes) to video by WAN VACE Model and mask video",
         "inputs": {
@@ -346,8 +341,7 @@
             "split": {"type": "float","default": 0.3},
             "causvidStrength": {"type": "float","default": 0.2},
             "size": {"type":"integer", "default":640},
-            "frame_load_cap": {"type":"integer", "default":0},
-            "blur": {"type":"integer", "default":1}
+            "frame_load_cap": {"type":"integer", "default":0}
         }
     },
     "v2v_wan_vace_extend_api": {

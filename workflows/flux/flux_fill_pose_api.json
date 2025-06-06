@@ -399,7 +399,7 @@
         "81",
         0
       ],
-      "bbox_detector": "yolox_l.onnx",
+      "bbox_detector": "yolox_l.torchscript.pt",
       "pose_estimator": "dw-ll_ucoco_384_bs5.torchscript.pt",
       "scale_stick_for_xinsr_cn": "disable",
       "image": [

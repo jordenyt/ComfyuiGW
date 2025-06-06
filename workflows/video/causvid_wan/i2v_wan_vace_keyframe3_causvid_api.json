@@ -269,7 +269,7 @@
       ],
       "repeat": 1,
       "keep_proportion": false,
-      "divisible_by": 2,
+      "divisible_by": 1,
       "mask_channel": "alpha",
       "background_color": ""
     },
@@ -324,7 +324,7 @@
       ],
       "repeat": 1,
       "keep_proportion": false,
-      "divisible_by": 2,
+      "divisible_by": 1,
       "mask_channel": "alpha",
       "background_color": ""
     },
@@ -372,7 +372,7 @@
       ],
       "repeat": 1,
       "keep_proportion": false,
-      "divisible_by": 2,
+      "divisible_by": 1,
       "mask_channel": "alpha",
       "background_color": ""
     },

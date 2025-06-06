@@ -1,7 +1,7 @@
 {
   "6": {
     "inputs": {
-      "text": "Taiwanese woman with long messy brown hair, sitting in cafe. she is showing her sexy collarbone, medium size breast and cleavage.",
+      "text": "naked slim woman, long messy dark brown hair, selfie, on sofa, collarbone, medium sized breasts, legs, dark and dim environment",
       "clip": [
         "11",
         0
@@ -99,7 +99,7 @@
   "17": {
     "inputs": {
       "scheduler": "simple",
-      "steps": 30,
+      "steps": 28,
       "denoise": 1,
       "model": [
         "30",
@@ -113,7 +113,7 @@
   },
   "25": {
     "inputs": {
-      "noise_seed": 82031824544622
+      "noise_seed": 45170326743709
     },
     "class_type": "RandomNoise",
     "_meta": {
@@ -135,8 +135,8 @@
   },
   "30": {
     "inputs": {
-      "max_shift": 0.5000000000000001,
-      "base_shift": 0.5000000000000001,
+      "max_shift": 0.5,
+      "base_shift": 0.5,
       "width": [
         "66",
         2
@@ -146,7 +146,7 @@
         3
       ],
       "model": [
-        "64",
+        "79",
         0
       ]
     },
@@ -177,7 +177,7 @@
         0
       ],
       "image": [
-        "82",
+        "80",
         0
       ]
     },
@@ -188,7 +188,7 @@
   },
   "42": {
     "inputs": {
-      "text": "fat, bangs",
+      "text": "",
       "clip": [
         "11",
         0
@@ -201,7 +201,7 @@
   },
   "48": {
     "inputs": {
-      "control_net_name": "flux\\FLUX.1-dev-ControlNet-Union-Pro-2.0-fp8.safetensors"
+      "control_net_name": "flux\\Shakker-Labs_FLUX.1-dev-ControlNet-Union-Pro-fp8.safetensors"
     },
     "class_type": "ControlNetLoader",
     "_meta": {
@@ -210,7 +210,7 @@
   },
   "49": {
     "inputs": {
-      "type": "normal",
+      "type": "openpose",
       "control_net": [
         "48",
         0
@@ -234,21 +234,6 @@
       "title": "Patch Sage Attention KJ"
     }
   },
-  "64": {
-    "inputs": {
-      "model_type": "flux",
-      "rel_l1_thresh": 0.2,
-      "max_skip_steps": 3,
-      "model": [
-        "62",
-        0
-      ]
-    },
-    "class_type": "TeaCache",
-    "_meta": {
-      "title": "TeaCache"
-    }
-  },
   "65": {
     "inputs": {
       "lora_name": "Flux\\JordenFlux.safetensors",
@@ -265,7 +250,7 @@
   },
   "66": {
     "inputs": {
-      "image": "background_333520970739196.jpg",
+      "image": "background_895605354482606.jpg",
       "resize": true,
       "width": [
         "67",
@@ -372,16 +357,31 @@
       "title": "VAE Encode"
     }
   },
-  "82": {
+  "79": {
+    "inputs": {
+      "model_type": "flux",
+      "rel_l1_thresh": 0.4,
+      "max_skip_steps": 3,
+      "model": [
+        "62",
+        0
+      ]
+    },
+    "class_type": "TeaCache",
+    "_meta": {
+      "title": "TeaCache"
+    }
+  },
+  "80": {
     "inputs": {
       "detect_hand": "enable",
       "detect_body": "enable",
-      "detect_face": "disable",
+      "detect_face": "enable",
       "resolution": [
-        "83",
+        "67",
         0
       ],
-      "bbox_detector": "yolox_l.onnx",
+      "bbox_detector": "yolox_l.torchscript.pt",
       "pose_estimator": "dw-ll_ucoco_384_bs5.torchscript.pt",
       "scale_stick_for_xinsr_cn": "disable",
       "image": [
@@ -392,22 +392,6 @@
     "class_type": "DWPreprocessor",
     "_meta": {
       "title": "DWPose Estimator"
-    }
-  },
-  "83": {
-    "inputs": {
-      "a": [
-        "66",
-        2
-      ],
-      "b": [
-        "66",
-        3
-      ]
-    },
-    "class_type": "JWIntegerMin",
-    "_meta": {
-      "title": "Integer Minimum"
     }
   }
 }

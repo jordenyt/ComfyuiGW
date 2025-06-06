@@ -113,7 +113,7 @@
             "cnStrength": "38.inputs.strength",
             "cnEnd": "38.inputs.end_percent",
             "cnStart": "38.inputs.start_percent",
-            "face": "82.inputs.detect_face"
+            "face": "80.inputs.detect_face"
         }
     },
     "flux_cn_pose_depth_img2img_api": {

@@ -1,11 +1,11 @@
 {
   "9": {
     "inputs": {
-      "video": "src_video_1063548870732056.mp4",
+      "video": "src_video_762414647133074.mp4",
       "force_rate": 16,
       "custom_width": 0,
       "custom_height": 0,
-      "frame_load_cap": 161,
+      "frame_load_cap": 0,
       "skip_first_frames": 0,
       "select_every_nth": 1,
       "format": "AnimateDiff"
@@ -21,8 +21,8 @@
       "height": 640,
       "upscale_method": "lanczos",
       "keep_proportion": true,
-      "divisible_by": 1,
-      "crop": "disabled",
+      "divisible_by": 16,
+      "crop": 0,
       "image": [
         "9",
         0
@@ -30,7 +30,7 @@
     },
     "class_type": "ImageResizeKJ",
     "_meta": {
-      "title": "Resize Image"
+      "title": "Resize Image (deprecated)"
     }
   },
   "11": {
@@ -90,12 +90,12 @@
     "inputs": {
       "detect_hand": "enable",
       "detect_body": "enable",
-      "detect_face": "disable",
+      "detect_face": "enable",
       "resolution": [
         "13",
         0
       ],
-      "bbox_detector": "yolox_l.onnx",
+      "bbox_detector": "yolox_l.torchscript.pt",
       "pose_estimator": "dw-ll_ucoco_384_bs5.torchscript.pt",
       "scale_stick_for_xinsr_cn": "disable",
       "image": [

@@ -75,12 +75,16 @@
         "fields": {
             "src_video": "1.inputs.video",
             "force_rate": "1.inputs.force_rate",
-            "index": "2.inputs.start_index"
+            "index": "2.inputs.start_index",
+            "size": ["5.inputs.width", "5.inputs.height"],
+            "divisible_by": "5.inputs.divisible_by"
         },
         "inputs": {
             "src_video": {"type":"video", "default":null},
             "force_rate": {"type":"integer", "default":16},
-            "index": {"type":"integer", "default":0}
+            "index": {"type":"integer", "default":0},
+            "size": {"type":"integer", "default":640},
+            "divisible_by": {"type":"integer", "default":16}
         }
     },
     "video_replace_audio_api": {

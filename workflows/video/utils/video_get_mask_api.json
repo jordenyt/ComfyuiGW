@@ -20,7 +20,7 @@
   "3": {
     "inputs": {
       "prompt": "face, hair, neck",
-      "threshold": 0.3,
+      "threshold": 0.30000000000000004,
       "sam_model": [
         "1",
         0
@@ -30,7 +30,7 @@
         0
       ],
       "image": [
-        "10",
+        "13",
         0
       ]
     },
@@ -52,7 +52,7 @@
         0
       ],
       "image": [
-        "10",
+        "13",
         0
       ]
     },
@@ -142,7 +142,7 @@
       "height": 640,
       "upscale_method": "lanczos",
       "keep_proportion": true,
-      "divisible_by": 1,
+      "divisible_by": 16,
       "crop": "disabled",
       "image": [
         "9",
@@ -170,7 +170,7 @@
       "pingpong": false,
       "save_output": true,
       "images": [
-        "8",
+        "14",
         0
       ]
     },
@@ -189,6 +189,30 @@
     "class_type": "VHS_VideoInfo",
     "_meta": {
       "title": "Video Info 🎥🅥🅗🅢"
+    }
+  },
+  "13": {
+    "inputs": {
+      "image": [
+        "10",
+        0
+      ]
+    },
+    "class_type": "ImpactImageBatchToImageList",
+    "_meta": {
+      "title": "Image Batch to Image List"
+    }
+  },
+  "14": {
+    "inputs": {
+      "images": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "ImageListToImageBatch",
+    "_meta": {
+      "title": "Image List to Image Batch"
     }
   }
 }

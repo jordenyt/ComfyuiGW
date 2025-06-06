@@ -20,7 +20,7 @@
       "height": 1024,
       "repeat": 1,
       "keep_proportion": true,
-      "divisible_by": 16,
+      "divisible_by": 1,
       "mask_channel": "alpha",
       "background_color": ""
     },
@@ -177,7 +177,7 @@
       "height": 640,
       "upscale_method": "lanczos",
       "keep_proportion": true,
-      "divisible_by": 2,
+      "divisible_by": 16,
       "crop": 0,
       "image": [
         "117",
@@ -360,7 +360,7 @@
       ],
       "repeat": 1,
       "keep_proportion": false,
-      "divisible_by": 2,
+      "divisible_by": 1,
       "mask_channel": "alpha",
       "background_color": ""
     },
@@ -415,7 +415,7 @@
       ],
       "repeat": 1,
       "keep_proportion": false,
-      "divisible_by": 2,
+      "divisible_by": 1,
       "mask_channel": "alpha",
       "background_color": ""
     },
@@ -463,7 +463,7 @@
       ],
       "repeat": 1,
       "keep_proportion": false,
-      "divisible_by": 2,
+      "divisible_by": 1,
       "mask_channel": "alpha",
       "background_color": ""
     },

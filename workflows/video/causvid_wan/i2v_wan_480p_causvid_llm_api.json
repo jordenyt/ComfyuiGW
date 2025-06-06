@@ -31,7 +31,10 @@
   },
   "27": {
     "inputs": {
-      "text": "a man and a woman are kissing and hugging in wedding ceremony",
+      "text": [
+        "86",
+        0
+      ],
       "clip": [
         "21:1",
         0
@@ -116,7 +119,7 @@
         "26",
         3
       ],
-      "length": 81,
+      "length": 161,
       "batch_size": 1,
       "positive": [
         "27",
@@ -234,7 +237,7 @@
   },
   "84": {
     "inputs": {
-      "lora_name": "WAN21\\AmorousWanKisses.safetensors",
+      "lora_name": "WAN21\\l3z_kiss.safetensors",
       "strength": 0.7000000000000002,
       "blocks_type": "all",
       "model": [
@@ -245,6 +248,127 @@
     "class_type": "HunyuanVideoLoraLoader",
     "_meta": {
       "title": "Hunyuan Video LoRA Loader"
+    }
+  },
+  "86": {
+    "inputs": {
+      "api_key": "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",
+      "system_prompt": "You are a helper to generate video prompt from picture description and user input elements.  The video prompt should not include the picture description but only need to state the motion of background, action/movement of subject and camera movement. The output should not have fore-word and explanation of the prompt.",
+      "user_message_box": [
+        "92",
+        0
+      ],
+      "model": "deepseek/deepseek-chat-v3-0324:free",
+      "web_search": false,
+      "cheapest": false,
+      "fastest": true,
+      "temperature": 1,
+      "pdf_engine": "auto"
+    },
+    "class_type": "OpenRouterNode",
+    "_meta": {
+      "title": "OpenRouter LLM Node (Text/Multi-Image/PDF)"
+    }
+  },
+  "87": {
+    "inputs": {
+      "model": "MiaoshouAI/Florence-2-large-PromptGen-v2.0",
+      "precision": "fp16",
+      "attention": "eager",
+      "convert_to_safetensors": false
+    },
+    "class_type": "DownloadAndLoadFlorence2Model",
+    "_meta": {
+      "title": "DownloadAndLoadFlorence2Model"
+    }
+  },
+  "88": {
+    "inputs": {
+      "text_input": "",
+      "task": "more_detailed_caption",
+      "fill_mask": false,
+      "keep_model_loaded": false,
+      "max_new_tokens": 1024,
+      "num_beams": 20,
+      "do_sample": true,
+      "output_mask_select": "",
+      "seed": 159148526306525,
+      "image": [
+        "26",
+        0
+      ],
+      "florence2_model": [
+        "87",
+        0
+      ]
+    },
+    "class_type": "Florence2Run",
+    "_meta": {
+      "title": "Florence2Run"
+    }
+  },
+  "89": {
+    "inputs": {
+      "a": "\\n Picture description: \\n",
+      "b": [
+        "88",
+        2
+      ]
+    },
+    "class_type": "JWStringConcat",
+    "_meta": {
+      "title": "String Concatenate"
+    }
+  },
+  "90": {
+    "inputs": {
+      "a": "\\n User input element: \\n",
+      "b": [
+        "91",
+        0
+      ]
+    },
+    "class_type": "JWStringConcat",
+    "_meta": {
+      "title": "String Concatenate"
+    }
+  },
+  "91": {
+    "inputs": {
+      "text": "kissing, hugging, cleavage, medium sized breast, 10 seconds long"
+    },
+    "class_type": "ttN text",
+    "_meta": {
+      "title": "text"
+    }
+  },
+  "92": {
+    "inputs": {
+      "a": [
+        "89",
+        0
+      ],
+      "b": [
+        "90",
+        0
+      ]
+    },
+    "class_type": "JWStringConcat",
+    "_meta": {
+      "title": "String Concatenate"
+    }
+  },
+  "94": {
+    "inputs": {
+      "text_0": "- Gentle sway of church curtains from a soft breeze  \n- The couple turns toward each other, their hands intertwining  \n- Warm light gradually brightens on their faces as they lean in for a tender kiss  \n- His hand glides up to caress her cheek during the embrace, fingers brushing her veil  \n- She arches slightly into the hug, drawing him closer, cleavage pressing against his chest  \n- Slow push-in camera movement emphasizing the intimacy  \n- Veil flutters as they separate, eyes locking with loving smiles",
+      "text": [
+        "86",
+        0
+      ]
+    },
+    "class_type": "ShowText|pysssss",
+    "_meta": {
+      "title": "Show Text 🐍"
     }
   },
   "21:0": {
@@ -278,7 +402,7 @@
   },
   "85:0": {
     "inputs": {
-      "Number": "10"
+      "Number": "14"
     },
     "class_type": "Int",
     "_meta": {
@@ -287,7 +411,7 @@
   },
   "85:1": {
     "inputs": {
-      "Number": "0.3"
+      "Number": "0.4"
     },
     "class_type": "Float",
     "_meta": {
@@ -331,7 +455,7 @@
   "85:7": {
     "inputs": {
       "lora_name": "WAN21\\Wan21_CausVid_14B_T2V_lora_rank32.safetensors",
-      "strength": 0.10000000000000002,
+      "strength": 0.25000000000000006,
       "blocks_type": "all",
       "model": [
         "50",
@@ -345,12 +469,12 @@
   },
   "85:8": {
     "inputs": {
-      "seed": 872491008498603,
+      "seed": 103156893102496,
       "steps": [
         "85:2",
         0
       ],
-      "cfg": 4,
+      "cfg": 6,
       "sampler_name": "euler_ancestral",
       "scheduler": "simple",
       "denoise": 1,
@@ -378,7 +502,7 @@
   },
   "85:9": {
     "inputs": {
-      "seed": 860419600816617,
+      "seed": 982067027679273,
       "steps": [
         "85:3",
         0

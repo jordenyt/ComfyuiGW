@@ -174,7 +174,7 @@
         "showT2I": false,
         "show": true,
         "configurable": true,
-        "default": {"type":"img2img", "denoise":1.0, "cfgScale":1, "guidance": 3.5, "steps":30, "baseImage":"background", "sdSize":1024},
+        "default": {"type":"img2img", "denoise":1.0, "cfgScale":1, "steps":30, "baseImage":"background", "sdSize":1024},
         "fields": {
             "workflow": "flux_cn_pose_img2img",
             "background": "$background",

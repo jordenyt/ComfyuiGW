@@ -20,7 +20,7 @@
       "height": 1024,
       "repeat": 1,
       "keep_proportion": true,
-      "divisible_by": 16,
+      "divisible_by": 1,
       "mask_channel": "alpha",
       "background_color": ""
     },
@@ -177,7 +177,7 @@
       "height": 640,
       "upscale_method": "lanczos",
       "keep_proportion": true,
-      "divisible_by": 2,
+      "divisible_by": 16,
       "crop": 0,
       "image": [
         "117",
@@ -187,26 +187,6 @@
     "class_type": "ImageResizeKJ",
     "_meta": {
       "title": "Resize Image (deprecated)"
-    }
-  },
-  "172": {
-    "inputs": {
-      "expand": 0,
-      "incremental_expandrate": 0,
-      "tapered_corners": false,
-      "flip_input": false,
-      "blur_radius": 1,
-      "lerp_alpha": 1,
-      "decay_factor": 1,
-      "fill_holes": true,
-      "mask": [
-        "185",
-        0
-      ]
-    },
-    "class_type": "GrowMaskWithBlur",
-    "_meta": {
-      "title": "Grow Mask With Blur"
     }
   },
   "177": {
@@ -383,7 +363,7 @@
         0
       ],
       "mask": [
-        "172",
+        "185",
         0
       ]
     },
@@ -404,7 +384,7 @@
         0
       ],
       "original_masks": [
-        "172",
+        "185",
         0
       ],
       "replacement_masks": [
@@ -431,7 +411,7 @@
       ],
       "repeat": 1,
       "keep_proportion": false,
-      "divisible_by": 2,
+      "divisible_by": 1,
       "mask_channel": "alpha",
       "background_color": ""
     },
@@ -486,7 +466,7 @@
       ],
       "repeat": 1,
       "keep_proportion": false,
-      "divisible_by": 2,
+      "divisible_by": 1,
       "mask_channel": "alpha",
       "background_color": ""
     },
@@ -534,7 +514,7 @@
       ],
       "repeat": 1,
       "keep_proportion": false,
-      "divisible_by": 2,
+      "divisible_by": 1,
       "mask_channel": "alpha",
       "background_color": ""
     },
