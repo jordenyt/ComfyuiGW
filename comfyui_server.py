@@ -141,6 +141,24 @@ def is_valid_base64_image(base64_data):
     except Exception:
         return False
 
+def find_existing_file(prefix, file_bytes):
+    """Check if a file with the same prefix and content already exists"""
+    inputs_path = os.path.join(local_path, "inputs")
+    if not os.path.exists(inputs_path):
+        return None
+        
+    prefix_pattern = prefix + "_"
+    for filename in os.listdir(inputs_path):
+        if filename.startswith(prefix_pattern):
+            filepath = os.path.join(inputs_path, filename)
+            try:
+                with open(filepath, 'rb') as f:
+                    if f.read() == file_bytes:
+                        return filepath
+            except Exception:
+                continue
+    return None
+
 def save_base64_image(base64_data, prefix, session_id):
     decoded_data = base64.b64decode(base64_data)
     save_path = f"{local_path}inputs{os.path.sep}{prefix}_{session_id}.jpg"
@@ -297,8 +315,13 @@ async def comfyui_workflow_handler(request: Request):
     for key, value in data.items():
         if isinstance(value, str) and is_valid_base64_image(value):
             #print(f"{key} is_valid_base64_image.")
-            cleanup_images([key+"_"])
-            data[key] = save_base64_image(value, key, session_id)
+            image_bytes = base64.b64decode(value)
+            existing_path = find_existing_file(key, image_bytes)
+            if existing_path:
+                data[key] = existing_path
+            else:
+                cleanup_images([key+"_"])
+                data[key] = save_base64_image(value, key, session_id)
 
     workflow_name = data['workflow'] + '_api'
     promptID = comfyui_workflow(workflow_name, data)['prompt_id']
@@ -338,17 +361,23 @@ async def comfyui_runflow_handler(request: Request):
             field_type = field["type"]
             
             if field_type in ["image", "video", "audio"]:
-                # Handle file upload
-                cleanup_images([field_name+"_"])
                 file = form_data.get(field_name)
                 if file and file.filename:
-                    # Save file
-                    file_ext = os.path.splitext(file.filename)[1]
-                    save_path = f"{local_path}inputs{os.path.sep}{field_name}_{session_id}{file_ext}"
-                    os.makedirs(os.path.dirname(save_path), exist_ok=True)
-                    with open(save_path, 'wb') as f:
-                        f.write(await file.read())
-                    data[field_name] = save_path
+                    # Read file content
+                    file_content = await file.read()
+                    # Check for existing file with same content
+                    existing_path = find_existing_file(field_name, file_content)
+                    if existing_path:
+                        data[field_name] = existing_path
+                    else:
+                        # Save file
+                        cleanup_images([field_name+"_"])
+                        file_ext = os.path.splitext(file.filename)[1]
+                        save_path = f"{local_path}inputs{os.path.sep}{field_name}_{session_id}{file_ext}"
+                        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+                        with open(save_path, 'wb') as f:
+                            f.write(file_content)
+                        data[field_name] = save_path
             else:
                 # Handle regular fields
                 value = form_data.get(field_name)

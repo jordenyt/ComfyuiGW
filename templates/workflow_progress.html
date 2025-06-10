@@ -20,6 +20,8 @@
     <button onclick="interruptWorkflow()">Interrupt</button>
 
     <script>
+        let statusTimeout;
+
         function updateStatus() {
             fetch('/comfyui_status')
                 .then(response => response.json())
@@ -28,9 +30,9 @@
                         `<strong>Progress:</strong> ${data.progress}<br>
                          <strong>Step:</strong> ${data.step}`;
                     
-                    if (data.progress !== "Done") {
-                        setTimeout(updateStatus, 1000);
-                    }
+                    //if (data.progress !== "Done") {
+                        statusTimeout = setTimeout(updateStatus, 1000);
+                    //}
                 });
         }
 
@@ -38,6 +40,15 @@
             fetch('/comfyui_interrupt')
                 .then(() => alert('Workflow interrupted'));
         }
+
+        // Handle visibility changes
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                clearTimeout(statusTimeout);
+            } else {
+                updateStatus();
+            }
+        });
 
         // Start polling status
         updateStatus();
