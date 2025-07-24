@@ -284,7 +284,7 @@
   },
   "50": {
     "inputs": {
-      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "sage_attention": "sageattn_qk_int8_pv_fp8_cuda++",
       "model": [
         "49",
         0

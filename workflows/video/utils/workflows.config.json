@@ -23,6 +23,22 @@
             "ref_image": {"type": "image", "default": null}
         }
     },
+    "iv2v_liveportrait_api": {
+        "prompt_workflow": "iv2v_liveportrait_video_api.json",
+        "fields": {
+            "video": "146.inputs.video",
+            "drv_video": "8.inputs.video",
+            "force_rate": "146.inputs.force_rate",
+            "frame_load_cap": "146.inputs.frame_load_cap"
+        },
+        "descriptions": "Expression Transfer with LivePortrait.",
+        "inputs": {
+            "video": {"type": "video", "default": null},
+            "drv_video": {"type": "video", "default": null},
+            "force_rate": {"type": "integer", "default": 16},
+            "frame_load_cap": {"type": "integer", "default": 0}
+        }
+    },
     "video_get_mask_api": {
         "prompt_workflow": "video_get_mask_api.json",
         "descriptions": "Get mask from video by prompt",
@@ -75,7 +91,7 @@
         "fields": {
             "src_video": "1.inputs.video",
             "force_rate": "1.inputs.force_rate",
-            "index": "2.inputs.start_index",
+            "index": "6.inputs.Number",
             "size": ["5.inputs.width", "5.inputs.height"],
             "divisible_by": "5.inputs.divisible_by"
         },
@@ -97,6 +113,16 @@
         "inputs": {
             "video": {"type": "video", "default": null},
             "audio": {"type": "audio", "default": null}
+        }
+    },
+    "video_save_mp4_api": {
+        "prompt_workflow": "v2v_save_mp4_api.json",
+        "fields": {
+            "video": "1.inputs.video"
+        },
+        "descriptions": "Convert video to MP4/YUV420p/H.264 ",
+        "inputs": {
+            "video": {"type": "video", "default": null}
         }
     }
 }

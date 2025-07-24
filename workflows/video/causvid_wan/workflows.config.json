@@ -25,10 +25,10 @@
             "causvidStrength": "85:7.inputs.strength",
             "start_img": "26.inputs.image",
             "positive": "91.inputs.text",
-            "negative": "28.inputs.text",
+            "negative": "109.inputs.text",
             "length": "40.inputs.length",
-            "loraStrength": "84.inputs.strength",
-            "lora": "84.inputs.lora_name",
+            "loraStrength": ["106.inputs.strength_model","106.inputs.strength_clip"],
+            "lora": "106.inputs.lora_name",
             "size": ["26.inputs.width","26.inputs.height"]
         },
         "descriptions": "Start Image to Video with WAN 2.1 I2V 480p Model",
@@ -41,8 +41,7 @@
             "loraStrength": {"type":"float", "default": 0.7},
             "cfg": {"type": "float","default": 6.0},
             "split": {"type": "float","default": 0.4},
-            "causvidStrength": {"type": "float","default": 0.25},
-            "steps": {"type": "integer","default": 14},
+            "steps": {"type": "integer","default": 10},
             "size": {"type": "integer","default": 640}
         }
     },
@@ -81,12 +80,11 @@
             "prompt": {"type":"text", "default":""},
             "negative_prompt": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
             "lora": {"type":"string", "default": "WAN21\\wan-nsfw-e14-fixed.safetensors"},
-            "loraStrength": {"type":"float", "default": 0.5},
-            "cfg": {"type":"float", "default":4},
-            "steps": {"type": "integer","default": 10},
+            "loraStrength": {"type":"float", "default": 0.7},
+            "cfg": {"type":"float", "default":6},
+            "steps": {"type": "integer","default": 12},
             "denoise": {"type":"float", "default":1},
-            "split": {"type": "float","default": 0.3},
-            "causvidStrength": {"type": "float","default": 0.2},
+            "split": {"type": "float","default": 0.5},
             "size": {"type":"integer", "default":640},
             "length": {"type":"integer", "default":161}
         }
@@ -131,12 +129,11 @@
             "prompt": {"type":"text", "default":""},
             "negative_prompt": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
             "lora": {"type":"string", "default": "WAN21\\wan-nsfw-e14-fixed.safetensors"},
-            "loraStrength": {"type":"float", "default": 0.5},
-            "cfg": {"type":"float", "default":4},
-            "steps": {"type": "integer","default": 10},
+            "loraStrength": {"type":"float", "default": 0.7},
+            "cfg": {"type":"float", "default":6},
+            "steps": {"type": "integer","default": 12},
             "denoise": {"type":"float", "default":1},
-            "split": {"type": "float","default": 0.3},
-            "causvidStrength": {"type": "float","default": 0.2},
+            "split": {"type": "float","default": 0.5},
             "size": {"type":"integer", "default":640},
             "frame_load_cap": {"type":"integer", "default":0}
         }
@@ -184,14 +181,13 @@
             "prompt": {"type":"text", "default":""},
             "negative_prompt": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
             "lora": {"type":"string", "default": "WAN21\\wan-nsfw-e14-fixed.safetensors"},
-            "loraStrength": {"type":"float", "default": 0.5},
+            "loraStrength": {"type":"float", "default": 0.7},
             "num_frame_max": {"type": "integer","default": 161},
             "start_frame": {"type": "integer","default": 160},
-            "cfg": {"type":"float", "default":4},
-            "steps": {"type": "integer","default": 10},
+            "cfg": {"type":"float", "default":6},
+            "steps": {"type": "integer","default": 12},
             "denoise": {"type":"float", "default":1},
-            "split": {"type": "float","default": 0.3},
-            "causvidStrength": {"type": "float","default": 0.2},
+            "split": {"type": "float","default": 0.5},
             "size": {"type":"integer", "default":640}
         }
     },
@@ -217,7 +213,8 @@
             "keyframe_3_index": "223.inputs.start_index",
             "frame_load_cap": "117.inputs.frame_load_cap",
             "lora": "224.inputs.lora_name",
-            "loraStrength": "224.inputs.strength"
+            "loraStrength": "224.inputs.strength",
+            "strength": "186.inputs.strength"
         },
         "descriptions": "Video (+ ref image + keyframes) to video by WAN VACE Model and pose video",
         "inputs": {
@@ -234,11 +231,11 @@
             "negative_prompt": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
             "lora": {"type":"string", "default": "WAN21\\wan-nsfw-e14-fixed.safetensors"},
             "loraStrength": {"type":"float", "default": 0.7},
-            "cfg": {"type":"float", "default":4},
-            "steps": {"type": "integer","default": 10},
+            "strength": {"type":"float", "default": 1.0},
+            "cfg": {"type":"float", "default":6},
+            "steps": {"type": "integer","default": 12},
             "denoise": {"type":"float", "default":1},
-            "split": {"type": "float","default": 0.3},
-            "causvidStrength": {"type": "float","default": 0.2},
+            "split": {"type": "float","default": 0.5},
             "size": {"type":"integer", "default":640},
             "frame_load_cap": {"type":"integer", "default":0}
         }
@@ -267,12 +264,17 @@
             "num_frame_max": "261.inputs.value",
             "start_frame": "258.inputs.value",
             "lora": "224.inputs.lora_name",
-            "loraStrength": "224.inputs.strength"
+            "loraStrength": "224.inputs.strength",
+            "vaceStrength": "186.inputs.strength",
+            "color_ref_image": "269.inputs.image",
+            "color_ref_index": "270.inputs.compare_index"
         },
         "descriptions": "Extend Video (+ ref image + keyframes) to video by WAN VACE Model and pose video",
         "inputs": {
             "src_video": {"type":"video", "default":null},
             "reference_image": {"type":"image", "default":null},
+            "color_ref_image": {"type":"image", "default":null},
+            "color_ref_index": {"type":"integer", "default":0},
             "pose_video": {"type":"video", "default":null},
             "keyframe_1": {"type":"image", "default":null},
             "keyframe_1_index": {"type":"integer", "default":0},
@@ -285,17 +287,76 @@
             "negative_prompt": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
             "lora": {"type":"string", "default": "WAN21\\wan-nsfw-e14-fixed.safetensors"},
             "loraStrength": {"type":"float", "default": 0.7},
+            "vaceStrength": {"type":"float", "default": 1.0},
             "num_frame_max": {"type": "integer","default": 161},
             "start_frame": {"type": "integer","default": 160},
-            "cfg": {"type":"float", "default":4},
-            "steps": {"type": "integer","default": 10},
+            "cfg": {"type":"float", "default":6},
+            "steps": {"type": "integer","default": 12},
             "denoise": {"type":"float", "default":1},
-            "split": {"type": "float","default": 0.3},
-            "causvidStrength": {"type": "float","default": 0.2},
-            "size": {"type":"integer", "default":640},
-            "frame_load_cap": {"type":"integer", "default":0}
+            "split": {"type": "float","default": 0.5},
+            "size": {"type":"integer", "default":640}
         }
     },
+    "iv2v_wan_vace_pose_replace_api": {
+        "prompt_workflow": "iv2v_wan_vace_pose_keyframe3_causvid_replace_api.json",
+        "fields": {
+            "seed": ["247:8.inputs.seed", "247:9.inputs.seed"],
+            "split": "247:1.inputs.Number",
+            "causvidStrength": "247:7.inputs.strength",
+            "cfg": "247:8.inputs.cfg",
+            "steps": "247:0.inputs.Number",
+            "size": ["132.inputs.width", "132.inputs.height"],
+            "prompt": "27.inputs.text",
+            "negative_prompt": "28.inputs.text",
+            "src_video": "117.inputs.video",
+            "pose_video": "177.inputs.video",
+            "reference_image": "26.inputs.image",
+            "keyframe_1": "208.inputs.image",
+            "keyframe_1_index": "207.inputs.start_index",
+            "keyframe_2": "220.inputs.image",
+            "keyframe_2_index": "221.inputs.start_index",
+            "keyframe_3": "222.inputs.image",
+            "keyframe_3_index": "223.inputs.start_index",
+            "replace_video": "250.inputs.video",
+            "buffer_frame": "279.inputs.Number",
+            "start_frame": "270.inputs.Number",
+            "end_frame": "273.inputs.Number",
+            "lora": "224.inputs.lora_name",
+            "loraStrength": "224.inputs.strength",
+            "vaceStrength": "186.inputs.strength",
+            "color_ref_image": "293.inputs.image",
+            "color_ref_index": "292.inputs.compare_index"
+        },
+        "descriptions": "Regenerate Video (+ ref image + keyframes) to video by WAN VACE Model and pose video",
+        "inputs": {
+            "src_video": {"type":"video", "default":null},
+            "reference_image": {"type":"image", "default":null},
+            "color_ref_image": {"type":"image", "default":null},
+            "color_ref_index": {"type":"integer", "default":0},
+            "pose_video": {"type":"video", "default":null},
+            "keyframe_1": {"type":"image", "default":null},
+            "keyframe_1_index": {"type":"integer", "default":0},
+            "keyframe_2": {"type":"image", "default":null},
+            "keyframe_2_index": {"type":"integer", "default":0},
+            "keyframe_3": {"type":"image", "default":null},
+            "keyframe_3_index": {"type":"integer", "default":0},
+            "replace_video": {"type":"video", "default":null},
+            "prompt": {"type":"text", "default":""},
+            "negative_prompt": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
+            "lora": {"type":"string", "default": "WAN21\\wan-nsfw-e14-fixed.safetensors"},
+            "loraStrength": {"type":"float", "default": 0.7},
+            "vaceStrength": {"type":"float", "default": 1.0},
+            "buffer_frame": {"type": "integer","default": 8},
+            "start_frame": {"type": "integer","default": 999},
+            "end_frame": {"type": "integer","default": 999},
+            "cfg": {"type":"float", "default":6},
+            "steps": {"type": "integer","default": 12},
+            "denoise": {"type":"float", "default":1},
+            "split": {"type": "float","default": 0.5},
+            "size": {"type":"integer", "default":640}
+        }
+    },
+
     "iv2v_wan_vace_mask_api": {
         "prompt_workflow": "iv2v_wan_vace_mask_keyframe3_causvid_api.json",
         "fields": {
@@ -335,11 +396,10 @@
             "negative_prompt": {"type":"text", "default":"chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip"},
             "lora": {"type":"string", "default": "WAN21\\wan-nsfw-e14-fixed.safetensors"},
             "loraStrength": {"type":"float", "default": 0.7},
-            "cfg": {"type":"float", "default":1},
-            "steps": {"type": "integer","default": 10},
-            "denoise": {"type":"float", "default":4},
-            "split": {"type": "float","default": 0.3},
-            "causvidStrength": {"type": "float","default": 0.2},
+            "cfg": {"type":"float", "default":6},
+            "steps": {"type": "integer","default": 12},
+            "denoise": {"type":"float", "default":1},
+            "split": {"type": "float","default": 0.5},
             "size": {"type":"integer", "default":640},
             "frame_load_cap": {"type":"integer", "default":0}
         }
@@ -371,10 +431,9 @@
             "new_frame": {"type": "integer", "default": 80},
             "lora": {"type":"string", "default": "WAN21\\wan-nsfw-e14-fixed.safetensors"},
             "loraStrength": {"type":"float", "default": 0.7},
-            "steps": {"type": "integer", "default": 10},
-            "cfg": {"type":"float", "default":4},
-            "split": {"type": "float","default": 0.3},
-            "causvidStrength": {"type": "float","default": 0.2}
+            "steps": {"type": "integer", "default": 12},
+            "cfg": {"type":"float", "default":6},
+            "split": {"type": "float","default": 0.5}
         }
     }
 }

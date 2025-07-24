@@ -13,6 +13,19 @@
         }
     },
     {
+        "name": "ColorMatch",
+        "title": "Color Match",
+        "showT2I": false,
+        "show": true,
+        "configurable": false,
+        "default": {"type":"img2img", "baseImage":"background"},
+        "fields": {
+            "workflow": "color_match",
+            "background": "$background",
+            "reference": "$reference"
+        }
+    },
+    {
         "name": "ConcatImage",
         "title": "Concat Images",
         "showT2I": false,

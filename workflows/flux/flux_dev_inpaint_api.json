@@ -99,7 +99,7 @@
     "inputs": {
       "scheduler": "normal",
       "steps": 20,
-      "denoise": 0.75,
+      "denoise": 0.7500000000000001,
       "model": [
         "60",
         0
@@ -156,7 +156,7 @@
         0
       ],
       "mask": [
-        "63",
+        "69",
         0
       ]
     },
@@ -298,7 +298,7 @@
   "60": {
     "inputs": {
       "max_shift": 1.1500000000000001,
-      "base_shift": 0.5,
+      "base_shift": 0.5000000000000001,
       "width": [
         "35",
         2
@@ -317,7 +317,54 @@
       "title": "ModelSamplingFlux"
     }
   },
-  "63": {
+  "65": {
+    "inputs": {
+      "lora_name": "Flux\\JordenFlux.safetensors",
+      "strength_model": 0.8000000000000002,
+      "strength_clip": 0,
+      "model": [
+        "12",
+        0
+      ],
+      "clip": [
+        "11",
+        0
+      ]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  },
+  "67": {
+    "inputs": {
+      "model_type": "flux",
+      "rel_l1_thresh": 0.20000000000000004,
+      "max_skip_steps": 3,
+      "model": [
+        "68",
+        0
+      ]
+    },
+    "class_type": "TeaCache",
+    "_meta": {
+      "title": "TeaCache"
+    }
+  },
+  "68": {
+    "inputs": {
+      "sage_attention": "sageattn_qk_int8_pv_fp8_cuda++",
+      "model": [
+        "65",
+        0
+      ]
+    },
+    "class_type": "PathchSageAttentionKJ",
+    "_meta": {
+      "title": "Patch Sage Attention KJ"
+    }
+  },
+  "69": {
     "inputs": {
       "expand": 0,
       "incremental_expandrate": 0,
@@ -335,53 +382,6 @@
     "class_type": "GrowMaskWithBlur",
     "_meta": {
       "title": "Grow Mask With Blur"
-    }
-  },
-  "65": {
-    "inputs": {
-      "lora_name": "Flux\\amateurphoto_v3.5.safetensors",
-      "strength_model": 0.8,
-      "strength_clip": 0,
-      "model": [
-        "12",
-        0
-      ],
-      "clip": [
-        "11",
-        0
-      ]
-    },
-    "class_type": "LoraLoader",
-    "_meta": {
-      "title": "Load LoRA"
-    }
-  },
-  "66": {
-    "inputs": {
-      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
-      "model": [
-        "65",
-        0
-      ]
-    },
-    "class_type": "PathchSageAttentionKJ",
-    "_meta": {
-      "title": "Patch Sage Attention KJ"
-    }
-  },
-  "67": {
-    "inputs": {
-      "model_type": "flux",
-      "rel_l1_thresh": 0.2,
-      "max_skip_steps": 3,
-      "model": [
-        "66",
-        0
-      ]
-    },
-    "class_type": "TeaCache",
-    "_meta": {
-      "title": "TeaCache"
     }
   }
 }

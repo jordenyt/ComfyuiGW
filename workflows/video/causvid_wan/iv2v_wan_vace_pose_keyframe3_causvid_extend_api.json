@@ -20,7 +20,7 @@
       "height": 1024,
       "repeat": 1,
       "keep_proportion": true,
-      "divisible_by": 1,
+      "divisible_by": 16,
       "mask_channel": "alpha",
       "background_color": ""
     },
@@ -92,11 +92,11 @@
       ],
       "loop_count": 0,
       "filename_prefix": "iv2v_wan_vace_pose",
-      "format": "video/h264-mp4",
-      "pix_fmt": "yuv420p",
-      "crf": 19,
-      "save_metadata": false,
-      "trim_to_audio": false,
+      "format": "video/av1-webm",
+      "pix_fmt": "yuv420p10le",
+      "crf": 20,
+      "input_color_depth": "8bit",
+      "save_metadata": true,
       "pingpong": false,
       "save_output": true,
       "images": [
@@ -360,7 +360,7 @@
       ],
       "repeat": 1,
       "keep_proportion": false,
-      "divisible_by": 1,
+      "divisible_by": 16,
       "mask_channel": "alpha",
       "background_color": ""
     },
@@ -415,7 +415,7 @@
       ],
       "repeat": 1,
       "keep_proportion": false,
-      "divisible_by": 1,
+      "divisible_by": 16,
       "mask_channel": "alpha",
       "background_color": ""
     },
@@ -463,7 +463,7 @@
       ],
       "repeat": 1,
       "keep_proportion": false,
-      "divisible_by": 1,
+      "divisible_by": 16,
       "mask_channel": "alpha",
       "background_color": ""
     },
@@ -612,7 +612,7 @@
         0
       ],
       "replacement_images": [
-        "250",
+        "270",
         0
       ],
       "original_masks": [
@@ -716,13 +716,152 @@
         0
       ],
       "images": [
-        "250",
+        "270",
         0
       ]
     },
     "class_type": "GetImageRangeFromBatch",
     "_meta": {
       "title": "Get Image or Mask Range From Batch"
+    }
+  },
+  "269": {
+    "inputs": {
+      "image": "20240124_151419.jpg",
+      "resize": true,
+      "width": [
+        "251",
+        8
+      ],
+      "height": [
+        "251",
+        9
+      ],
+      "repeat": 1,
+      "keep_proportion": false,
+      "divisible_by": 2,
+      "mask_channel": "alpha",
+      "background_color": ""
+    },
+    "class_type": "LoadAndResizeImage",
+    "_meta": {
+      "title": "Load & Resize Image"
+    }
+  },
+  "270": {
+    "inputs": {
+      "compare_index": 0,
+      "image_list": [
+        "250",
+        0
+      ],
+      "reference_image": [
+        "269",
+        0
+      ]
+    },
+    "class_type": "ColorCorrectionNode",
+    "_meta": {
+      "title": "Video Color restore"
+    }
+  },
+  "271": {
+    "inputs": {
+      "start": [
+        "275",
+        0
+      ],
+      "length": 1,
+      "image": [
+        "265",
+        0
+      ]
+    },
+    "class_type": "ImageFromBatch+",
+    "_meta": {
+      "title": "🔧 Image From Batch"
+    }
+  },
+  "273": {
+    "inputs": {
+      "images": [
+        "265",
+        0
+      ]
+    },
+    "class_type": "JWImageBatchCount",
+    "_meta": {
+      "title": "Get Image Batch Count"
+    }
+  },
+  "275": {
+    "inputs": {
+      "expression": "a-1",
+      "a": [
+        "273",
+        0
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "276": {
+    "inputs": {
+      "value": [
+        "275",
+        0
+      ],
+      "format_string": "{:04d}"
+    },
+    "class_type": "JWIntegerToString",
+    "_meta": {
+      "title": "Integer to String"
+    }
+  },
+  "277": {
+    "inputs": {
+      "string_a": "frame_",
+      "string_b": [
+        "276",
+        0
+      ],
+      "delimiter": ""
+    },
+    "class_type": "StringConcatenate",
+    "_meta": {
+      "title": "Concatenate"
+    }
+  },
+  "278": {
+    "inputs": {
+      "output_path": "",
+      "filename_prefix": [
+        "277",
+        0
+      ],
+      "filename_delimiter": "_",
+      "filename_number_padding": 4,
+      "filename_number_start": "false",
+      "extension": "jpg",
+      "dpi": 300,
+      "quality": 95,
+      "optimize_image": "true",
+      "lossless_webp": "false",
+      "overwrite_mode": "false",
+      "show_history": "false",
+      "show_history_by_prefix": "false",
+      "embed_workflow": "false",
+      "show_previews": "true",
+      "images": [
+        "271",
+        0
+      ]
+    },
+    "class_type": "Image Save",
+    "_meta": {
+      "title": "Image Save"
     }
   },
   "21:2": {

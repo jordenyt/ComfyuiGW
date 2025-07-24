@@ -15,7 +15,7 @@
   "8": {
     "inputs": {
       "samples": [
-        "62",
+        "80",
         0
       ],
       "vae": [
@@ -50,7 +50,7 @@
   },
   "35": {
     "inputs": {
-      "image": "background_652703960466863.jpg",
+      "image": "background_1033185773803986.jpg",
       "resize": true,
       "width": 1024,
       "height": 1024,
@@ -122,7 +122,7 @@
   },
   "53": {
     "inputs": {
-      "image": "paint_652703960466863.jpg",
+      "image": "paint_1033185773803986.jpg",
       "resize": true,
       "width": 1024,
       "height": 1024,
@@ -177,11 +177,11 @@
       "lossless_webp": "false",
       "overwrite_mode": "false",
       "show_history": "false",
-      "show_history_by_prefix": "true",
-      "embed_workflow": "true",
+      "show_history_by_prefix": "false",
+      "embed_workflow": "false",
       "show_previews": "true",
       "images": [
-        "74",
+        "78",
         0
       ]
     },
@@ -203,9 +203,65 @@
       "title": "FluxGuidance"
     }
   },
-  "62": {
+  "69": {
     "inputs": {
-      "seed": 275210219387489,
+      "unet_name": "fluxFillFP8_v10.safetensors",
+      "weight_dtype": "fp8_e4m3fn_fast"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "75": {
+    "inputs": {
+      "sage_attention": "sageattn_qk_int8_pv_fp8_cuda++",
+      "model": [
+        "69",
+        0
+      ]
+    },
+    "class_type": "PathchSageAttentionKJ",
+    "_meta": {
+      "title": "Patch Sage Attention KJ"
+    }
+  },
+  "76": {
+    "inputs": {
+      "model_type": "flux",
+      "rel_l1_thresh": 0.20000000000000004,
+      "max_skip_steps": 3,
+      "model": [
+        "75",
+        0
+      ]
+    },
+    "class_type": "TeaCache",
+    "_meta": {
+      "title": "TeaCache"
+    }
+  },
+  "78": {
+    "inputs": {
+      "method": "mkl",
+      "strength": 1.0000000000000002,
+      "image_ref": [
+        "35",
+        0
+      ],
+      "image_target": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "ColorMatch",
+    "_meta": {
+      "title": "Color Match"
+    }
+  },
+  "80": {
+    "inputs": {
+      "seed": 614605986967564,
       "steps": 20,
       "cfg": 1,
       "sampler_name": "euler",
@@ -231,110 +287,6 @@
     "class_type": "KSampler",
     "_meta": {
       "title": "KSampler"
-    }
-  },
-  "64": {
-    "inputs": {
-      "grow": 0,
-      "blur": 0,
-      "mask": [
-        "52",
-        0
-      ]
-    },
-    "class_type": "INPAINT_ExpandMask",
-    "_meta": {
-      "title": "Expand Mask"
-    }
-  },
-  "69": {
-    "inputs": {
-      "unet_name": "fluxFillFP8_v10.safetensors",
-      "weight_dtype": "fp8_e4m3fn_fast"
-    },
-    "class_type": "UNETLoader",
-    "_meta": {
-      "title": "Load Diffusion Model"
-    }
-  },
-  "72": {
-    "inputs": {
-      "mask": [
-        "73",
-        0
-      ]
-    },
-    "class_type": "InvertMask",
-    "_meta": {
-      "title": "InvertMask"
-    }
-  },
-  "73": {
-    "inputs": {
-      "grow": 15,
-      "blur": 0,
-      "mask": [
-        "52",
-        0
-      ]
-    },
-    "class_type": "INPAINT_ExpandMask",
-    "_meta": {
-      "title": "Expand Mask"
-    }
-  },
-  "74": {
-    "inputs": {
-      "color_space": "RGB",
-      "luminance_factor": 0,
-      "color_intensity_factor": 1,
-      "fade_factor": 0,
-      "neutralization_factor": 0,
-      "device": "auto",
-      "image": [
-        "8",
-        0
-      ],
-      "reference": [
-        "35",
-        0
-      ],
-      "reference_mask": [
-        "72",
-        0
-      ]
-    },
-    "class_type": "ImageColorMatchAdobe+",
-    "_meta": {
-      "title": "🔧 Image Color Match Adobe"
-    }
-  },
-  "75": {
-    "inputs": {
-      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
-      "model": [
-        "69",
-        0
-      ]
-    },
-    "class_type": "PathchSageAttentionKJ",
-    "_meta": {
-      "title": "Patch Sage Attention KJ"
-    }
-  },
-  "76": {
-    "inputs": {
-      "model_type": "flux",
-      "rel_l1_thresh": 0.2,
-      "max_skip_steps": 3,
-      "model": [
-        "75",
-        0
-      ]
-    },
-    "class_type": "TeaCache",
-    "_meta": {
-      "title": "TeaCache"
     }
   }
 }

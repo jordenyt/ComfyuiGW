@@ -96,6 +96,36 @@
             "loraStrength": ["48.inputs.strength_model","48.inputs.strength_clip"]
         }
     },
+    "flux_kontext_api": {
+        "prompt_workflow": "flux_kontext_api.json",
+        "fields": {
+            "background": "63.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "76.inputs.text",
+            "size": ["86.inputs.width", "86.inputs.height"],
+            "batch_size": "56.inputs.a",
+            "steps": "80.inputs.steps",
+            "cfg": "80.inputs.cfg",
+            "denoise": "80.inputs.denoise",
+            "seed": "80.inputs.seed",
+            "guidance": ["53.inputs.guidance", "83.inputs.guidance"]
+        }
+    },
+    "flux_kontext_dual_api": {
+        "prompt_workflow": "flux_kontext_dual_api.json",
+        "fields": {
+            "background": "63.inputs.image",
+            "reference": "73.inputs.image",
+            "positive": "6.inputs.text",
+            "negative": "76.inputs.text",
+            "size": ["66.inputs.width", "66.inputs.height", "74.inputs.width", "74.inputs.height"],
+            "steps": "79.inputs.steps",
+            "cfg": "79.inputs.cfg",
+            "denoise": "79.inputs.denoise",
+            "seed": "79.inputs.seed",
+            "guidance": ["53.inputs.guidance", "80.inputs.guidance"]
+        }
+    },
     "flux_cn_pose_img2img_api": {
         "prompt_workflow": "flux_cn_pose_img2img_api.json",
         "fields": {
@@ -217,7 +247,6 @@
             "denoise": "17.inputs.denoise",
             "seed": "25.inputs.noise_seed",
             "guidance": ["39.inputs.guidance", "59.inputs.guidance"],
-            "maskBlur": ["63.inputs.blur_radius", "63.inputs.expand"],
             "lora": "65.inputs.lora_name",
             "loraStrength": ["65.inputs.strength_model","65.inputs.strength_clip"]
         }
@@ -253,12 +282,11 @@
             "negative": "55.inputs.text",
             "size": ["35.inputs.width", "35.inputs.height", "53.inputs.width", "53.inputs.height"],
             "batch_size": "56.inputs.amount",
-            "steps": "62.inputs.steps",
-            "cfg": "62.inputs.cfg",
-            "denoise": "62.inputs.denoise",
-            "seed": "62.inputs.seed",
-            "guidance": ["39.inputs.guidance", "59.inputs.guidance"],
-            "maskBlur": ["73.inputs.grow","64.inputs.grow","64.inputs.blur"]
+            "steps": "80.inputs.steps",
+            "cfg": "80.inputs.cfg",
+            "denoise": "80.inputs.denoise",
+            "seed": "80.inputs.seed",
+            "guidance": ["39.inputs.guidance", "59.inputs.guidance"]
         }
     },
     "flux_fill_pose_api": {

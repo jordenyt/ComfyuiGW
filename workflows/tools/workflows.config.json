@@ -35,6 +35,13 @@
             "reference": "1.inputs.image"
         }
     },
+    "color_match_api": {
+        "prompt_workflow": "i2i_color_match_api.json",
+        "fields": {
+            "background": "18.inputs.image",
+            "reference": "11.inputs.image"
+        }
+    },
     "concat_image_api": {
         "prompt_workflow": "concat_image_api.json",
         "fields": {

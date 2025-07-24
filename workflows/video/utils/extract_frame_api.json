@@ -5,8 +5,11 @@
       "force_rate": 16,
       "custom_width": 0,
       "custom_height": 0,
-      "frame_load_cap": 0,
-      "skip_first_frames": 0,
+      "frame_load_cap": 5,
+      "skip_first_frames": [
+        "6",
+        0
+      ],
       "select_every_nth": 1,
       "format": "AnimateDiff"
     },
@@ -17,7 +20,7 @@
   },
   "2": {
     "inputs": {
-      "start_index": -1,
+      "start_index": 0,
       "num_frames": 1,
       "images": [
         "1",
@@ -32,7 +35,10 @@
   "3": {
     "inputs": {
       "output_path": "",
-      "filename_prefix": "video_extract",
+      "filename_prefix": [
+        "7",
+        0
+      ],
       "filename_delimiter": "_",
       "filename_number_padding": 4,
       "filename_number_start": "false",
@@ -74,6 +80,42 @@
     "class_type": "ImageResizeKJv2",
     "_meta": {
       "title": "Resize Image v2"
+    }
+  },
+  "6": {
+    "inputs": {
+      "Number": "20"
+    },
+    "class_type": "Int",
+    "_meta": {
+      "title": "Int"
+    }
+  },
+  "7": {
+    "inputs": {
+      "string_a": "frame_",
+      "string_b": [
+        "8",
+        0
+      ],
+      "delimiter": ""
+    },
+    "class_type": "StringConcatenate",
+    "_meta": {
+      "title": "Concatenate"
+    }
+  },
+  "8": {
+    "inputs": {
+      "value": [
+        "6",
+        0
+      ],
+      "format_string": "{:04d}"
+    },
+    "class_type": "JWIntegerToString",
+    "_meta": {
+      "title": "Integer to String"
     }
   }
 }

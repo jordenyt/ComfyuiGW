@@ -111,7 +111,7 @@
   },
   "49": {
     "inputs": {
-      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "sage_attention": "sageattn_qk_int8_pv_fp8_cuda++",
       "model": [
         "32",
         0
@@ -594,7 +594,7 @@
   "237:7": {
     "inputs": {
       "lora_name": "WAN21\\Wan21_CausVid_14B_T2V_lora_rank32.safetensors",
-      "strength": 0.10000000000000002,
+      "strength": 0.25,
       "blocks_type": "all",
       "model": [
         "50",

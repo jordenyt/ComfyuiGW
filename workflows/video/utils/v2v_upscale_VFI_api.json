@@ -7,11 +7,11 @@
       ],
       "loop_count": 0,
       "filename_prefix": "upscaled_",
-      "format": "video/h264-mp4",
-      "pix_fmt": "yuv420p",
-      "crf": 19,
+      "format": "video/av1-webm",
+      "pix_fmt": "yuv420p10le",
+      "crf": 20,
+      "input_color_depth": "8bit",
       "save_metadata": false,
-      "trim_to_audio": false,
       "pingpong": false,
       "save_output": true,
       "images": [
@@ -40,7 +40,7 @@
       "ensemble": true,
       "scale_factor": 1,
       "frames": [
-        "404",
+        "411",
         0
       ]
     },
@@ -51,7 +51,7 @@
   },
   "376": {
     "inputs": {
-      "video": "video_395172306510605.mp4",
+      "video": "combine_00013-audio.webm",
       "force_rate": 0,
       "custom_width": 0,
       "custom_height": 0,
@@ -103,27 +103,6 @@
       "title": "Integer"
     }
   },
-  "400": {
-    "inputs": {
-      "expression": "c/ (max(a, b) * 4)",
-      "a": [
-        "394",
-        8
-      ],
-      "b": [
-        "394",
-        9
-      ],
-      "c": [
-        "401",
-        0
-      ]
-    },
-    "class_type": "MathExpression|pysssss",
-    "_meta": {
-      "title": "Math Expression 🐍"
-    }
-  },
   "401": {
     "inputs": {
       "value": 1500
@@ -159,21 +138,30 @@
       "title": "Load Upscale Model"
     }
   },
-  "404": {
+  "411": {
     "inputs": {
-      "upscale_method": "lanczos",
-      "scale_by": [
-        "400",
-        1
+      "width": [
+        "401",
+        0
       ],
+      "height": [
+        "401",
+        0
+      ],
+      "upscale_method": "area",
+      "keep_proportion": "resize",
+      "pad_color": "0, 0, 0",
+      "crop_position": "center",
+      "divisible_by": 2,
+      "device": "cpu",
       "image": [
         "402",
         0
       ]
     },
-    "class_type": "ImageScaleBy",
+    "class_type": "ImageResizeKJv2",
     "_meta": {
-      "title": "Upscale Image By"
+      "title": "Resize Image v2"
     }
   }
 }

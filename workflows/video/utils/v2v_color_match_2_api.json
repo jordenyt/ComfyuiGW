@@ -1,7 +1,7 @@
 {
   "11": {
     "inputs": {
-      "image": "keyframe_1_1077225783009040.jpg"
+      "image": "reference_392704977379165.jpg"
     },
     "class_type": "LoadImage",
     "_meta": {
@@ -10,7 +10,7 @@
   },
   "12": {
     "inputs": {
-      "video": "iv2v_wan_vace_pose_mask_00059-audio.mp4",
+      "video": "prev_video_316997780579897.mp4",
       "force_rate": 0,
       "custom_width": 0,
       "custom_height": 0,
@@ -34,7 +34,7 @@
       "filename_prefix": "color match",
       "format": "video/h264-mp4",
       "pix_fmt": "yuv420p",
-      "crf": 19,
+      "crf": 18,
       "save_metadata": true,
       "trim_to_audio": false,
       "pingpong": false,
@@ -67,21 +67,19 @@
   },
   "18": {
     "inputs": {
-      "method": "mvgd",
-      "strength": 1,
-      "multithread": true,
-      "image_ref": [
-        "11",
+      "compare_index": 0,
+      "image_list": [
+        "12",
         0
       ],
-      "image_target": [
-        "12",
+      "reference_image": [
+        "11",
         0
       ]
     },
-    "class_type": "ColorMatch",
+    "class_type": "ColorCorrectionNode",
     "_meta": {
-      "title": "Color Match"
+      "title": "Video Color restore"
     }
   }
 }

@@ -99,7 +99,7 @@
     "inputs": {
       "scheduler": "normal",
       "steps": 20,
-      "denoise": 0.7000000000000001,
+      "denoise": 0.7000000000000002,
       "model": [
         "44",
         0
@@ -112,7 +112,7 @@
   },
   "25": {
     "inputs": {
-      "noise_seed": 124884621374057
+      "noise_seed": 1094833970239824
     },
     "class_type": "RandomNoise",
     "_meta": {
@@ -121,7 +121,7 @@
   },
   "29": {
     "inputs": {
-      "text": "smile, thin, fat, lamp",
+      "text": "smile, thin, fat, lamp, makeup",
       "clip": [
         "48",
         1
@@ -182,7 +182,7 @@
   },
   "41": {
     "inputs": {
-      "image": "temp (8).jpg",
+      "image": "317380898399313928.mp4_snapshot_00.00.000.jpg",
       "resize": true,
       "width": 1024,
       "height": 1024,
@@ -229,7 +229,7 @@
   "44": {
     "inputs": {
       "max_shift": 1.1500000000000001,
-      "base_shift": 0.5,
+      "base_shift": 0.5000000000000001,
       "width": [
         "41",
         2
@@ -276,9 +276,9 @@
   },
   "48": {
     "inputs": {
-      "lora_name": "Flux\\amateurphoto_v3.5.safetensors",
-      "strength_model": 0.8,
-      "strength_clip": 0,
+      "lora_name": "Flux\\JordenFlux.safetensors",
+      "strength_model": 1.0000000000000002,
+      "strength_clip": 1.0000000000000002,
       "model": [
         "12",
         0
@@ -295,7 +295,7 @@
   },
   "49": {
     "inputs": {
-      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "sage_attention": "sageattn_qk_int8_pv_fp8_cuda++",
       "model": [
         "48",
         0
@@ -309,7 +309,7 @@
   "50": {
     "inputs": {
       "model_type": "flux",
-      "rel_l1_thresh": 0.2,
+      "rel_l1_thresh": 0.20000000000000004,
       "max_skip_steps": 3,
       "model": [
         "49",

@@ -286,11 +286,9 @@
   "74": {
     "inputs": {
       "color_space": "RGB",
-      "luminance_factor": 0,
-      "color_intensity_factor": 1.0000000000000002,
-      "fade_factor": 0,
-      "neutralization_factor": 0,
+      "factor": 1,
       "device": "auto",
+      "batch_size": 0,
       "image": [
         "8",
         0
@@ -304,14 +302,14 @@
         0
       ]
     },
-    "class_type": "ImageColorMatchAdobe+",
+    "class_type": "ImageColorMatch+",
     "_meta": {
-      "title": "🔧 Image Color Match Adobe"
+      "title": "🔧 Image Color Match"
     }
   },
   "75": {
     "inputs": {
-      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "sage_attention": "sageattn_qk_int8_pv_fp8_cuda++",
       "model": [
         "69",
         0

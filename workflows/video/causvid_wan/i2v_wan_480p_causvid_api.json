@@ -1,7 +1,7 @@
 {
   "23": {
     "inputs": {
-      "unet_name": "wan2.1-i2v-14b-480p-Q6_K.gguf",
+      "unet_name": "Wan2.1_I2V_14B_FusionX-Q6_K.gguf",
       "device": "cuda:0",
       "virtual_vram_gb": 0,
       "use_other_vram": false,
@@ -163,7 +163,7 @@
   },
   "49": {
     "inputs": {
-      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "sage_attention": "sageattn_qk_int8_pv_fp8_cuda++",
       "model": [
         "84",
         0
@@ -388,7 +388,7 @@
       "scheduler": "simple",
       "denoise": 1,
       "model": [
-        "85:7",
+        "50",
         0
       ],
       "positive": [

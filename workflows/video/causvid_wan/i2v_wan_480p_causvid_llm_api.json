@@ -1,7 +1,7 @@
 {
   "23": {
     "inputs": {
-      "unet_name": "wan2.1-i2v-14b-480p-Q6_K.gguf",
+      "unet_name": "Wan2.1_I2V_14B_FusionX-Q6_K.gguf",
       "device": "cuda:0",
       "virtual_vram_gb": 0,
       "use_other_vram": false,
@@ -14,13 +14,13 @@
   },
   "26": {
     "inputs": {
-      "image": "sdsketch_6922_240828140158.jpg",
+      "image": "start_img_283107909025401.jpg",
       "resize": true,
       "width": 640,
       "height": 640,
       "repeat": 1,
       "keep_proportion": true,
-      "divisible_by": 16,
+      "divisible_by": 2,
       "mask_channel": "alpha",
       "background_color": ""
     },
@@ -32,12 +32,12 @@
   "27": {
     "inputs": {
       "text": [
-        "86",
+        "112",
         0
       ],
       "clip": [
-        "21:1",
-        0
+        "106",
+        1
       ]
     },
     "class_type": "CLIPTextEncode",
@@ -47,10 +47,13 @@
   },
   "28": {
     "inputs": {
-      "text": "overexposure, deformed, mutation, blurry, flashing",
-      "clip": [
-        "21:1",
+      "text": [
+        "109",
         0
+      ],
+      "clip": [
+        "106",
+        1
       ]
     },
     "class_type": "CLIPTextEncode",
@@ -166,9 +169,9 @@
   },
   "49": {
     "inputs": {
-      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "sage_attention": "sageattn_qk_int8_pv_fp8_cuda++",
       "model": [
-        "84",
+        "106",
         0
       ]
     },
@@ -235,27 +238,12 @@
       "title": "Image Save"
     }
   },
-  "84": {
-    "inputs": {
-      "lora_name": "WAN21\\l3z_kiss.safetensors",
-      "strength": 0.7000000000000002,
-      "blocks_type": "all",
-      "model": [
-        "32",
-        0
-      ]
-    },
-    "class_type": "HunyuanVideoLoraLoader",
-    "_meta": {
-      "title": "Hunyuan Video LoRA Loader"
-    }
-  },
   "86": {
     "inputs": {
-      "api_key": "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",
+      "api_key": "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",
       "system_prompt": "You are a helper to generate video prompt from picture description and user input elements.  The video prompt should not include the picture description but only need to state the motion of background, action/movement of subject and camera movement. The output should not have fore-word and explanation of the prompt.",
       "user_message_box": [
-        "92",
+        "111",
         0
       ],
       "model": "deepseek/deepseek-chat-v3-0324:free",
@@ -263,11 +251,12 @@
       "cheapest": false,
       "fastest": true,
       "temperature": 1,
-      "pdf_engine": "auto"
+      "pdf_engine": "auto",
+      "chat_mode": false
     },
     "class_type": "OpenRouterNode",
     "_meta": {
-      "title": "OpenRouter LLM Node (Text/Multi-Image/PDF)"
+      "title": "OpenRouter LLM Node (Text/Multi-Image/PDF/Chat)"
     }
   },
   "87": {
@@ -292,7 +281,7 @@
       "num_beams": 20,
       "do_sample": true,
       "output_mask_select": "",
-      "seed": 159148526306525,
+      "seed": 796201695593253,
       "image": [
         "26",
         0
@@ -335,7 +324,7 @@
   },
   "91": {
     "inputs": {
-      "text": "kissing, hugging, cleavage, medium sized breast, 10 seconds long"
+      "text": "hong kong woman, seductive, pleasure, "
     },
     "class_type": "ttN text",
     "_meta": {
@@ -360,7 +349,7 @@
   },
   "94": {
     "inputs": {
-      "text_0": "- Gentle sway of church curtains from a soft breeze  \n- The couple turns toward each other, their hands intertwining  \n- Warm light gradually brightens on their faces as they lean in for a tender kiss  \n- His hand glides up to caress her cheek during the embrace, fingers brushing her veil  \n- She arches slightly into the hug, drawing him closer, cleavage pressing against his chest  \n- Slow push-in camera movement emphasizing the intimacy  \n- Veil flutters as they separate, eyes locking with loving smiles",
+      "text_0": "- Slow, sensual movement of the woman’s fingers tracing down her body  \n- Gentle sway of her hair as she tilts her head slightly  \n- Subtle shift in her posture to emphasize curves  \n- Soft, rhythmic breathing causing slight rise and fall of her chest  \n- Camera gliding smoothly in a shallow arc around her  \n- Warm light flickering subtly to enhance the intimate atmosphere  \n- Slow, lingering focus on her expression shifting from neutral to subtly seductive  \n- Delicate motion of her legs slightly adjusting position",
       "text": [
         "86",
         0
@@ -369,6 +358,79 @@
     "class_type": "ShowText|pysssss",
     "_meta": {
       "title": "Show Text 🐍"
+    }
+  },
+  "106": {
+    "inputs": {
+      "lora_name": "WAN21\\wan_female_masturbation.safetensors",
+      "strength_model": 0.5000000000000001,
+      "strength_clip": 0.5000000000000001,
+      "model": [
+        "32",
+        0
+      ],
+      "clip": [
+        "21:1",
+        0
+      ]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  },
+  "109": {
+    "inputs": {
+      "text": "chaotic, distortion, anime, animated, cartoon, cuts, fades, transition, compression artifacts, poor composition, talking, singing, fast movement, watermark, subtitle, trademark, shaking, jumping, frame skip, fast moving, shaking, sudden"
+    },
+    "class_type": "ttN text",
+    "_meta": {
+      "title": "text"
+    }
+  },
+  "110": {
+    "inputs": {
+      "a": "\\n User do not want these elements: \\n",
+      "b": [
+        "109",
+        0
+      ]
+    },
+    "class_type": "JWStringConcat",
+    "_meta": {
+      "title": "String Concatenate"
+    }
+  },
+  "111": {
+    "inputs": {
+      "a": [
+        "92",
+        0
+      ],
+      "b": [
+        "110",
+        0
+      ]
+    },
+    "class_type": "JWStringConcat",
+    "_meta": {
+      "title": "String Concatenate"
+    }
+  },
+  "112": {
+    "inputs": {
+      "a": [
+        "86",
+        0
+      ],
+      "b": [
+        "91",
+        0
+      ]
+    },
+    "class_type": "JWStringConcat",
+    "_meta": {
+      "title": "String Concatenate"
     }
   },
   "21:0": {
@@ -402,7 +464,7 @@
   },
   "85:0": {
     "inputs": {
-      "Number": "14"
+      "Number": "10"
     },
     "class_type": "Int",
     "_meta": {
@@ -455,7 +517,7 @@
   "85:7": {
     "inputs": {
       "lora_name": "WAN21\\Wan21_CausVid_14B_T2V_lora_rank32.safetensors",
-      "strength": 0.25000000000000006,
+      "strength": 0,
       "blocks_type": "all",
       "model": [
         "50",
@@ -469,7 +531,7 @@
   },
   "85:8": {
     "inputs": {
-      "seed": 103156893102496,
+      "seed": 276987704437897,
       "steps": [
         "85:2",
         0
@@ -502,7 +564,7 @@
   },
   "85:9": {
     "inputs": {
-      "seed": 982067027679273,
+      "seed": 555107069339597,
       "steps": [
         "85:3",
         0
@@ -512,7 +574,7 @@
       "scheduler": "simple",
       "denoise": 1,
       "model": [
-        "85:7",
+        "50",
         0
       ],
       "positive": [

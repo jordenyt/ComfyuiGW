@@ -125,12 +125,72 @@
         }
     },
     {
+        "name": "FluxKontext",
+        "title": "Flux Kontext (Sketch)",
+        "showT2I": false,
+        "show": true,
+        "configurable": true,
+        "default": {"type":"img2img", "denoise":1, "cfgScale":1, "steps":20, "baseImage":"sketch", "sdSize":1024},
+        "fields": {
+            "workflow": "flux_kontext",
+            "background": "$background",
+            "positive": "$positive",
+            "negative": "$negative",
+            "batch_size": "$batchSize",
+            "size": "$size",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "denoise": "$denoise",
+            "guidance": 2.5
+        }
+    },
+    {
+        "name": "FluxKontextInpaint",
+        "title": "Flux Kontext Inpaint",
+        "showT2I": false,
+        "show": true,
+        "configurable": true,
+        "default": {"type":"inpaint", "inpaintPartial":1, "denoise":1, "cfgScale":1, "steps":20, "baseImage":"background", "sdSize":1024},
+        "fields": {
+            "workflow": "flux_kontext",
+            "background": "$background",
+            "positive": "$positive",
+            "negative": "$negative",
+            "batch_size": "$batchSize",
+            "size": "$size",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "denoise": "$denoise",
+            "guidance": 2.5
+        }
+    },
+    {
+        "name": "FluxKontextDual",
+        "title": "Flux Kontext dual",
+        "showT2I": false,
+        "show": true,
+        "configurable": true,
+        "default": {"type":"img2img", "denoise":1, "cfgScale":1, "steps":20, "baseImage":"sketch", "sdSize":1024},
+        "fields": {
+            "workflow": "flux_kontext_dual",
+            "background": "$background",
+            "reference": "$reference",
+            "positive": "$positive",
+            "negative": "$negative",
+            "size": "$size",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "denoise": "$denoise",
+            "guidance": 2.5
+        }
+    },
+    {
         "name": "FluxImg2img",
         "title": "Flux img2img (Sketch)",
         "showT2I": false,
         "show": true,
         "configurable": true,
-        "default": {"type":"img2img", "denoise":0.6, "cfgScale":1, "guidance": 3.5, "steps":20, "baseImage":"sketch", "sdSize":1024},
+        "default": {"type":"img2img", "denoise":0.6, "cfgScale":1, "steps":20, "baseImage":"sketch", "sdSize":1024},
         "fields": {
             "workflow": "flux_img2img",
             "background": "$background",

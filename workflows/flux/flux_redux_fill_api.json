@@ -230,7 +230,7 @@
   },
   "62": {
     "inputs": {
-      "seed": 520820047672501,
+      "seed": 361409171647732,
       "steps": 25,
       "cfg": 1,
       "sampler_name": "euler",
@@ -342,10 +342,9 @@
       ],
       "mask_blur": 0,
       "mask_offset": 0,
-      "background": "Alpha",
       "invert_output": false,
-      "optimize": "default",
       "refine_foreground": false,
+      "background": "Alpha",
       "image": [
         "126",
         0
@@ -482,7 +481,7 @@
   },
   "86": {
     "inputs": {
-      "sage_attention": "sageattn_qk_int8_pv_fp16_triton",
+      "sage_attention": "sageattn_qk_int8_pv_fp8_cuda++",
       "model": [
         "12",
         0
