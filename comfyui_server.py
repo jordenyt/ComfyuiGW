@@ -497,6 +497,10 @@ async def run_workflow_form(request: Request, workflow: str):
                 "required": True
             }
             
+            # Add choices if they exist
+            if "choices" in field:
+                field_def["choices"] = field["choices"]
+                
             if field_type == "array":
                 field_def["item_type"] = "integer"  # Assuming array contains integers
                 

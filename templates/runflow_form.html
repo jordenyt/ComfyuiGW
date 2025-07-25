@@ -7,12 +7,12 @@
         body { font-family: Arial, sans-serif; margin: 20px; }
         h1 { color: #333; }
         .form-group { margin-bottom: 15px; }
-        label { display: inline-block; margin-bottom: 5px; font-weight: bold; width: 45% }
+        label { display: inline-block; margin-bottom: 5px; font-weight: bold; width: 40% }
         input[type="text"], input[type="number"], textarea { 
             padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
         }
-        input[type="text"], input[type="number"] {
-            display: inline-block; width: 48%
+        input[type="text"], input[type="number"], div.radio-div {
+            display: inline-block; width: 53%
         }
         textarea { 
             width: 100%;
@@ -37,7 +37,15 @@
                 {% if field.type == 'text' %}
                 <textarea name="{{ field.name }}" id="{{ field.name }}" rows="4">{{ field.default }}</textarea>
                 {% else %}
-                <input type="text" name="{{ field.name }}" id="{{ field.name }}" value="{{ field.default }}">
+                    {% if field.choices %}
+                    <div class="radio-div">
+                        {% for choice in field.choices %}
+                            <input type="radio" name="{{ field.name }}" value="{{ choice }}" {% if field.default == choice %}checked{% endif %}>{{ choice }}
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <input type="text" name="{{ field.name }}" id="{{ field.name }}" value="{{ field.default }}">
+                    {% endif %}
                 {% endif %}
             {% elif field.type == 'integer' or field.type == 'float' %}
                 <input type="number" name="{{ field.name }}" id="{{ field.name }}" 
