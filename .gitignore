@@ -5,7 +5,7 @@
 *.avi
 *.mp3
 *.wav
-
+*.webm
 # Python
 venv
 __pycache__

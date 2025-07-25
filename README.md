@@ -4,7 +4,7 @@
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)]()
 [![ComfyUI Compatible](https://img.shields.io/badge/ComfyUI-compatible-brightgreen.svg)](https://github.com/comfyanonymous/ComfyUI)
 
-**ComfyuiGW** is a powerful RESTful API Gateway designed specifically for running [ComfyUI version of Stable Diffusion Sketch](https://github.com/jordenyt/stable_diffusion_sketch/tree/comfyui). It provides a robust interface for executing complex workflows through both API endpoints and a user-friendly web interface.
+**ComfyuiGW** is a RESTful API Gateway designed specifically for running [ComfyUI version of Stable Diffusion Sketch](https://github.com/jordenyt/stable_diffusion_sketch/tree/comfyui). It provides a robust interface for executing complex workflows through both API endpoints and a user-friendly web interface.
 
 ## ✨ Key Features
 - **REST API Gateway** - Execute ComfyUI workflows via simple HTTP requests
@@ -135,7 +135,7 @@ Defines workflow mappings and API parameters with the following structure:
   - Key: API parameter name
   - Value: Target node input(s) in format `"node_id.inputs.param_name"` (string for single input, array for multiple inputs)
 - **descriptions**: (Optional) Description to be show in `runflow` web interface:
-- **inputs**: (Optional) Defines `runflow` parameters:
+- **inputs**: (Optional) JSON object which defines `runflow` parameters:
   - **type**: Data type (text, string, integer, float, array, image, video, audio)
   - **default**: Default value if not provided
 

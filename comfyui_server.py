@@ -171,7 +171,7 @@ def cleanup_images(prefixes):
     if os.path.exists(inputs_path):
         for f in os.listdir(inputs_path):
             for prefix in prefixes:
-                if f.startswith(prefix) and (f.endswith(".jpg") or f.endswith(".mp4") or f.endswith(".mp3") or f.endswith(".wav")):
+                if f.startswith(prefix) and (f.endswith(".jpg") or f.endswith(".mp4") or f.endswith(".webm") or f.endswith(".mp3") or f.endswith(".wav")):
                     os.remove(os.path.join(inputs_path, f))
 
 def ws_message(ws, msg):
@@ -497,6 +497,10 @@ async def run_workflow_form(request: Request, workflow: str):
                 "required": True
             }
             
+            # Add choices if they exist
+            if "choices" in field:
+                field_def["choices"] = field["choices"]
+                
             if field_type == "array":
                 field_def["item_type"] = "integer"  # Assuming array contains integers
                 
