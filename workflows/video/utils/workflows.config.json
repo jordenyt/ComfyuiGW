@@ -82,7 +82,7 @@
             "size": {"type":"integer", "default":640},
             "force_rate": {"type":"integer", "default":16},
             "frame_load_cap": {"type":"integer", "default":0},
-            "detect_face": {"type":"string", "default":"disable"}
+            "detect_face": {"type":"string", "default":"disable", "choices": ["enable", "disable"]}
         }
     },
     "extract_frame_api": {
