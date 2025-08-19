@@ -177,7 +177,20 @@ def cleanup_images(prefixes):
 def ws_message(ws, msg):
     def run(*args):
         global finished_nodes, node_ids, msg_step, msg_progress, cur_node, last_node, last_time, last_step
-        message = json.loads(msg)
+        
+        try:
+            # Handle both string and binary WebSocket messages
+            if isinstance(msg, bytes):
+                try:
+                    decoded_msg = msg.decode('utf-8')
+                except UnicodeDecodeError:
+                    return
+            else:
+                decoded_msg = msg
+                
+            message = json.loads(decoded_msg)
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            return
         
         if message['type'] == 'progress':
             data = message['data']
