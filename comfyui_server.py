@@ -55,13 +55,13 @@ def format_time(seconds):
 def get_workflow_config():
     config = {}
     if os.path.exists(workflows_config_path):
-        with open(workflows_config_path, 'r') as f:
+        with open(workflows_config_path, 'r', encoding='utf-8') as f:
             config.update(json.load(f))
     workflows_dir = os.path.join(local_path, "workflows")
     for root, dirs, files in os.walk(workflows_dir):
         if "workflows.config.json" in files:
             config_path = os.path.join(root, "workflows.config.json")
-            with open(config_path, 'r') as f:
+            with open(config_path, 'r', encoding='utf-8') as f:
                 workflow_config = json.load(f)
                 # For each workflow in this config, check if prompt_workflow needs path prepended
                 for name, wf in workflow_config.items():
@@ -117,7 +117,8 @@ def queue_prompt(prompt_workflow):
 
 def comfyui_workflow(workflow_name, data):
     workflow_config = load_workflow_config(workflow_name)
-    prompt_workflow = json.load(open(workflow_config['prompt_workflow']))
+    with open(workflow_config['prompt_workflow'], encoding='utf-8') as f:
+        prompt_workflow = json.load(f)
     prompt_workflow = apply_settings(prompt_workflow, workflow_config['fields'], data)
     return queue_prompt(prompt_workflow)
 
@@ -450,14 +451,14 @@ async def get_mode_config():
     config = []
     # First check root mode_config.json if it exists
     if os.path.exists(mode_config_path):
-        with open(mode_config_path, 'r') as f:
+        with open(mode_config_path, 'r', encoding='utf-8') as f:
             config.extend(json.load(f))
     # Scan workflows directory for mode.config.json files
     workflows_dir = os.path.join(local_path, "workflows")
     for root, dirs, files in os.walk(workflows_dir):
         if "mode.config.json" in files:
             config_path = os.path.join(root, "mode.config.json")
-            with open(config_path, 'r') as f:
+            with open(config_path, 'r', encoding='utf-8') as f:
                 config.extend(json.load(f))
     
     if not config:
