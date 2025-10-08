@@ -86,7 +86,7 @@ def set_workflow_value(d, path, key, data):
         d = d.setdefault(k, {})
     
     if key == "seed":
-        d[path[-1]] = random.randint(1, 1125899906842600)
+        d[path[-1]] = random.randint(1, 4294967295)
     elif key in data:
         d[path[-1]] = data[key]
 
@@ -287,6 +287,31 @@ def stop_comfyui():
     
     comfyui_process = None
     return {"message": "ComfyUI Stopped."}
+
+# LORA Models Endpoint
+@app.get('/loras')
+def get_loras():
+    """Get list of LORA model files"""
+    loras_dir = os.path.join(COMFYUI_PATH, 'models', 'loras')
+    
+    if not os.path.exists(loras_dir):
+        raise HTTPException(status_code=404, detail="LORA models directory not found")
+        
+    file_paths = []
+    # Follow symbolic links (-> True)
+    for root, _, files in os.walk(loras_dir, followlinks=True):
+        # Handle symlinked root directories
+        real_root = os.path.realpath(root)
+        if not real_root.startswith(os.path.realpath(loras_dir)):
+            continue
+            
+        for file in files:
+            abs_path = os.path.join(root, file)
+            # Get path relative to original loras_dir location
+            rel_path = os.path.relpath(abs_path, loras_dir)
+            file_paths.append(rel_path.replace('\\', '/'))
+            
+    return file_paths
 
 # ComfyUI API Endpoints
 @app.get('/comfyui_status')
