@@ -67,6 +67,32 @@
             Free Memory
         </button>
     </div>
+
+    <div style="text-align: center; margin-bottom: 16px; font-size: 1.1em;">
+        <strong>Current Path:</strong> 
+        {% if current_path %}
+            /{{ current_path }}
+        {% else %}
+            Root Directory
+        {% endif %}
+    </div>
+
+    {% if subdirectories or parent_path is not none %}
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; justify-content: center;">
+        {% if parent_path is not none %}
+            <a href="/runflow/{{ parent_path if parent_path != '' else '' }}" 
+               style="background-color: #e74c3c; color: white; padding: 6px 12px; border-radius: 4px; font-weight: bold; text-decoration: none; font-size: 0.95em;">
+                ..
+            </a>
+        {% endif %}
+        {% for subdir in subdirectories %}
+            <a href="/runflow/{% if current_path %}{{ current_path }}/{% endif %}{{ subdir }}" 
+               style="background-color: #3498db; color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 0.95em;">
+                {{ subdir }}
+            </a>
+        {% endfor %}
+    </div>
+    {% endif %}
     <script>
         async function freeMemory() {
             try {
@@ -83,7 +109,7 @@
             {% if "inputs" in workflow %}
             <div class="workflow-card">
                 <div class="workflow-name">
-                    <a href="/runflow/{{ workflow_name.replace('_api', '') }}">{{ workflow_name.replace('_api', '').replace('_', ' ') }}</a>
+                    <a href="/workflow/{{ workflow_name.replace('_api', '') }}">{{ workflow_name.replace('_api', '').replace('_', ' ') }}</a>
                 </div>
                 <div class="workflow-inputs">
                     {{workflow["descriptions"]}}

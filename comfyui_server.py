@@ -52,31 +52,41 @@ def format_time(seconds):
     minutes, seconds = divmod(int(seconds), 60)
     return f"{minutes:02d}:{seconds:02d}"
 
-def get_workflow_config():
+def get_workflow_config(path, show_sub=True):
+    safe_path = path if path else ""
+    workflows_dir = os.path.join(local_path, "workflows", safe_path)
     config = {}
-    if os.path.exists(workflows_config_path):
-        with open(workflows_config_path, 'r', encoding='utf-8') as f:
-            config.update(json.load(f))
-    workflows_dir = os.path.join(local_path, "workflows")
-    for root, dirs, files in os.walk(workflows_dir):
+    #if os.path.exists(workflows_config_path):
+    #    with open(workflows_config_path, 'r', encoding='utf-8') as f:
+    #        config.update(json.load(f))
+    if not os.path.exists(workflows_dir):
+        return {}
+    
+    if show_sub:
+        dir_iter = os.walk(workflows_dir)
+    else:
+        dir_iter = [(workflows_dir, [], os.listdir(workflows_dir))]
+        
+    for root, dirs, files in dir_iter:
         if "workflows.config.json" in files:
             config_path = os.path.join(root, "workflows.config.json")
             with open(config_path, 'r', encoding='utf-8') as f:
                 workflow_config = json.load(f)
                 # For each workflow in this config, check if prompt_workflow needs path prepended
                 for name, wf in workflow_config.items():
-                    if "prompt_workflow" in wf and not os.path.isabs(wf["prompt_workflow"]):
-                        if "/" not in wf["prompt_workflow"] and "\\" not in wf["prompt_workflow"]:
+                    prompt = wf.get("prompt_workflow")
+                    if prompt and isinstance(prompt, str) and not os.path.isabs(prompt):
+                        if "/" not in prompt and "\\" not in prompt:
                             # Get relative path from workflows_dir to current config file
                             rel_path = os.path.relpath(root, workflows_dir)
                             wf["prompt_workflow"] = os.path.join("workflows", rel_path, wf["prompt_workflow"])
                 config.update(workflow_config)
-    if not config:
-        raise KeyError("No workflows.config.json files found in workflows directory")
+    #if not config:
+    #    raise KeyError("No workflows.config.json files found in workflows directory")
     return config
     
 def load_workflow_config(workflow_name):
-    config = get_workflow_config()
+    config = get_workflow_config(None, show_sub=True)
     if workflow_name in config:
         return config[workflow_name]
     raise KeyError(f"Workflow '{workflow_name}' not found in any workflows.config.json")
@@ -492,8 +502,35 @@ async def get_mode_config():
     return config
 
 @app.get("/runflow", response_class=HTMLResponse)
-async def list_workflows(request: Request):
-    config = get_workflow_config()
+@app.get("/runflow/{path:path}", response_class=HTMLResponse)
+async def list_workflows(request: Request, path: str = None):
+    # Get first-level subdirectories
+    workflows_dir = os.path.join(local_path, "workflows")
+    subdirectories = []
+    if path:
+        full_path = os.path.join(workflows_dir, path)
+    else:
+        full_path = workflows_dir
+    
+    for entry in os.listdir(full_path):
+        entry_path = os.path.join(full_path, entry)
+        if os.path.isdir(entry_path):
+            # Check if subdirectory contains workflows
+            try:
+                # Build relative path to subdirectory
+                sub_path = os.path.join(path, entry) if path else entry
+                sub_config = get_workflow_config(sub_path, show_sub=True)
+                workflows_with_inputs_in_sub = {
+                    name: config for name, config in sub_config.items() 
+                    if "inputs" in config
+                }
+                if workflows_with_inputs_in_sub:
+                    subdirectories.append(entry)
+            except:
+                # Skip directories with errors
+                pass
+    
+    config = get_workflow_config(path, show_sub=False)
     
     # Filter workflows to only those with inputs defined
     workflows_with_inputs = {
@@ -501,11 +538,25 @@ async def list_workflows(request: Request):
         if "inputs" in config
     }
     
+    # Normalize path for template
+    current_path = path.replace('\\', '/') if path else ""
+    
+    # Calculate parent path
+    parent_path = None
+    if current_path:
+        path_parts = current_path.split('/')
+        if len(path_parts) > 1:
+            parent_path = '/'.join(path_parts[:-1])
+        else:
+            parent_path = ""  # Root is parent
     return templates.TemplateResponse(
         "runflow_list.html",
         {
             "request": request,
-            "workflows": workflows_with_inputs
+            "workflows": workflows_with_inputs,
+            "subdirectories": subdirectories,
+            "current_path": current_path,
+            "parent_path": parent_path
         }
     )
 
@@ -516,7 +567,7 @@ async def workflow_status_page(request: Request):
         {"request": request}
     )
 
-@app.get("/runflow/{workflow}", response_class=HTMLResponse)
+@app.get("/workflow/{workflow}", response_class=HTMLResponse)
 async def run_workflow_form(request: Request, workflow: str):
     try:
         workflow_config = load_workflow_config(f"{workflow}_api")
