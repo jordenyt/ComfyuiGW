@@ -17,23 +17,57 @@
 <body>
     <h1>Workflow Progress</h1>
     <div id="status">Loading...</div>
-    <button onclick="interruptWorkflow()">Interrupt</button>
+    <button id="interruptButton" onclick="interruptWorkflow()">Interrupt</button>
+    <button id="downloadButton" onclick="findLatestRunflowFile()">Download Latest Runflow File</button>
 
     <script>
         let statusTimeout;
 
         function updateStatus() {
+            const downloadButton = document.getElementById('downloadButton');
+            const interruptButton = document.getElementById('interruptButton');
+            downloadButton.style.display = 'none'; // Hide download button by default
+            interruptButton.style.display = 'block'; // Show interrupt button by default
             fetch('/comfyui_status')
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('status').innerHTML = 
-                        `<strong>Progress:</strong> ${data.progress}<br>
-                         <strong>Step:</strong> ${data.step}`;
+                    let statusHtml = `<strong>Progress:</strong> ${data.progress}<br>
+                                     <strong>Step:</strong> ${data.step}`;
                     
-                    //if (data.progress !== "Done") {
+                    // Add download button when progress is "Done"
+                    if (data.progress === "Done") {
+                        // Find and display the latest runflow file
+                        downloadButton.style.display = 'block'; // Show download button
+                        interruptButton.style.display = 'none'; // Hide interrupt button
+                        findLatestRunflowFile();
+                    } 
+                    
+                    document.getElementById('status').innerHTML = statusHtml;
+                    
+                    // Continue polling unless progress is "Done"
+                    if (data.progress !== "Done") {
                         statusTimeout = setTimeout(updateStatus, 1000);
-                    //}
+                    }
                 });
+        }
+        
+        function findLatestRunflowFile() {
+            fetch('/find_latest_runflow')
+                .then(response => response.json())
+                .then(data => {
+                    const downloadButton = document.getElementById('downloadButton');
+                    if (downloadButton && data.file_url) {
+                        downloadButton.setAttribute('onclick', `downloadFile('${data.file_url}')`);
+                        downloadButton.textContent = `Download ${data.filename}`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error finding latest runflow file:', error);
+                });
+        }
+        
+        function downloadFile(fileUrl) {
+            window.open(fileUrl, '_blank');
         }
 
         function interruptWorkflow() {

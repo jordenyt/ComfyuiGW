@@ -14,7 +14,7 @@ import shlex
 from urllib import request
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
 import random
 from io import BytesIO
 from PIL import Image
@@ -350,6 +350,62 @@ def comfyui_result():
             with open(jpg_path, 'rb') as f:
                 processed_images_data.append(base64.b64encode(f.read()).decode())
     return {'processed_image': processed_images_data}
+
+@app.get('/find_latest_runflow')
+def find_latest_runflow_file():
+    """Find the latest file starting with 'runflow' in the comfyui_output_dir"""
+    try:
+        runflow_files = []
+        
+        if os.path.exists(comfyui_output_dir):
+            for filename in os.listdir(comfyui_output_dir):
+                if filename.startswith("runflow"):
+                    filepath = os.path.join(comfyui_output_dir, filename)
+                    if os.path.isfile(filepath):
+                        # Get modification time
+                        mod_time = os.path.getmtime(filepath)
+                        runflow_files.append((filename, mod_time, filepath))
+        
+        # Sort by modification time (newest first)
+        runflow_files.sort(key=lambda x: x[1], reverse=True)
+        
+        if runflow_files:
+            latest_file = runflow_files[0]
+            # Return a URL that can be used to download the file
+            file_url = f"/download_file/{latest_file[0]}"
+            return {
+                'file_url': file_url,
+                'filename': latest_file[0],
+                'filepath': latest_file[2]
+            }
+        else:
+            return {'file_url': None, 'filename': None, 'message': 'No runflow files found'}
+            
+    except Exception as e:
+        return {'file_url': None, 'filename': None, 'error': str(e)}
+
+@app.get('/download_file/{filename}')
+def download_file(filename: str):
+    """Download a specific file from the output directory"""
+    try:
+        filepath = os.path.join(comfyui_output_dir, filename)
+        
+        if not os.path.exists(filepath):
+            raise HTTPException(status_code=404, detail="File not found")
+        
+        if not filename.startswith("runflow"):
+            raise HTTPException(status_code=403, detail="Access denied")
+            
+        return FileResponse(
+            filepath,
+            media_type='application/octet-stream',
+            filename=filename
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post('/comfyui_workflow')
 async def comfyui_workflow_handler(request: Request):
