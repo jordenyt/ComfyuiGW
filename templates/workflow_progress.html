@@ -7,67 +7,91 @@
         body { font-family: Arial, sans-serif; margin: 20px; }
         h1 { color: #333; }
         #status { margin: 20px 0; padding: 10px; background: #f5f5f5; }
-        button { 
-            background-color: #f44336; color: white; padding: 10px 15px; 
-            border: none; border-radius: 4px; cursor: pointer; 
-        }
+        #results { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; }
+        .result-card { border: 1px solid #ccc; padding: 10px; border-radius: 4px; min-width: 200px; max-width: 300px; }
+        .result-card img { max-width: 100%; max-height: 200px; object-fit: contain; }
+        .result-card video { max-width: 100%; max-height: 200px; }
+        .result-card audio { width: 100%; }
+        .result-card pre { max-height: 100px; overflow: auto; background: #f5f5f5; padding: 5px; font-size: 12px; }
+        button { background-color: #f44336; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; }
         button:hover { background-color: #d32f2f; }
+        .download-btn { background-color: #4CAF50; margin-top: 5px; }
+        .download-btn:hover { background-color: #45a049; }
     </style>
 </head>
 <body>
-    <h1>Workflow Progress</h1>
+    <h1>Workflow Progress{% if workflow %}: <span id="workflowName">{{ workflow }}</span>{% endif %}</h1>
     <div id="status">Loading...</div>
     <button id="interruptButton" onclick="interruptWorkflow()">Interrupt</button>
-    <button id="downloadButton" onclick="findLatestRunflowFile()">Download Latest Runflow File</button>
+    <div id="results"></div>
 
     <script>
+        const workflow = "{{ workflow }}";
+        const startTime = {{ start_time if start_time else 0 }};
         let statusTimeout;
 
         function updateStatus() {
-            const downloadButton = document.getElementById('downloadButton');
-            const interruptButton = document.getElementById('interruptButton');
-            downloadButton.style.display = 'none'; // Hide download button by default
-            interruptButton.style.display = 'block'; // Show interrupt button by default
             fetch('/comfyui_status')
-                .then(response => response.json())
+                .then(r => r.json())
                 .then(data => {
-                    let statusHtml = `<strong>Progress:</strong> ${data.progress}<br>
-                                     <strong>Step:</strong> ${data.step}`;
-                    
-                    // Add download button when progress is "Done"
+                    document.getElementById('status').innerHTML =
+                        `<strong>Progress:</strong> ${data.progress}<br><strong>Step:</strong> ${data.step}`;
+
                     if (data.progress === "Done") {
-                        // Find and display the latest runflow file
-                        downloadButton.style.display = 'block'; // Show download button
-                        interruptButton.style.display = 'none'; // Hide interrupt button
-                        findLatestRunflowFile();
-                    } 
-                    
-                    document.getElementById('status').innerHTML = statusHtml;
-                    
-                    // Continue polling unless progress is "Done"
-                    if (data.progress !== "Done") {
-                        statusTimeout = setTimeout(updateStatus, 1000);
+                        document.getElementById('interruptButton').style.display = 'none';
+                        findWorkflowOutputs();
+                    } else {
+                        setTimeout(updateStatus, 1000);
                     }
                 });
         }
-        
-        function findLatestRunflowFile() {
-            fetch('/find_latest_runflow')
-                .then(response => response.json())
+
+        function findWorkflowOutputs() {
+            if (!workflow) return;
+            fetch(`/find_workflow_outputs/${workflow}`)
+                .then(r => r.json())
                 .then(data => {
-                    const downloadButton = document.getElementById('downloadButton');
-                    if (downloadButton && data.file_url) {
-                        downloadButton.setAttribute('onclick', `downloadFile('${data.file_url}')`);
-                        downloadButton.textContent = `Download ${data.filename}`;
+                    if (data.has_output_config === false) {
+                        document.getElementById('results').style.display = 'none';
+                        return;
                     }
-                })
-                .catch(error => {
-                    console.error('Error finding latest runflow file:', error);
+                    if (data.files && data.files.length > 0) {
+                        displayResults(data.files);
+                    }
                 });
         }
-        
-        function downloadFile(fileUrl) {
-            window.open(fileUrl, '_blank');
+
+        function displayResults(files) {
+            const container = document.getElementById('results');
+            let html = '<h3>Output Files</h3>';
+
+            files.forEach(file => {
+                const ext = file.extension ? file.extension.toLowerCase() : file.filename.split('.').pop().toLowerCase();
+                const url = file.file_url;
+
+                html += `<div class="result-card">
+                    <strong>${file.filename}</strong><br>
+                    <small>${new Date(file.mod_time * 1000).toLocaleString()}</small><br>`;
+
+                if (['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp'].includes(ext)) {
+                    html += `<img src="${url}" alt="${file.filename}"/>`;
+                } else if (['mp4', 'webm', 'avi', 'mov'].includes(ext)) {
+                    html += `<video src="${url}" controls></video>`;
+                } else if (['mp3', 'wav', 'ogg', 'flac'].includes(ext)) {
+                    html += `<audio src="${url}" controls></audio>`;
+                } else {
+                    html += `<pre id="content_${file.filename}">Loading...</pre>`;
+                    fetch(url).then(r => r.text()).then(text => {
+                        const el = document.getElementById(`content_${file.filename}`);
+                        if (el) el.textContent = text.substring(0, 200) + (text.length > 200 ? '...' : '');
+                    });
+                }
+
+                html += `<button class="download-btn" onclick="window.open('${url}', '_blank')">Download</button>
+                </div>`;
+            });
+
+            container.innerHTML = html;
         }
 
         function interruptWorkflow() {
@@ -75,16 +99,11 @@
                 .then(() => alert('Workflow interrupted'));
         }
 
-        // Handle visibility changes
         document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                clearTimeout(statusTimeout);
-            } else {
-                updateStatus();
-            }
+            if (document.hidden) clearTimeout(statusTimeout);
+            else updateStatus();
         });
 
-        // Start polling status
         updateStatus();
     </script>
 </body>

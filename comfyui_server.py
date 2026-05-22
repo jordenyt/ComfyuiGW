@@ -45,6 +45,7 @@ last_node = ""
 last_time = 0
 last_step = 0
 cur_node = ""
+workflow_start_time = None
 
 # Helper functions
 def format_time(seconds):
@@ -110,7 +111,7 @@ def apply_settings(prompt_workflow, settings, data):
     return prompt_workflow
 
 def queue_prompt(prompt_workflow):
-    global finished_nodes, node_ids, msg_progress, current_prompt, last_node
+    global finished_nodes, node_ids, msg_progress, current_prompt, last_node, workflow_start_time
     current_prompt = prompt_workflow
     node_ids = list(prompt_workflow.keys())
     finished_nodes = []
@@ -118,6 +119,7 @@ def queue_prompt(prompt_workflow):
     global msg_step
     msg_step = ""
     last_node = ""
+    workflow_start_time = time.time()
     
     p = {"prompt": prompt_workflow, "client_id": client_id}
     headers = {'Content-Type': 'application/json'}
@@ -384,24 +386,68 @@ def find_latest_runflow_file():
     except Exception as e:
         return {'file_url': None, 'filename': None, 'error': str(e)}
 
+@app.get('/find_workflow_outputs/{workflow}')
+def find_workflow_outputs(workflow: str):
+    """Find all output files for a workflow based on output config"""
+    global workflow_start_time
+    try:
+        config = load_workflow_config(workflow)
+        output_config = config.get('output', {})
+
+        if 'files' not in output_config:
+            return {'files': [], 'has_output_config': False}
+
+        file_specs = output_config.get('files', [])
+        all_files = []
+
+        if os.path.exists(comfyui_output_dir) and workflow_start_time:
+            for spec in file_specs:
+                prefix = spec.get('prefix', 'output')
+                extension = spec.get('extension', 'jpg')
+
+                for filename in os.listdir(comfyui_output_dir):
+                    if filename.startswith(prefix) and filename.endswith(f".{extension}"):
+                        filepath = os.path.join(comfyui_output_dir, filename)
+                        mod_time = os.path.getmtime(filepath)
+                        if mod_time >= workflow_start_time:
+                            all_files.append({
+                                'filename': filename,
+                                'filepath': filepath,
+                                'mod_time': mod_time,
+                                'extension': extension,
+                                'prefix': prefix
+                            })
+
+        all_files.sort(key=lambda x: x['mod_time'], reverse=True)
+
+        return {
+            'files': [{
+                'file_url': f"/download_file/{f['filename']}",
+                'filename': f['filename'],
+                'filepath': f['filepath'],
+                'extension': f['extension'],
+                'mod_time': f['mod_time']
+            } for f in all_files],
+            'has_output_config': True
+        }
+    except Exception as e:
+        return {'files': [], 'has_output_config': False, 'error': str(e)}
+
 @app.get('/download_file/{filename}')
 def download_file(filename: str):
     """Download a specific file from the output directory"""
     try:
         filepath = os.path.join(comfyui_output_dir, filename)
-        
+
         if not os.path.exists(filepath):
             raise HTTPException(status_code=404, detail="File not found")
-        
-        if not filename.startswith("runflow"):
-            raise HTTPException(status_code=403, detail="Access denied")
-            
+
         return FileResponse(
             filepath,
             media_type='application/octet-stream',
             filename=filename
         )
-        
+
     except HTTPException:
         raise
     except Exception as e:
@@ -504,8 +550,8 @@ async def comfyui_runflow_handler(request: Request):
 
 
     return templates.TemplateResponse(
-        "workflow_progress.html", 
-        {"request": request}
+        "workflow_progress.html",
+        {"request": request, "workflow": workflow_name, "start_time": workflow_start_time}
     )
 
 @app.post('/comfyui_caption')
