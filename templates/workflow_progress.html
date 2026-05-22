@@ -13,10 +13,14 @@
         .result-card video { max-width: 100%; max-height: 200px; }
         .result-card audio { width: 100%; }
         .result-card pre { max-height: 100px; overflow: auto; background: #f5f5f5; padding: 5px; font-size: 12px; }
+        .txt-content { white-space: pre-wrap; word-break: break-word; font-family: monospace; font-size: 13px; }
         button { background-color: #f44336; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; }
         button:hover { background-color: #d32f2f; }
         .download-btn { background-color: #4CAF50; margin-top: 5px; }
         .download-btn:hover { background-color: #45a049; }
+        .copy-btn { background-color: #2196F3; margin-top: 5px; }
+        .copy-btn:hover { background-color: #1976D2; }
+        .copy-btn.copied { background-color: #4CAF50; }
     </style>
 </head>
 <body>
@@ -51,12 +55,17 @@
             fetch(`/find_workflow_outputs/${workflow}`)
                 .then(r => r.json())
                 .then(data => {
+                    console.log('API response:', data);
                     if (data.has_output_config === false) {
                         document.getElementById('results').style.display = 'none';
+                        document.getElementById('status').innerHTML += `<pre style="margin-top:10px;background:#f5f5f5;padding:10px;">Debug: ${JSON.stringify(data.debug || data.error || 'No output config', null, 2)}</pre>`;
                         return;
                     }
                     if (data.files && data.files.length > 0) {
+                        console.log('Files found:', data.files);
                         displayResults(data.files);
+                    } else {
+                        document.getElementById('results').innerHTML = `<pre style="background:#f5f5f5;padding:10px;">Debug (no files found): ${JSON.stringify(data.debug, null, 2)}</pre>`;
                     }
                 });
         }
@@ -67,7 +76,9 @@
 
             files.forEach(file => {
                 const ext = file.extension ? file.extension.toLowerCase() : file.filename.split('.').pop().toLowerCase();
-                const url = file.file_url;
+                const url = '/download_file?filepath=' + encodeURIComponent(file.filepath);
+                console.log('Generated URL:', url);
+                console.log('Original filepath:', file.filepath);
 
                 html += `<div class="result-card">
                     <strong>${file.filename}</strong><br>
@@ -79,11 +90,30 @@
                     html += `<video src="${url}" controls></video>`;
                 } else if (['mp3', 'wav', 'ogg', 'flac'].includes(ext)) {
                     html += `<audio src="${url}" controls></audio>`;
+                } else if (ext === 'txt') {
+                    html += `<div class="txt-content" id="content_${file.filename}" style="max-height:300px;overflow:auto;background:#f5f5f5;padding:5px;">Loading...</div>`;
+                    html += `<button class="copy-btn" onclick="copyToClipboard('content_${file.filename}', this)">Copy to Clipboard</button>`;
+                    fetch(url)
+                        .then(r => {
+                            if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
+                            return r.text();
+                        })
+                        .then(text => {
+                            const el = document.getElementById(`content_${file.filename}`);
+                            if (el) {
+                                el.textContent = text;
+                                el.dataset.text = text; // Store for copying
+                            }
+                        })
+                        .catch(err => {
+                            const el = document.getElementById(`content_${file.filename}`);
+                            if (el) el.textContent = 'Error loading: ' + err.message + '\nURL: ' + url;
+                        });
                 } else {
-                    html += `<pre id="content_${file.filename}">Loading...</pre>`;
+                    html += `<pre id="content_${file.filename}" style="max-height:100px;overflow:auto;">Loading...</pre>`;
                     fetch(url).then(r => r.text()).then(text => {
                         const el = document.getElementById(`content_${file.filename}`);
-                        if (el) el.textContent = text.substring(0, 200) + (text.length > 200 ? '...' : '');
+                        if (el) el.textContent = text.substring(0, 500) + (text.length > 500 ? '...' : '');
                     });
                 }
 
@@ -92,6 +122,22 @@
             });
 
             container.innerHTML = html;
+        }
+
+        function copyToClipboard(elementId, btn) {
+            const el = document.getElementById(elementId);
+            if (!el || !el.dataset.text) return;
+            navigator.clipboard.writeText(el.dataset.text).then(() => {
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'Copy to Clipboard';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                btn.textContent = 'Failed';
+                setTimeout(() => btn.textContent = 'Copy to Clipboard', 2000);
+            });
         }
 
         function interruptWorkflow() {

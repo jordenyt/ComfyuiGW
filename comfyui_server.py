@@ -6,6 +6,7 @@ import psutil
 import json
 import os
 import websocket
+from urllib.parse import quote
 from threading import Thread
 import uuid
 import requests
@@ -395,7 +396,11 @@ def find_workflow_outputs(workflow: str):
         output_config = config.get('output', {})
 
         if 'files' not in output_config:
-            return {'files': [], 'has_output_config': False}
+            return {'files': [], 'has_output_config': False, 'debug': {
+                'workflow': workflow,
+                'comfyui_output_dir': comfyui_output_dir,
+                'workflow_start_time': workflow_start_time
+            }}
 
         file_specs = output_config.get('files', [])
         all_files = []
@@ -405,47 +410,75 @@ def find_workflow_outputs(workflow: str):
                 prefix = spec.get('prefix', 'output')
                 extension = spec.get('extension', 'jpg')
 
-                for filename in os.listdir(comfyui_output_dir):
-                    if filename.startswith(prefix) and filename.endswith(f".{extension}"):
-                        filepath = os.path.join(comfyui_output_dir, filename)
-                        mod_time = os.path.getmtime(filepath)
-                        if mod_time >= workflow_start_time:
-                            all_files.append({
-                                'filename': filename,
-                                'filepath': filepath,
-                                'mod_time': mod_time,
-                                'extension': extension,
-                                'prefix': prefix
-                            })
+                # Check if prefix contains subdirectory
+                if '/' in prefix or '\\' in prefix:
+                    # Split into subdir and filename prefix
+                    parts = prefix.replace('\\', '/').split('/')
+                    subdir = '/'.join(parts[:-1])
+                    filename_prefix = parts[-1]
+                    search_dir = os.path.join(comfyui_output_dir, subdir)
+                else:
+                    search_dir = comfyui_output_dir
+                    filename_prefix = prefix
+
+                if os.path.exists(search_dir):
+                    for filename in os.listdir(search_dir):
+                        if filename.startswith(filename_prefix) and filename.endswith(f".{extension}"):
+                            filepath = os.path.join(search_dir, filename)
+                            mod_time = os.path.getmtime(filepath)
+                            if mod_time >= workflow_start_time:
+                                all_files.append({
+                                    'filename': filename,
+                                    'filepath': filepath,
+                                    'mod_time': mod_time,
+                                    'extension': extension,
+                                    'prefix': prefix
+                                })
+                else:
+                    pass  # Directory doesn't exist
 
         all_files.sort(key=lambda x: x['mod_time'], reverse=True)
 
         return {
             'files': [{
-                'file_url': f"/download_file/{f['filename']}",
+                'file_url': f"/download_file/{quote(f['filepath'])}",
                 'filename': f['filename'],
                 'filepath': f['filepath'],
                 'extension': f['extension'],
                 'mod_time': f['mod_time']
             } for f in all_files],
-            'has_output_config': True
+            'has_output_config': True,
+            'debug': {
+                'workflow': workflow,
+                'config_found': config.get('output'),
+                'comfyui_output_dir': comfyui_output_dir,
+                'search_dir': search_dir,
+                'search_exists': os.path.exists(search_dir),
+                'workflow_start_time': workflow_start_time,
+                'file_specs': file_specs
+            }
         }
     except Exception as e:
         return {'files': [], 'has_output_config': False, 'error': str(e)}
 
-@app.get('/download_file/{filename}')
-def download_file(filename: str):
+@app.get('/download_file')
+def download_file(filepath: str = ""):
     """Download a specific file from the output directory"""
     try:
-        filepath = os.path.join(comfyui_output_dir, filename)
+        from urllib.parse import unquote
+        # URL decode and normalize path separators
+        decoded = unquote(filepath)
+        decoded = decoded.replace('/', '\\')
+        full_path = os.path.normpath(decoded)
+        print(f"DEBUG download_file: received='{filepath}', decoded='{decoded}', full='{full_path}', exists={os.path.exists(full_path)}")
 
-        if not os.path.exists(filepath):
-            raise HTTPException(status_code=404, detail="File not found")
+        if not os.path.exists(full_path):
+            raise HTTPException(status_code=404, detail=f"File not found: {full_path}")
 
         return FileResponse(
-            filepath,
+            full_path,
             media_type='application/octet-stream',
-            filename=filename
+            filename=os.path.basename(full_path)
         )
 
     except HTTPException:
