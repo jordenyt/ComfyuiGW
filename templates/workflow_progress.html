@@ -117,8 +117,10 @@
                     });
                 }
 
-                html += `<button class="download-btn" onclick="window.open('${url}', '_blank')">Download</button>
-                </div>`;
+                if (ext !== 'txt') {
+                    html += `<button class="download-btn" onclick="window.open('${url}', '_blank')">Download</button>`;
+                }
+                html += `</div>`;
             });
 
             container.innerHTML = html;
@@ -127,17 +129,45 @@
         function copyToClipboard(elementId, btn) {
             const el = document.getElementById(elementId);
             if (!el || !el.dataset.text) return;
-            navigator.clipboard.writeText(el.dataset.text).then(() => {
+            const text = el.dataset.text;
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.textContent = 'Copied!';
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        btn.textContent = 'Copy to Clipboard';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                }).catch(() => {
+                    fallbackCopy(text, btn);
+                });
+            } else {
+                fallbackCopy(text, btn);
+            }
+        }
+
+        function fallbackCopy(text, btn) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            ta.style.top = '0';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            try {
+                document.execCommand('copy');
                 btn.textContent = 'Copied!';
                 btn.classList.add('copied');
-                setTimeout(() => {
-                    btn.textContent = 'Copy to Clipboard';
-                    btn.classList.remove('copied');
-                }, 2000);
-            }).catch(err => {
+            } catch (err) {
                 btn.textContent = 'Failed';
-                setTimeout(() => btn.textContent = 'Copy to Clipboard', 2000);
-            });
+            }
+            document.body.removeChild(ta);
+            setTimeout(() => {
+                btn.textContent = 'Copy to Clipboard';
+                btn.classList.remove('copied');
+            }, 2000);
         }
 
         function interruptWorkflow() {
