@@ -236,12 +236,18 @@ def ws_message(ws, msg):
                     
         elif message['type'] == 'executing':
             data = message['data']
-            if data['node'] is None and data['prompt_id'] == promptID:
+            if data.get('prompt_id') != promptID:
+                return
+            if data['node'] is None:
+                msg_step = ""
                 msg_progress = "Done"
             elif data['node'] not in finished_nodes:
                 finished_nodes.append(data['node'])
                 cur_node = data['node']
-                msg_progress = f"Processing \"{current_prompt[data['node']]['_meta']['title']}\" ({len(finished_nodes)}/{len(node_ids)})..."
+                node_info = current_prompt.get(data['node'], {}) if current_prompt else {}
+                title = node_info.get('_meta', {}).get('title')
+                label = title if title else data['node']
+                msg_progress = f"Processing \"{label}\" ({len(finished_nodes)}/{len(node_ids)})..."
                 
         elif message['type'] == 'execution_interrupted':
             data = message['data']
@@ -489,34 +495,48 @@ def download_file(filepath: str = ""):
 @app.post('/comfyui_workflow')
 async def comfyui_workflow_handler(request: Request):
     global promptID, ws  # Changed to use dictionary
-    data = await request.json()
-    
+    try:
+        data = await request.json()
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON body")
+
     if not comfyui_process:
-        return {"message": "ComfyUI is not started."}
-    
+        raise HTTPException(status_code=503, detail="ComfyUI is not started.")
+
+    if not isinstance(data, dict) or 'workflow' not in data:
+        raise HTTPException(status_code=400, detail="Missing 'workflow' key in request body")
+
     session_id = str(random.randint(1, 1125899906842600))
-    
-    for key, value in data.items():
-        if isinstance(value, str) and is_valid_base64_image(value):
-            #print(f"{key} is_valid_base64_image.")
-            image_bytes = base64.b64decode(value)
-            existing_path = find_existing_file(key, image_bytes)
-            if existing_path:
-                data[key] = existing_path
-            else:
-                cleanup_images([key+"_"])
-                data[key] = save_base64_image(value, key, session_id)
 
-    workflow_name = data['workflow'] + '_api'
-    promptID = comfyui_workflow(workflow_name, data)['prompt_id']
-    
-    if not ws:
-        ws = open_websocket_connection()
+    try:
+        for key, value in data.items():
+            if isinstance(value, str) and is_valid_base64_image(value):
+                #print(f"{key} is_valid_base64_image.")
+                image_bytes = base64.b64decode(value)
+                existing_path = find_existing_file(key, image_bytes)
+                if existing_path:
+                    data[key] = existing_path
+                else:
+                    cleanup_images([key+"_"])
+                    data[key] = save_base64_image(value, key, session_id)
 
-    # Clean up old files
-    for f in os.listdir(comfyui_output_dir):
-        if f.startswith("api"):
-            os.remove(os.path.join(comfyui_output_dir, f))
+        workflow_name = data['workflow'] + '_api'
+        result = comfyui_workflow(workflow_name, data)
+        if not isinstance(result, dict) or 'prompt_id' not in result:
+            raise HTTPException(status_code=500, detail=f"Failed to get prompt_id from ComfyUI: {result}")
+        promptID = result['prompt_id']
+
+        if not ws:
+            ws = open_websocket_connection()
+
+        # Clean up old files
+        for f in os.listdir(comfyui_output_dir):
+            if f.startswith("api"):
+                os.remove(os.path.join(comfyui_output_dir, f))
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"comfyui_workflow failed: {e}")
 
     return {"status": "Got Prompt"}
 
