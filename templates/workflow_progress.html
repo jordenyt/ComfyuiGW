@@ -93,7 +93,7 @@
                 } else if (ext === 'txt') {
                     html += `<div class="txt-content" id="content_${file.filename}" style="max-height:300px;overflow:auto;background:#f5f5f5;padding:5px;">Loading...</div>`;
                     html += `<button class="copy-btn" onclick="copyToClipboard('content_${file.filename}', this)">Copy to Clipboard</button>`;
-                    fetch(url)
+                    fetch(`${url}&_=${Date.now()}`, { cache: 'no-store' })
                         .then(r => {
                             if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
                             return r.text();
@@ -111,7 +111,7 @@
                         });
                 } else {
                     html += `<pre id="content_${file.filename}" style="max-height:100px;overflow:auto;">Loading...</pre>`;
-                    fetch(url).then(r => r.text()).then(text => {
+                    fetch(`${url}&_=${Date.now()}`, { cache: 'no-store' }).then(r => r.text()).then(text => {
                         const el = document.getElementById(`content_${file.filename}`);
                         if (el) el.textContent = text.substring(0, 500) + (text.length > 500 ? '...' : '');
                     });
