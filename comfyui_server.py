@@ -157,7 +157,7 @@ def is_valid_base64_image(base64_data):
 
 def find_existing_file(prefix, file_bytes):
     """Check if a file with the same prefix and content already exists"""
-    inputs_path = os.path.join(local_path, "inputs")
+    inputs_path = os.path.join(COMFYUI_PATH, 'input')
     if not os.path.exists(inputs_path):
         return None
         
@@ -175,13 +175,13 @@ def find_existing_file(prefix, file_bytes):
 
 def save_base64_image(base64_data, prefix, session_id):
     decoded_data = base64.b64decode(base64_data)
-    save_path = f"{local_path}inputs{os.path.sep}{prefix}_{session_id}.jpg"
+    save_path = os.path.join(COMFYUI_PATH, 'input', f"{prefix}_{session_id}.jpg")
     with open(save_path, 'wb') as img_file:
         img_file.write(decoded_data)
     return save_path
 
 def cleanup_images(prefixes):
-    inputs_path = os.path.join(local_path, "inputs")
+    inputs_path = os.path.join(COMFYUI_PATH, 'input')
     if os.path.exists(inputs_path):
         for f in os.listdir(inputs_path):
             for prefix in prefixes:
@@ -577,7 +577,7 @@ async def comfyui_runflow_handler(request: Request):
                         # Save file
                         cleanup_images([field_name+"_"])
                         file_ext = os.path.splitext(file.filename)[1]
-                        save_path = f"{local_path}inputs{os.path.sep}{field_name}_{session_id}{file_ext}"
+                        save_path = os.path.join(COMFYUI_PATH, 'input', f"{field_name}_{session_id}{file_ext}")
                         os.makedirs(os.path.dirname(save_path), exist_ok=True)
                         with open(save_path, 'wb') as f:
                             f.write(file_content)
