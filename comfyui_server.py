@@ -93,10 +93,99 @@ def load_workflow_config(workflow_name):
         return config[workflow_name]
     raise KeyError(f"Workflow '{workflow_name}' not found in any workflows.config.json")
 
+_node_input_names_cache = {}
+
+
+def get_node_input_names(node_type):
+    """Fetch ordered list of input names for a node type from ComfyUI /object_info.
+    Cached. Returns None on failure so callers can fall back gracefully."""
+    if node_type in _node_input_names_cache:
+        return _node_input_names_cache[node_type]
+    try:
+        with request.urlopen(f"http://{comfyui_server}/object_info/{quote(node_type, safe='')}", timeout=5) as resp:
+            data = json.loads(resp.read())
+        spec = data.get(node_type, {})
+        required = list(spec.get("input", {}).get("required", {}).keys())
+        optional = list(spec.get("input", {}).get("optional", {}).keys())
+        names = required + optional
+    except Exception:
+        names = None
+    _node_input_names_cache[node_type] = names
+    return names
+
+
+_CONTROL_AFTER_GENERATE_VALUES = {"randomize", "increment", "decrement", "fixed"}
+
+
+def convert_ui_workflow_to_api(workflow):
+    if not isinstance(workflow, dict) or not isinstance(workflow.get("nodes"), list):
+        return workflow
+
+    links = {}
+    for link in workflow.get("links", []):
+        if isinstance(link, list) and len(link) >= 5:
+            links[link[0]] = (link[1], link[2])
+
+    converted = {}
+    skipped_types = {"MarkdownNote", "Note"}
+
+    for node in workflow["nodes"]:
+        node_type = node.get("type")
+        if not node_type or node_type in skipped_types:
+            continue
+
+        node_id = str(node.get("id"))
+        widgets = list(node.get("widgets_values", []) or [])
+        node_inputs_list = node.get("inputs", []) or []
+        widgeted_names = {
+            ni["widget"]["name"]
+            for ni in node_inputs_list
+            if ni.get("widget") and ni.get("widget", {}).get("name")
+        }
+
+        connected = {}
+        for node_input in node_inputs_list:
+            name = node_input.get("name")
+            if not name:
+                continue
+            link_id = node_input.get("link")
+            if link_id is not None and link_id in links:
+                source_node, source_slot = links[link_id]
+                connected[name] = [str(source_node), source_slot]
+
+        known_names = get_node_input_names(node_type)
+        inputs = {}
+
+        if known_names is None:
+            inputs.update(connected)
+            for w in widgets:
+                inputs[f"value{len(inputs)}"] = w
+        else:
+            for name in known_names:
+                if name in connected:
+                    inputs[name] = connected[name]
+                    if name in widgeted_names and widgets:
+                        widgets.pop(0)
+                    continue
+                if not widgets:
+                    continue
+                inputs[name] = widgets.pop(0)
+                if name == "seed" and widgets and widgets[0] in _CONTROL_AFTER_GENERATE_VALUES:
+                    widgets.pop(0)
+
+        converted[node_id] = {
+            "inputs": inputs,
+            "class_type": node_type,
+            "_meta": {"title": node.get("title", node_type)},
+        }
+
+    return converted
+
+
 def set_workflow_value(d, path, key, data):
     for k in path[:-1]:
         d = d.setdefault(k, {})
-    
+
     if key == "seed":
         d[path[-1]] = random.randint(1, 4294967295)
     elif key in data:
@@ -121,7 +210,7 @@ def queue_prompt(prompt_workflow):
     msg_step = ""
     last_node = ""
     workflow_start_time = time.time()
-    
+
     p = {"prompt": prompt_workflow, "client_id": client_id}
     headers = {'Content-Type': 'application/json'}
     data = json.dumps(p).encode('utf-8')
@@ -132,6 +221,7 @@ def comfyui_workflow(workflow_name, data):
     workflow_config = load_workflow_config(workflow_name)
     with open(workflow_config['prompt_workflow'], encoding='utf-8') as f:
         prompt_workflow = json.load(f)
+    prompt_workflow = convert_ui_workflow_to_api(prompt_workflow)
     prompt_workflow = apply_settings(prompt_workflow, workflow_config['fields'], data)
     return queue_prompt(prompt_workflow)
 
@@ -520,7 +610,12 @@ async def comfyui_workflow_handler(request: Request):
                     cleanup_images([key+"_"])
                     data[key] = save_base64_image(value, key, session_id)
 
-        workflow_name = data['workflow'] + '_api'
+        workflow_name = data['workflow']
+        try:
+            load_workflow_config(workflow_name + '_api')
+            workflow_name += '_api'
+        except KeyError:
+            pass
         result = comfyui_workflow(workflow_name, data)
         if not isinstance(result, dict) or 'prompt_id' not in result:
             raise HTTPException(status_code=500, detail=f"Failed to get prompt_id from ComfyUI: {result}")
@@ -625,7 +720,12 @@ async def comfyui_caption(request: Request):
         if os.path.exists(caption_file):
             os.remove(caption_file)
                 
-        workflow_name = data['workflow'] + '_api'
+        workflow_name = data['workflow']
+        try:
+            load_workflow_config(workflow_name + '_api')
+            workflow_name += '_api'
+        except KeyError:
+            pass
         promptID = comfyui_workflow(workflow_name, data)['prompt_id']
         
         while not os.path.exists(caption_file):
