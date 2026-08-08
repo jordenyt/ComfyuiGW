@@ -27,6 +27,7 @@ from comfyui_images import (
 import comfyui_process
 import comfyui_state as st
 from comfyui_process import start_comfyui, stop_comfyui
+from comfyui_converter import convert_ui_workflow_to_api  # noqa: F401  (re-exported for callers)
 from comfyui_workflow import (
     comfyui_workflow,
     get_workflow_config,
