@@ -215,7 +215,7 @@ def download_file(filepath: str = ""):
         decoded = unquote(filepath)
         decoded = decoded.replace('/', '\\')
         full_path = os.path.normpath(decoded)
-        print(f"DEBUG download_file: received='{filepath}', decoded='{decoded}', full='{full_path}', exists={os.path.exists(full_path)}")
+        #print(f"DEBUG download_file: received='{filepath}', decoded='{decoded}', full='{full_path}', exists={os.path.exists(full_path)}")
 
         if not os.path.exists(full_path):
             raise HTTPException(status_code=404, detail=f"File not found: {full_path}")

@@ -412,15 +412,40 @@ def _connected_inputs(node_inputs, links):
     return connected
 
 
+def _consume_matchtype_subwidgets(name, node_inputs, widgets):
+    """Pop and return widgets for any sub-fields (dotted names) under ``name``.
+
+    For match-type inputs like ``resize_type`` whose sub-fields appear as
+    ``resize_type.megapixels`` in the UI's inputs[], the widget value of the
+    parent and its sub-fields are stored consecutively in widgets_values.
+    """
+    sub = {}
+    for ni in node_inputs or []:
+        w = ni.get("widget")
+        if not w:
+            continue
+        wname = w.get("name") or ""
+        if wname == name or not wname.startswith(name + "."):
+            continue
+        if ni.get("link") is not None:
+            continue
+        if widgets:
+            sub[wname] = widgets.pop(0)
+    return sub
+
+
 def _convert_list_branch(node, known_names, widgeted_names, unbacked_optional_names,
                          connected, widgets, forwarded):
     """Convert a node whose widgets_values is a positional list."""
+    node_inputs = node.get("inputs") or []
     inputs = {}
+    used_widget_slots = set()
     for name in known_names:
         if name in connected:
             inputs[name] = connected[name]
             if name in widgeted_names and widgets:
                 widgets.pop(0)
+                used_widget_slots.add(name)
                 if name == "seed":
                     _skip_control_after_generate(widgets)
             continue
@@ -428,6 +453,7 @@ def _convert_list_branch(node, known_names, widgeted_names, unbacked_optional_na
             inputs[name] = forwarded[name]
             if name in widgeted_names and widgets:
                 widgets.pop(0)
+                used_widget_slots.add(name)
                 if name == "seed":
                     _skip_control_after_generate(widgets)
             continue
@@ -436,8 +462,14 @@ def _convert_list_branch(node, known_names, widgeted_names, unbacked_optional_na
         if not widgets:
             continue
         inputs[name] = widgets.pop(0)
+        used_widget_slots.add(name)
         if name == "seed":
             _skip_control_after_generate(widgets)
+        # Match-type parents consume their sub-fields' widget values
+        # immediately after their own (e.g. resize_type -> resize_type.megapixels).
+        for sub_name, sub_value in _consume_matchtype_subwidgets(name, node_inputs, widgets).items():
+            inputs[sub_name] = sub_value
+
     # Preserve connected inputs whose names aren't in known_names (legacy schema).
     for name, value in connected.items():
         if name not in inputs:
