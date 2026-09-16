@@ -32,7 +32,7 @@
         <input type="hidden" name="workflow" value="{{ workflow }}">
         {% for field in form_fields %}
         <div class="form-group">
-            <label for="{{ field.name }}">{{ field.name.replace('_', ' ') }}:</label>
+            <label for="{{ field.name }}">{{ field.name.replace('_', ' ') }}:{% if field.optional %} <small>(optional)</small>{% endif %}</label>
             {% if field.type == 'string' or field.type == 'text' %}
                 {% if field.type == 'text' %}
                 <textarea name="{{ field.name }}" id="{{ field.name }}" rows="4">{{ field.default }}</textarea>

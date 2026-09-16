@@ -472,7 +472,8 @@ async def run_workflow_form(request: Request, workflow: str):
                 "name": name,
                 "type": field_type,
                 "default": default,
-                "required": True
+                "required": not field.get("optional", False),
+                "optional": field.get("optional", False),
             }
 
             if "choices" in field:
