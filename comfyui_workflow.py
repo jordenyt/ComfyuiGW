@@ -12,6 +12,13 @@ from comfyui_state import client_id
 
 
 def set_workflow_value(d, path, key, data):
+    # Skip fields whose target node isn't in the prompt. Without this guard,
+    # the setdefault loop below would CREATE an empty node entry (e.g., for
+    # audio loaders that haven't been added to the workflow JSON yet), which
+    # ComfyUI rejects with "Node has no class_type".
+    if path[0] not in d:
+        return
+
     for k in path[:-1]:
         d = d.setdefault(k, {})
 
