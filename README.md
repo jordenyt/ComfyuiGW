@@ -88,10 +88,35 @@ Access `http://localhost:5000/runflow` to execute workflows through a convenient
 4. **Retrieve Results** - Find output in `ComfyUI/output` directory
 
 
+## 🤖 Agent / Programmatic Access
+
+The gateway serves its own documentation, so a remote agent on the LAN can learn the API without
+access to this repository.
+
+Start at `http://<host>:5000/`, which indexes every entry point. In particular:
+
+| Path | Purpose |
+|---|---|
+| `/agent_guide` | **[Agent Integration Guide](docs/AGENT_API_GUIDE.md)** rendered as HTML |
+| `/agent_guide.md` | The same guide as raw Markdown |
+| `/api/workflows` | JSON map of every workflow → accepted payload keys, input/output flags |
+| `/api/endpoints` | JSON inventory of all routes |
+| `/openapi.json`, `/docs` | FastAPI-generated schema and Swagger UI |
+
+The guide documents the full lifecycle (submit → poll `/comfyui_status` until `progress == "Done"`
+→ fetch outputs → download), the JSON and multipart entry points, and the non-obvious behaviours
+that commonly break clients: a single global job slot, the exact `_api` suffix rules, raw (non-`data:`)
+base64 for image fields, and the `file_url` field that is emitted but not routable.
+
+A ready-to-use Python client is included in the guide (see its §8).
+
+
 ## 🧩 Project Structure
 ```
 ComfyuiGW/
 ├── comfyui_server.py            # Main server implementation
+├── docs/
+│   └── AGENT_API_GUIDE.md       # Agent integration guide (served at /agent_guide.md)
 ├── run.bat                      # Windows launch script
 ├── run.sh                       # Linux launch script
 ├── requirements.txt             # Python dependencies
@@ -101,6 +126,8 @@ ComfyuiGW/
 │   └── my_ComfyUI_workflow.json # Your custom ComfyUI workfiles API json
 ├── inputs/                      # Uploaded input files
 ├── templates/                   # Web interface templates
+│   ├── index.html               # Landing page
+│   ├── agent_guide.html         # Rendered agent guide
 │   ├── runflow_form.html        # Workflow form template
 │   ├── runflow_list.html        # Workflow list template
 │   └── workflow_progress.html   # Progress tracking

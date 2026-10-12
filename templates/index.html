@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ComfyUI Gateway</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #2c3e50;
+        }
+        h1 { text-align: center; color: #333; }
+        h2 { margin-top: 32px; border-bottom: 2px solid #ecf0f1; padding-bottom: 6px; }
+        .group { margin-bottom: 8px; }
+        .entry {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 7px 10px;
+            border: 1px solid #ecf0f1;
+            border-radius: 4px;
+            margin-bottom: 6px;
+            background: #f9f9f9;
+        }
+        .entry:hover { background: #fff; border-color: #3498db; }
+        .method {
+            font-family: Consolas, monospace;
+            font-size: 0.75em;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 3px;
+            min-width: 46px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .method.get { background: #d6eaf8; color: #1a5276; }
+        .method.post { background: #fdebd0; color: #7e5109; }
+        .method.doc { background: #d5f5e3; color: #1e6f3c; }
+        .path {
+            font-family: Consolas, monospace;
+            font-size: 0.9em;
+            color: #2c3e50;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        a.path:hover { text-decoration: underline; color: #3498db; }
+        .desc { color: #566573; font-size: 0.9em; }
+        .host {
+            background: #f4f6f7; border: 1px solid #d5dbdb; border-radius: 4px;
+            padding: 10px; font-family: Consolas, monospace; font-size: 0.85em;
+            word-break: break-all; margin: 16px 0; text-align: center;
+        }
+        .warn {
+            background: #fef9e7; border: 1px solid #f4d03f; border-radius: 4px;
+            padding: 10px 14px; margin: 16px 0; font-size: 0.9em;
+        }
+        .status { text-align: center; color: #7f8c8d; font-size: 0.85em; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <h1>ComfyUI Gateway</h1>
+
+    <div class="host">
+        Base URL: <strong>{{ base_url }}</strong><br>
+        Agent guide: <a href="/agent_guide">HTML</a> ·
+        <a href="/agent_guide.md">Markdown</a> ·
+        <a href="/openapi.json">OpenAPI schema</a>
+    </div>
+
+    <div class="warn">
+        <strong>Before your first job, read the agent guide.</strong> This gateway has several
+        sharp edges — a single global job slot, a <code>"Done"</code> (capital D) completion string,
+        and a <code>file_url</code> field that is emitted but not routable.
+        <a href="/agent_guide">Read it →</a>
+    </div>
+
+    {% for group in groups %}
+    <h2>{{ group.title }}</h2>
+    {% for entry in group.entries %}
+    <div class="entry">
+        <span class="method {{ entry.method|lower }}">{{ entry.method }}</span>
+        <a class="path" href="{{ entry.url }}">{{ entry.path }}</a>
+        <span class="desc">{{ entry.description }}</span>
+    </div>
+    {% endfor %}
+    {% endfor %}
+
+    <div class="status">
+        {% if comfyui_running %}
+            ComfyUI backend: <strong>running</strong>
+        {% else %}
+            ComfyUI backend: <strong>not started</strong> — call
+            <code>GET /start_comfyui</code> before submitting work.
+        {% endif %}
+    </div>
+</body>
+</html>

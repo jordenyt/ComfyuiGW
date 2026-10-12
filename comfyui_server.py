@@ -7,10 +7,15 @@ from urllib.parse import quote, unquote
 
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse
 from fastapi.templating import Jinja2Templates
 
 import websocket
+
+try:
+    import markdown as markdown_lib
+except ImportError:
+    markdown_lib = None
 
 from comfyui_config import (
     COMFYUI_PATH,
@@ -38,6 +43,205 @@ from comfyui_websocket import open_websocket_connection
 app = FastAPI()
 app.state.max_request_size = 50 * 1024 * 1024  # 50MB limit
 templates = Jinja2Templates(directory="templates")
+
+AGENT_GUIDE_PATH = os.path.join(local_path, "docs", "AGENT_API_GUIDE.md")
+
+# Landing-page sections. Also serves as the description source for
+# GET /api/endpoints, which merges these notes onto the live route table.
+INDEX_GROUPS = [
+    {
+        'title': 'Start here',
+        'entries': [
+            {'method': 'GET', 'url': '/', 'path': '/',
+             'description': 'This page. Every entry point, grouped by purpose.'},
+            {'method': 'GET', 'url': '/agent_guide', 'path': '/agent_guide',
+             'description': 'This integration guide, rendered as HTML. Read before your first job.'},
+            {'method': 'GET', 'url': '/agent_guide.md', 'path': '/agent_guide.md',
+             'description': 'The same guide as raw Markdown, for feeding straight to an agent.'},
+            {'method': 'GET', 'url': '/api/workflows', 'path': '/api/workflows',
+             'description': 'JSON map of workflow name to accepted payload keys and result method.'},
+            {'method': 'GET', 'url': '/api/endpoints', 'path': '/api/endpoints',
+             'description': 'JSON inventory of every route on this server.'},
+            {'method': 'GET', 'url': '/mode_config', 'path': '/mode_config',
+             'description': 'Merged high-level presets. Resolve the $placeholders in fields yourself.'},
+            {'method': 'GET', 'url': '/openapi.json', 'path': '/openapi.json',
+             'description': 'FastAPI-generated OpenAPI schema.'},
+            {'method': 'GET', 'url': '/docs', 'path': '/docs',
+             'description': 'Swagger UI for the generated schema.'},
+        ],
+    },
+    {
+        'title': 'Running a workflow',
+        'entries': [
+            {'method': 'POST', 'url': '/comfyui_workflow', 'path': '/comfyui_workflow',
+             'description': 'Primary programmatic entry point. JSON body; image fields take raw base64 '
+                            '(no data: prefix). One job at a time.'},
+            {'method': 'POST', 'url': '/comfyui_runflow', 'path': '/comfyui_runflow',
+             'description': 'Multipart entry point. Required for video/audio inputs. Only works for '
+                            'workflows declaring an inputs block. Returns an HTML progress page.'},
+            {'method': 'POST', 'url': '/comfyui_caption', 'path': '/comfyui_caption',
+             'description': 'Blocks until the caption is written. No timeout, so it can hang on failure.'},
+        ],
+    },
+    {
+        'title': 'Status and control',
+        'entries': [
+            {'method': 'GET', 'url': '/comfyui_status', 'path': '/comfyui_status',
+             'description': 'Poll this. Job is finished when progress equals "Done" exactly.'},
+            {'method': 'GET', 'url': '/start_comfyui', 'path': '/start_comfyui',
+             'description': 'Start the ComfyUI backend. Idempotent; POST /comfyui_workflow returns 503 without it.'},
+            {'method': 'GET', 'url': '/stop_comfyui', 'path': '/stop_comfyui',
+             'description': 'Stop the ComfyUI backend.'},
+            {'method': 'GET', 'url': '/comfyui_free', 'path': '/comfyui_free',
+             'description': 'Unload models and free VRAM.'},
+            {'method': 'GET', 'url': '/comfyui_interrupt', 'path': '/comfyui_interrupt',
+             'description': 'Destructive. Cancels the job AND forces progress to "Done", so a finished '
+                            'poll no longer implies outputs exist. Never use it to check status.'},
+        ],
+    },
+    {
+        'title': 'Results',
+        'entries': [
+            {'method': 'GET', 'url': '/find_workflow_outputs/{workflow}', 'path': '/find_workflow_outputs/{workflow}',
+             'description': 'Use when /api/workflows shows has_output_config true. Requires the exact '
+                            '<name>_api key — no suffix fallback. Build download URLs from "filepath"; '
+                            'the returned "file_url" is not routable.'},
+            {'method': 'GET', 'url': '/comfyui_result', 'path': '/comfyui_result',
+             'description': 'Base64 images under key "processed_image" (not "images"). Only finds '
+                            'api*.jpg in the output root, so it returns [] for most workflows.'},
+            {'method': 'GET', 'url': '/download_file?filepath=', 'path': '/download_file?filepath=',
+             'key': '/download_file',
+             'description': 'Stream a file. Pass an absolute path exactly as the server returned it.'},
+            {'method': 'GET', 'url': '/find_latest_runflow', 'path': '/find_latest_runflow',
+             'description': 'Newest runflow* file in the output directory.'},
+            {'method': 'GET', 'url': '/loras', 'path': '/loras',
+             'description': 'Available LoRA model paths, relative to the ComfyUI loras directory.'},
+        ],
+    },
+    {
+        'title': 'Web interface',
+        'entries': [
+            {'method': 'GET', 'url': '/runflow', 'path': '/runflow',
+             'description': 'Workflow browser. Lists only workflows that declare an inputs block.'},
+            {'method': 'GET', 'url': '/runflow/{path}', 'path': '/runflow/{path}',
+             'key': '/runflow/{path:path}',
+             'description': 'Same browser, scoped to a workflows/ subdirectory.'},
+            {'method': 'GET', 'url': '/workflow/{workflow}', 'path': '/workflow/{workflow}',
+             'description': 'Generated HTML form for one workflow. Takes the bare name, without _api.'},
+            {'method': 'GET', 'url': '/workflow_status', 'path': '/workflow_status',
+             'description': 'Standalone progress page for any job.'},
+        ],
+    },
+]
+
+
+# ---------------------------------------------------------------------------
+# Discovery endpoints: index, agent guide, and machine-readable inventories.
+# These let a remote agent learn the API surface without reading the source.
+# ---------------------------------------------------------------------------
+
+@app.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    """Landing page linking every entry point."""
+    return templates.TemplateResponse(
+        "index.html",
+        {
+            "request": request,
+            "base_url": str(request.base_url).rstrip('/'),
+            "comfyui_running": bool(comfyui_process.comfyui_process),
+            "groups": INDEX_GROUPS,
+        }
+    )
+
+
+@app.get("/agent_guide.md")
+async def agent_guide_markdown():
+    """Agent integration guide as raw Markdown."""
+    if not os.path.exists(AGENT_GUIDE_PATH):
+        raise HTTPException(status_code=404, detail="Agent guide not found on disk")
+    with open(AGENT_GUIDE_PATH, 'r', encoding='utf-8') as f:
+        return PlainTextResponse(f.read(), media_type="text/markdown; charset=utf-8")
+
+
+@app.get("/agent_guide", response_class=HTMLResponse)
+async def agent_guide(request: Request):
+    """Agent integration guide rendered as HTML (falls back to source if markdown is absent)."""
+    if not os.path.exists(AGENT_GUIDE_PATH):
+        raise HTTPException(status_code=404, detail="Agent guide not found on disk")
+    with open(AGENT_GUIDE_PATH, 'r', encoding='utf-8') as f:
+        markdown_text = f.read()
+
+    html_body = None
+    if markdown_lib is not None:
+        html_body = markdown_lib.markdown(
+            markdown_text, extensions=["tables", "fenced_code", "toc", "sane_lists"]
+        )
+
+    return templates.TemplateResponse(
+        "agent_guide.html",
+        {
+            "request": request,
+            "markdown_text": markdown_text,
+            "html_body": html_body,
+            "fallback": html_body is None,
+        }
+    )
+
+
+@app.get('/api/workflows')
+def api_workflows():
+    """Every workflow with the payload keys it accepts and how to fetch its results.
+
+    ``fields`` is the authoritative list of accepted payload keys for
+    POST /comfyui_workflow. ``has_inputs`` marks workflows that can be driven
+    from the web form / multipart endpoint. ``has_output_config`` marks
+    workflows whose results are retrievable via /find_workflow_outputs;
+    without it, fall back to /comfyui_result (api*.jpg in the output root).
+    """
+    out = {}
+    for name, cfg in get_workflow_config(None, show_sub=True).items():
+        prompt_workflow = cfg.get('prompt_workflow') or ''
+        if prompt_workflow and not os.path.isabs(prompt_workflow):
+            prompt_workflow = os.path.normpath(os.path.join(local_path, prompt_workflow))
+
+        out[name] = {
+            'prompt_workflow': prompt_workflow,
+            'folder': os.path.basename(os.path.dirname(prompt_workflow)) if prompt_workflow else None,
+            'fields': cfg.get('fields') or {},
+            'inputs': cfg.get('inputs') or {},
+            'auto_image_tags': bool(cfg.get('auto_image_tags')),
+            'descriptions': cfg.get('descriptions'),
+            'output': cfg.get('output'),
+            'has_inputs': 'inputs' in cfg,
+            'has_output_config': 'files' in (cfg.get('output') or {}),
+        }
+    return out
+
+
+@app.get('/api/endpoints')
+def api_endpoints():
+    """Route inventory, merged with notes on the non-obvious ones."""
+    known = {}
+    for group in INDEX_GROUPS:
+        for entry in group['entries']:
+            known[entry.get('key') or entry['path']] = entry
+
+    out = []
+    for route in app.routes:
+        path = getattr(route, 'path', None)
+        methods = sorted(m for m in (getattr(route, 'methods', None) or set()) if m != 'HEAD')
+        if not path or not methods:
+            continue
+        note = known.get(path)
+        out.append({
+            'method': ','.join(methods),
+            'path': path,
+            # FastAPI copies the endpoint docstring onto route.description;
+            # route.__doc__ is the route class docstring and is always None.
+            'summary': getattr(route, 'description', None),
+            'description': note['description'] if note else None,
+        })
+    return {'endpoints': out}
 
 
 # LORA Models Endpoint
