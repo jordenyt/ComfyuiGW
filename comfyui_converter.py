@@ -16,30 +16,76 @@ from urllib.parse import quote
 
 from comfyui_config import comfyui_server
 
-_node_input_names_cache = {}
+_node_spec_cache = {}
+_display_name_cache = {}
 
 
-def get_node_input_names(node_type):
-    """Fetch ordered list of input names for a node type from ComfyUI /object_info.
-
-    Cached. Returns None on failure so callers can fall back gracefully.
-    """
-    if node_type in _node_input_names_cache:
-        return _node_input_names_cache[node_type]
+def _fetch_object_info(node_type):
+    """Fetch a node type's spec from ComfyUI /object_info, or None on failure."""
     try:
         with request.urlopen(
             f"http://{comfyui_server}/object_info/{quote(node_type, safe='')}",
             timeout=5,
         ) as resp:
             data = json.loads(resp.read())
-        spec = data.get(node_type, {})
-        required = list(spec.get("input", {}).get("required", {}).keys())
-        optional = list(spec.get("input", {}).get("optional", {}).keys())
-        names = required + optional
+        return data.get(node_type)
     except Exception:
-        names = None
-    _node_input_names_cache[node_type] = names
-    return names
+        return None
+
+
+def get_node_input_spec(node_type):
+    """Fetch and cache a node type's input schema from ComfyUI /object_info.
+
+    Returns ``{"names": [...], "sections": {name: flags}}`` where ``names`` is
+    the required-then-optional input order and ``sections`` holds each input's
+    option flags (e.g. ``control_after_generate``, ``__match_type__``).
+
+    Returns None only when the schema could not be fetched at all, so callers
+    can distinguish "ComfyUI unreachable" from "node type not installed" (which
+    yields an empty name list, matching ComfyUI's own tolerance).
+    """
+    if node_type in _node_spec_cache:
+        return _node_spec_cache[node_type]
+    spec = _fetch_object_info(node_type)
+    if spec is None:
+        # Distinguish a transport failure (None) from an unregistered node
+        # type, which used to degrade to an empty name list rather than a crash.
+        try:
+            with request.urlopen(f"http://{comfyui_server}/object_info", timeout=5) as resp:
+                json.loads(resp.read())
+            result = {"names": [], "sections": {}}
+        except Exception:
+            result = None
+    else:
+        sections = {}
+        names = []
+        for section in ("required", "optional"):
+            for name, value in (spec.get("input") or {}).get(section, {}).items():
+                sections[name] = value[1] if len(value) > 1 and isinstance(value[1], dict) else {}
+                names.append(name)
+        result = {"names": names, "sections": sections}
+    _node_spec_cache[node_type] = result
+    return result
+
+
+def get_node_input_names(node_type):
+    """Ordered list of input names for a node type, or None if unfetchable."""
+    spec = get_node_input_spec(node_type)
+    return None if spec is None else list(spec["names"])
+
+
+def get_node_display_name(node_type):
+    """Fetch a node type's frontend display name from ComfyUI /object_info.
+
+    Cached. Falls back to the node type itself when unavailable (custom nodes
+    that are not installed on the running ComfyUI instance).
+    """
+    if node_type in _display_name_cache:
+        return _display_name_cache[node_type]
+    spec = _fetch_object_info(node_type) or {}
+    name = spec.get("display_name") or node_type
+    _display_name_cache[node_type] = name
+    return name
 
 
 # --- Constants ---------------------------------------------------------------
@@ -241,7 +287,24 @@ def _forwarded_widgets_for_parent(parent, sg_inputs):
     return forwarded
 
 
-def _expand_one_subgraph(sg, parent, working_links, next_link_id, link_id_remap):
+def _redirect_expanded_origins(links, output_source_map):
+    """Rewrite link origins that still point at an expanded subgraph parent.
+
+    ``output_source_map`` maps ``(parent_id, out_slot)`` to the internal
+    ``(node_id, slot)`` that actually produces it. When one subgraph parent's
+    output feeds another subgraph parent's input, the consuming expansion reads
+    a pre-expansion link and would otherwise emit the parent node id instead of
+    the internal producer.
+    """
+    for l in links:
+        key = (str(l[1]), l[2])
+        replacement = output_source_map.get(key)
+        if replacement is not None:
+            l[1], l[2] = replacement
+
+
+def _expand_one_subgraph(sg, parent, working_links, next_link_id, link_id_remap,
+                         output_source_map):
     """Expand one parent node into its internal nodes.
 
     Returns ``(new_nodes, new_links, next_link_id)``.
@@ -275,6 +338,7 @@ def _expand_one_subgraph(sg, parent, working_links, next_link_id, link_id_remap)
             dests = [(d_n, d_s, oid) for lid, d_n, d_s, oid in sg_out_external if lid == sl_id]
             if not dests:
                 continue
+            output_source_map[(str(parent_id), sl["target_slot"])] = origin
             new_link_id = next_link_id
             next_link_id += 1
             link_remap[sl_id] = new_link_id
@@ -323,6 +387,7 @@ def _expand_subgraphs(workflow, max_iterations=32):
     working_nodes = list(workflow.get("nodes") or [])
     working_links = list(workflow.get("links") or [])
     link_id_remap = {}
+    output_source_map = {}
     expanded_parent_ids = set()
 
     for _ in range(max_iterations):
@@ -347,6 +412,7 @@ def _expand_subgraphs(workflow, max_iterations=32):
             expanded_parent_ids.add(parent["id"])
             ns, ls, next_link_id = _expand_one_subgraph(
                 sg, parent, working_links, next_link_id, link_id_remap,
+                output_source_map,
             )
             new_nodes.extend(ns)
             new_links.extend(ls)
@@ -368,6 +434,8 @@ def _expand_subgraphs(workflow, max_iterations=32):
             and l[1] not in expanded_parent_ids and l[3] not in expanded_parent_ids
         ]
         next_working_links.extend(new_links)
+
+        _redirect_expanded_origins(next_working_links, output_source_map)
 
         working_nodes = next_working_nodes
         working_links = next_working_links
@@ -412,63 +480,75 @@ def _connected_inputs(node_inputs, links):
     return connected
 
 
-def _consume_matchtype_subwidgets(name, node_inputs, widgets):
-    """Pop and return widgets for any sub-fields (dotted names) under ``name``.
+def _dynamic_combo_subfields(name, flags, selected):
+    """Sub-field names belonging to a match-type / dynamic-combo input.
 
-    For match-type inputs like ``resize_type`` whose sub-fields appear as
-    ``resize_type.megapixels`` in the UI's inputs[], the widget value of the
-    parent and its sub-fields are stored consecutively in widgets_values.
+    Two schema shapes are supported:
+    - legacy ``__match_type__`` holding already-dotted names
+    - ``COMFY_DYNAMICCOMBO_V3`` ``options``, where the entry matching the
+      selected key carries its own ``inputs.required`` sub-fields
+
+    ``selected`` is the widget value chosen for the parent combo.
     """
-    sub = {}
-    for ni in node_inputs or []:
-        w = ni.get("widget")
-        if not w:
-            continue
-        wname = w.get("name") or ""
-        if wname == name or not wname.startswith(name + "."):
-            continue
-        if ni.get("link") is not None:
-            continue
-        if widgets:
-            sub[wname] = widgets.pop(0)
-    return sub
+    legacy = flags.get("__match_type__")
+    if legacy:
+        return list(legacy)
+
+    for option in flags.get("options") or []:
+        # A plain COMBO reuses "options" for its choice list (strings); only the
+        # dynamic-combo form stores {"key", "inputs"} objects.
+        if isinstance(option, dict) and option.get("key") == selected:
+            required = (option.get("inputs") or {}).get("required") or {}
+            return [f"{name}.{sub}" for sub in required]
+    return []
 
 
-def _convert_list_branch(node, known_names, widgeted_names, unbacked_optional_names,
+def _assign_subfields(name, sections, selected, connected, forwarded, widgets, inputs):
+    """Consume and assign the sub-field widgets owned by a match-type input.
+
+    Sub-field widgets follow their parent's widget value positionally. A
+    connected sub-field still consumes its slot -- the connection wins for the
+    emitted value, but skipping the slot would shift every later widget.
+    """
+    for sub in _dynamic_combo_subfields(name, sections.get(name) or {}, selected):
+        if not widgets:
+            break
+        sub_value = widgets.pop(0)
+        if sub in connected:
+            inputs[sub] = connected[sub]
+        elif sub in forwarded:
+            inputs[sub] = forwarded[sub]
+        else:
+            inputs[sub] = sub_value
+
+
+def _convert_list_branch(node, spec, widgeted_names, unbacked_optional_names,
                          connected, widgets, forwarded):
     """Convert a node whose widgets_values is a positional list."""
-    node_inputs = node.get("inputs") or []
     inputs = {}
-    used_widget_slots = set()
-    for name in known_names:
-        if name in connected:
-            inputs[name] = connected[name]
+    sections = spec["sections"]
+
+    for name in spec["names"]:
+        if name in connected or name in forwarded:
+            inputs[name] = connected.get(name, forwarded.get(name))
+            selected = None
             if name in widgeted_names and widgets:
-                widgets.pop(0)
-                used_widget_slots.add(name)
-                if name == "seed":
+                selected = widgets.pop(0)
+                if sections.get(name, {}).get("control_after_generate"):
                     _skip_control_after_generate(widgets)
-            continue
-        if name in forwarded:
-            inputs[name] = forwarded[name]
-            if name in widgeted_names and widgets:
-                widgets.pop(0)
-                used_widget_slots.add(name)
-                if name == "seed":
-                    _skip_control_after_generate(widgets)
+            _assign_subfields(
+                name, sections, selected, connected, forwarded, widgets, inputs,
+            )
             continue
         if name in unbacked_optional_names:
             continue
         if not widgets:
             continue
-        inputs[name] = widgets.pop(0)
-        used_widget_slots.add(name)
-        if name == "seed":
+        value = widgets.pop(0)
+        inputs[name] = value
+        if sections.get(name, {}).get("control_after_generate"):
             _skip_control_after_generate(widgets)
-        # Match-type parents consume their sub-fields' widget values
-        # immediately after their own (e.g. resize_type -> resize_type.megapixels).
-        for sub_name, sub_value in _consume_matchtype_subwidgets(name, node_inputs, widgets).items():
-            inputs[sub_name] = sub_value
+        _assign_subfields(name, sections, value, connected, forwarded, widgets, inputs)
 
     # Preserve connected inputs whose names aren't in known_names (legacy schema).
     for name, value in connected.items():
@@ -511,21 +591,21 @@ def _convert_node(node, links):
     widgets = [v for _, v in widget_pairs]
     forwarded = node.get("_forwarded_widgets") or {}
 
-    known_names = get_node_input_names(node_type)
-    if known_names is None:
+    spec = get_node_input_spec(node_type)
+    if spec is None:
         inputs = _convert_fallback_branch(connected, widget_pairs)
     elif isinstance(node.get("widgets_values"), dict):
         inputs = _convert_dict_branch(node, connected)
     else:
         inputs = _convert_list_branch(
-            node, known_names, widgeted_names, unbacked_optional_names,
+            node, spec, widgeted_names, unbacked_optional_names,
             connected, widgets, forwarded,
         )
 
     return node_id, {
         "inputs": inputs,
         "class_type": node_type,
-        "_meta": {"title": node.get("title", node_type)},
+        "_meta": {"title": node.get("title") or get_node_display_name(node_type)},
     }
 
 
