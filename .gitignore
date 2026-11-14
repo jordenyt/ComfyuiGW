@@ -10,3 +10,5 @@
 # Python
 venv
 __pycache__
+.kilo
+.playwright-mcp
