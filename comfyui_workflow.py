@@ -2,13 +2,20 @@
 import json
 import os
 import random
-import time
-from urllib import request
+from urllib import error, request
 
 from comfyui_config import comfyui_server, local_path
 from comfyui_converter import convert_ui_workflow_to_api
-import comfyui_state as st
 from comfyui_state import client_id
+
+
+class WorkflowError(RuntimeError):
+    """ComfyUI rejected the prompt, or the request could not be sent."""
+
+    def __init__(self, message, detail=None, status_code=400):
+        super().__init__(message)
+        self.detail = detail or message
+        self.status_code = status_code
 
 
 def set_workflow_value(d, path, key, data):
@@ -181,20 +188,48 @@ def _strip_optional_unset_nodes(api_prompt, fields, inputs_cfg, data):
         api_prompt.pop(nid, None)
 
 
-def queue_prompt(prompt_workflow):
-    st.current_prompt = prompt_workflow
-    st.node_ids = list(prompt_workflow.keys())
-    st.finished_nodes = []
-    st.msg_progress = ""
-    st.msg_step = ""
-    st.last_node = ""
-    st.workflow_start_time = time.time()
+def queue_prompt(prompt_workflow, job_id=None, prompt_client_id=None):
+    """Hand a prompt to ComfyUI's queue.
 
-    p = {"prompt": prompt_workflow, "client_id": client_id}
+    ``job_id`` becomes the ComfyUI prompt id, so the gateway job id and the
+    ComfyUI job id are the same value. That is what makes targeted status and
+    cancellation possible.
+    """
+    payload = {"prompt": prompt_workflow, "client_id": prompt_client_id or client_id}
+    if job_id:
+        payload["prompt_id"] = job_id
+
     headers = {'Content-Type': 'application/json'}
-    data = json.dumps(p).encode('utf-8')
+    data = json.dumps(payload).encode('utf-8')
     req = request.Request(f"http://{comfyui_server}/prompt", data=data, headers=headers)
-    return json.loads(request.urlopen(req).read())
+    try:
+        with request.urlopen(req, timeout=120) as resp:
+            return json.loads(resp.read())
+    except error.HTTPError as exc:
+        body = exc.read().decode('utf-8', errors='replace')
+        detail = body
+        try:
+            parsed = json.loads(body)
+            node_errors = parsed.get("node_errors") or {}
+            message = parsed.get("error")
+            if isinstance(message, dict):
+                message = message.get("message") or json.dumps(message)
+            detail = message or body
+            if node_errors:
+                detail = f"{detail} | node_errors: {json.dumps(node_errors)}"
+        except ValueError:
+            pass
+        raise WorkflowError(
+            f"ComfyUI rejected the prompt (HTTP {exc.code})",
+            detail=detail,
+            status_code=400,
+        ) from exc
+    except error.URLError as exc:
+        raise WorkflowError(
+            f"Could not reach ComfyUI at {comfyui_server}",
+            detail=str(exc.reason),
+            status_code=503,
+        ) from exc
 
 
 def _prepend_workflows_prefix(workflow_config, workflows_dir, root):
@@ -243,7 +278,13 @@ def load_workflow_config(workflow_name):
     raise KeyError(f"Workflow '{workflow_name}' not found in any workflows.config.json")
 
 
-def comfyui_workflow(workflow_name, data):
+def build_prompt(workflow_name, data):
+    """Build the API-format prompt for a workflow.
+
+    Returns ``(prompt_workflow, workflow_config)``. The prompt is not sent to
+    ComfyUI here - :func:`queue_prompt` does that, so the caller can decide
+    the prompt id first.
+    """
     workflow_config = load_workflow_config(workflow_name)
     if workflow_config.get("auto_image_tags"):
         _auto_tag_ref_prompt(data)
@@ -260,4 +301,10 @@ def comfyui_workflow(workflow_name, data):
         workflow_config.get('inputs') or {},
         data,
     )
-    return queue_prompt(prompt_workflow)
+    return prompt_workflow, workflow_config
+
+
+def comfyui_workflow(workflow_name, data, job_id=None):
+    """Build and queue a workflow. Returns ComfyUI's prompt response."""
+    prompt_workflow, _config = build_prompt(workflow_name, data)
+    return queue_prompt(prompt_workflow, job_id=job_id)

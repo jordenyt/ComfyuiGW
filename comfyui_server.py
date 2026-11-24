@@ -1,7 +1,6 @@
 import base64
 import json
 import os
-import random
 import time
 from urllib.parse import quote, unquote
 
@@ -24,27 +23,32 @@ from comfyui_config import (
     mode_config_path,
 )
 from comfyui_images import (
-    cleanup_images,
     find_existing_file,
     is_valid_base64_image,
     save_base64_image,
+    save_input_file,
 )
+import comfyui_jobs as jobs
 import comfyui_process
 import comfyui_state as st
 from comfyui_process import start_comfyui, stop_comfyui
 from comfyui_converter import convert_ui_workflow_to_api  # noqa: F401  (re-exported for callers)
 from comfyui_workflow import (
-    comfyui_workflow,
+    WorkflowError,
+    comfyui_workflow,  # noqa: F401  (re-exported for callers)
     get_workflow_config,
     load_workflow_config,
 )
-from comfyui_websocket import open_websocket_connection
+from comfyui_websocket import open_websocket_connection, stop_websocket_connection
 
 app = FastAPI()
 app.state.max_request_size = 50 * 1024 * 1024  # 50MB limit
 templates = Jinja2Templates(directory="templates")
 
 AGENT_GUIDE_PATH = os.path.join(local_path, "docs", "AGENT_API_GUIDE.md")
+
+# How long /comfyui_caption waits for the caption workflow before giving up.
+CAPTION_TIMEOUT = 900.0
 
 # Landing-page sections. Also serves as the description source for
 # GET /api/endpoints, which merges these notes onto the live route table.
@@ -75,28 +79,42 @@ INDEX_GROUPS = [
         'entries': [
             {'method': 'POST', 'url': '/comfyui_workflow', 'path': '/comfyui_workflow',
              'description': 'Primary programmatic entry point. JSON body; image fields take raw base64 '
-                            '(no data: prefix). One job at a time.'},
+                            '(no data: prefix). Returns a job_id. Jobs are queued and run one at a time.'},
             {'method': 'POST', 'url': '/comfyui_runflow', 'path': '/comfyui_runflow',
              'description': 'Multipart entry point. Required for video/audio inputs. Only works for '
-                            'workflows declaring an inputs block. Returns an HTML progress page.'},
+                            'workflows declaring an inputs block. Returns an HTML progress page, or JSON '
+                            'with a job_id when the request sends Accept: application/json.'},
             {'method': 'POST', 'url': '/comfyui_caption', 'path': '/comfyui_caption',
-             'description': 'Blocks until the caption is written. No timeout, so it can hang on failure.'},
+             'description': 'Runs a caption workflow and blocks until the caption is written '
+                            '(bounded by a 900 s timeout).'},
         ],
     },
     {
         'title': 'Status and control',
         'entries': [
             {'method': 'GET', 'url': '/comfyui_status', 'path': '/comfyui_status',
-             'description': 'Poll this. Job is finished when progress equals "Done" exactly.'},
+             'description': 'Poll this, ideally with ?job_id=. The job is finished when state is done, '
+                            'error or cancelled (progress is then "Done"). Without a job_id the single '
+                            'active job is served; with several active jobs the call fails with 409.'},
+            {'method': 'POST', 'url': '/comfyui_cancel/{job_id}', 'path': '/comfyui_cancel/{job_id}',
+             'description': 'Cancels exactly one job - the running one is interrupted, a queued one is '
+                            'dequeued. Never touches another job.'},
+            {'method': 'GET', 'url': '/comfyui_interrupt', 'path': '/comfyui_interrupt',
+             'description': 'Alias for /comfyui_cancel/{job_id}. Requires ?job_id=; without it the call '
+                            'fails with 400.'},
+            {'method': 'POST', 'url': '/comfyui_interrupt_all', 'path': '/comfyui_interrupt_all',
+             'description': 'Kills whatever ComfyUI is running, whoever submitted it - including jobs '
+                            'started from the ComfyUI web UI. Use only when that is intended.'},
+            {'method': 'GET', 'url': '/api/jobs', 'path': '/api/jobs',
+             'description': 'Every job the gateway knows about, with their state and queue position.'},
+            {'method': 'GET', 'url': '/api/jobs/{job_id}', 'path': '/api/jobs/{job_id}',
+             'description': 'One job: state, progress, queue position and resolved output files.'},
             {'method': 'GET', 'url': '/start_comfyui', 'path': '/start_comfyui',
              'description': 'Start the ComfyUI backend. Idempotent; POST /comfyui_workflow returns 503 without it.'},
             {'method': 'GET', 'url': '/stop_comfyui', 'path': '/stop_comfyui',
              'description': 'Stop the ComfyUI backend.'},
             {'method': 'GET', 'url': '/comfyui_free', 'path': '/comfyui_free',
              'description': 'Unload models and free VRAM.'},
-            {'method': 'GET', 'url': '/comfyui_interrupt', 'path': '/comfyui_interrupt',
-             'description': 'Destructive. Cancels the job AND forces progress to "Done", so a finished '
-                            'poll no longer implies outputs exist. Never use it to check status.'},
         ],
     },
     {
@@ -104,16 +122,18 @@ INDEX_GROUPS = [
         'entries': [
             {'method': 'GET', 'url': '/find_workflow_outputs/{workflow}', 'path': '/find_workflow_outputs/{workflow}',
              'description': 'Use when /api/workflows shows has_output_config true. Requires the exact '
-                            '<name>_api key — no suffix fallback. Build download URLs from "filepath"; '
-                            'the returned "file_url" is not routable.'},
+                            '<name>_api key — no suffix fallback. Pass ?job_id= to scope the listing to one '
+                            'job. Build download URLs from "filepath"; the returned "file_url" is not routable.'},
             {'method': 'GET', 'url': '/comfyui_result', 'path': '/comfyui_result',
-             'description': 'Base64 images under key "processed_image" (not "images"). Only finds '
-                            'api*.jpg in the output root, so it returns [] for most workflows.'},
+             'description': 'Base64 images under key "processed_image" (not "images"). Pass ?job_id= to '
+                            'scope the result to one job. Only finds api*.jpg in the output root, so it '
+                            'returns [] for most workflows.'},
             {'method': 'GET', 'url': '/download_file?filepath=', 'path': '/download_file?filepath=',
              'key': '/download_file',
              'description': 'Stream a file. Pass an absolute path exactly as the server returned it.'},
             {'method': 'GET', 'url': '/find_latest_runflow', 'path': '/find_latest_runflow',
-             'description': 'Newest runflow* file in the output directory.'},
+             'description': 'Newest runflow* file in the output directory. Pass ?job_id= to restrict it '
+                            'to one job.'},
             {'method': 'GET', 'url': '/loras', 'path': '/loras',
              'description': 'Available LoRA model paths, relative to the ComfyUI loras directory.'},
         ],
@@ -129,7 +149,8 @@ INDEX_GROUPS = [
             {'method': 'GET', 'url': '/workflow/{workflow}', 'path': '/workflow/{workflow}',
              'description': 'Generated HTML form for one workflow. Takes the bare name, without _api.'},
             {'method': 'GET', 'url': '/workflow_status', 'path': '/workflow_status',
-             'description': 'Standalone progress page for any job.'},
+             'description': 'Standalone progress page. Pass ?job_id= to follow one job; without it the '
+                            'page follows the single active job.'},
         ],
     },
 ]
@@ -275,22 +296,85 @@ def start_comfyui_endpoint():
 
 @app.get("/stop_comfyui")
 def stop_comfyui_endpoint():
+    jobs.stop_reconciler()
+    stop_websocket_connection()
     return stop_comfyui()
 
 
 # ComfyUI Status Endpoints
+def _resolve_job(job_id):
+    """Return a known job, or fail with 404."""
+    job = jobs.registry.get(job_id)
+    if job is None:
+        raise HTTPException(status_code=404, detail=f"Unknown job_id: {job_id}")
+    return job
+
+
+def _resolve_job_for_request(job_id):
+    """Resolve the job a request is about.
+
+    With a job_id the job must exist. Without one the single active job is
+    served; anything else is ambiguous and fails loudly with 409 instead of
+    silently returning another job's data.
+    """
+    if job_id:
+        return _resolve_job(job_id)
+
+    active = jobs.registry.active()
+    if len(active) == 1:
+        return active[0]
+    if not active:
+        raise HTTPException(
+            status_code=409,
+            detail="No active job. Pass job_id to address a specific job.",
+        )
+    raise HTTPException(
+        status_code=409,
+        detail=f"job_id is required: {len(active)} jobs are active. "
+               "Poll /api/jobs to find the one you mean.",
+    )
+
+
 @app.get('/comfyui_status')
-def comfyui_status():
-    return {"progress": st.msg_progress, "step": st.msg_step}
+def comfyui_status(job_id: str = None):
+    """Progress of one job.
+
+    Pass ?job_id= to address a specific job. Without it the single active job
+    is served, and a request that could match several jobs fails with 409.
+    """
+    job = _resolve_job_for_request(job_id)
+    return job.status()
 
 
 @app.get('/comfyui_interrupt')
-def comfyui_interrupt():
-    st.msg_progress = "Done"
-    if st.promptID:
-        import requests
-        return requests.post("http://127.0.0.1:8188/interrupt")
-    return {}
+def comfyui_interrupt(job_id: str = None):
+    """Cancel one job. Alias for POST /comfyui_cancel/{job_id}."""
+    if not job_id:
+        raise HTTPException(
+            status_code=400,
+            detail="job_id is required. Use POST /comfyui_cancel/{job_id}. To stop whatever ComfyUI "
+                   "is running regardless of owner use POST /comfyui_interrupt_all.",
+        )
+    return _cancel_job(job_id)
+
+
+@app.post('/comfyui_cancel/{job_id}')
+def comfyui_cancel(job_id: str):
+    """Cancel exactly one job - running jobs are interrupted, queued jobs dequeued."""
+    return _cancel_job(job_id)
+
+
+def _cancel_job(job_id):
+    result = jobs.cancel_job(job_id)
+    if result is None:
+        raise HTTPException(status_code=404, detail=f"Unknown job_id: {job_id}")
+    return result
+
+
+@app.post('/comfyui_interrupt_all')
+def comfyui_interrupt_all():
+    """Kill whatever ComfyUI is running - including jobs it did not submit."""
+    return jobs.interrupt_all()
 
 
 @app.get('/comfyui_free')
@@ -301,21 +385,45 @@ def comfyui_free():
 
 
 @app.get('/comfyui_result')
-def comfyui_result():
-    processed_images_data = []
-    for f1 in os.listdir(comfyui_output_dir):
-        if f1.startswith("api") and f1.endswith(".jpg"):
-            jpg_path = os.path.join(comfyui_output_dir, f1)
-            with open(jpg_path, 'rb') as f:
-                processed_images_data.append(base64.b64encode(f.read()).decode())
-    return {'processed_image': processed_images_data}
+def comfyui_result(job_id: str = None):
+    """The results of one job."""
+    job = _resolve_job_for_request(job_id)
+    return {
+        "job_id": job.job_id,
+        "state": job.state,
+        "processed_image": jobs.resolve_processed_images(job),
+        "files": jobs.resolve_outputs(job),
+    }
+
+
+@app.get('/api/jobs')
+def api_jobs(client_id: str = None, state: str = None):
+    """Every job the gateway knows about."""
+    return {
+        "jobs": [job.status() for job in jobs.registry.all(client_id=client_id, state=state)]
+    }
+
+
+@app.get('/api/jobs/{job_id}')
+def api_job(job_id: str):
+    """One job, with its resolved output files."""
+    job = _resolve_job(job_id)
+    payload = job.status()
+    payload["outputs"] = jobs.resolve_outputs(job)
+    return payload
 
 
 @app.get('/find_latest_runflow')
-def find_latest_runflow_file():
+def find_latest_runflow_file(job_id: str = None):
     """Find the latest file starting with 'runflow' in the comfyui_output_dir"""
     try:
         runflow_files = []
+        job = jobs.registry.get(job_id) if job_id else None
+        if job_id and job is None:
+            raise HTTPException(status_code=404, detail=f"Unknown job_id: {job_id}")
+
+        window_start, window_end = job.window() if job else (None, None)
+        history_names = {out["filename"] for out in job.outputs} if job else set()
 
         if os.path.exists(comfyui_output_dir):
             for filename in os.listdir(comfyui_output_dir):
@@ -323,6 +431,10 @@ def find_latest_runflow_file():
                     filepath = os.path.join(comfyui_output_dir, filename)
                     if os.path.isfile(filepath):
                         mod_time = os.path.getmtime(filepath)
+                        if job is not None:
+                            in_window = window_start <= mod_time <= window_end
+                            if not in_window and filename not in history_names:
+                                continue
                         runflow_files.append((filename, mod_time, filepath))
 
         runflow_files.sort(key=lambda x: x[1], reverse=True)
@@ -338,12 +450,14 @@ def find_latest_runflow_file():
         else:
             return {'file_url': None, 'filename': None, 'message': 'No runflow files found'}
 
+    except HTTPException:
+        raise
     except Exception as e:
         return {'file_url': None, 'filename': None, 'error': str(e)}
 
 
 @app.get('/find_workflow_outputs/{workflow}')
-def find_workflow_outputs(workflow: str):
+def find_workflow_outputs(workflow: str, job_id: str = None):
     """Find all output files for a workflow based on output config"""
     try:
         config = load_workflow_config(workflow)
@@ -352,46 +466,29 @@ def find_workflow_outputs(workflow: str):
         if 'files' not in output_config:
             return {'files': [], 'has_output_config': False, 'debug': {
                 'workflow': workflow,
-                'comfyui_output_dir': comfyui_output_dir,
-                'workflow_start_time': st.workflow_start_time
+                'comfyui_output_dir': comfyui_output_dir
             }}
 
+        job = None
+        if job_id:
+            job = jobs.registry.get(job_id)
+            if job is None:
+                raise HTTPException(status_code=404, detail=f"Unknown job_id: {job_id}")
+            jobs.ensure_history(job)
+            window_start, window_end = job.window()
+        else:
+            active = jobs.registry.active()
+            if len(active) == 1:
+                window_start, window_end = active[0].window()
+            else:
+                window_start, window_end = 0.0, None
+
         file_specs = output_config.get('files', [])
-        all_files = []
-
-        if os.path.exists(comfyui_output_dir) and st.workflow_start_time:
-            for spec in file_specs:
-                prefix = spec.get('prefix', 'output')
-                extension = spec.get('extension', 'jpg')
-
-                if '/' in prefix or '\\' in prefix:
-                    parts = prefix.replace('\\', '/').split('/')
-                    subdir = '/'.join(parts[:-1])
-                    filename_prefix = parts[-1]
-                    search_dir = os.path.join(comfyui_output_dir, subdir)
-                else:
-                    search_dir = comfyui_output_dir
-                    filename_prefix = prefix
-
-                if os.path.exists(search_dir):
-                    for filename in os.listdir(search_dir):
-                        if filename.startswith(filename_prefix) and filename.endswith(f".{extension}"):
-                            filepath = os.path.join(search_dir, filename)
-                            mod_time = os.path.getmtime(filepath)
-                            if mod_time >= st.workflow_start_time:
-                                all_files.append({
-                                    'filename': filename,
-                                    'filepath': filepath,
-                                    'mod_time': mod_time,
-                                    'extension': extension,
-                                    'prefix': prefix
-                                })
-
-        all_files.sort(key=lambda x: x['mod_time'], reverse=True)
+        all_files = jobs.find_output_files(workflow, (window_start, window_end))
 
         return {
             'files': [{
-                'file_url': f"/download_file/{quote(f['filepath'])}",
+                'file_url': f"/download_file?filepath={quote(f['filepath'])}",
                 'filename': f['filename'],
                 'filepath': f['filepath'],
                 'extension': f['extension'],
@@ -402,12 +499,13 @@ def find_workflow_outputs(workflow: str):
                 'workflow': workflow,
                 'config_found': config.get('output'),
                 'comfyui_output_dir': comfyui_output_dir,
-                'search_dir': search_dir,
-                'search_exists': os.path.exists(search_dir),
-                'workflow_start_time': st.workflow_start_time,
+                'job_id': job_id,
+                'workflow_start_time': window_start,
                 'file_specs': file_specs
             }
         }
+    except HTTPException:
+        raise
     except Exception as e:
         return {'files': [], 'has_output_config': False, 'error': str(e)}
 
@@ -423,6 +521,11 @@ def download_file(filepath: str = ""):
 
         if not os.path.exists(full_path):
             raise HTTPException(status_code=404, detail=f"File not found: {full_path}")
+
+        if not os.path.isfile(full_path):
+            # Starlette's FileResponse raises RuntimeError on a directory,
+            # which surfaces as an unhandled ASGI exception (500).
+            raise HTTPException(status_code=404, detail=f"Not a file: {full_path}")
 
         return FileResponse(
             full_path,
@@ -458,7 +561,12 @@ async def comfyui_workflow_handler(request: Request):
     if not isinstance(data, dict) or 'workflow' not in data:
         raise HTTPException(status_code=400, detail="Missing 'workflow' key in request body")
 
-    session_id = str(random.randint(1, 1125899906842600))
+    workflow_name = _resolve_workflow_name(data['workflow'])
+    client_id = request.headers.get('X-Client-Id')
+
+    # The job (and its ComfyUI prompt id) exists before the input files are
+    # written, so every input file can be owned by exactly one job.
+    job = jobs.create_job(workflow_name, client_id)
 
     try:
         for key, value in data.items():
@@ -467,32 +575,41 @@ async def comfyui_workflow_handler(request: Request):
                 existing_path = find_existing_file(key, image_bytes)
                 if existing_path:
                     data[key] = existing_path
+                    job.input_files.append(existing_path)
                 else:
-                    cleanup_images([key+"_"])
-                    data[key] = save_base64_image(value, key, session_id)
+                    saved_path = save_base64_image(value, key, job.job_id)
+                    data[key] = saved_path
+                    job.input_files.append(saved_path)
 
-        workflow_name = _resolve_workflow_name(data['workflow'])
-        result = comfyui_workflow(workflow_name, data)
-        if not isinstance(result, dict) or 'prompt_id' not in result:
-            raise HTTPException(status_code=500, detail=f"Failed to get prompt_id from ComfyUI: {result}")
-        st.promptID = result['prompt_id']
-
-        if not st.ws:
-            open_websocket_connection()
-
-        for f in os.listdir(comfyui_output_dir):
-            if f.startswith("api"):
-                os.remove(os.path.join(comfyui_output_dir, f))
+        jobs.submit_job(job, data)
+    except WorkflowError as exc:
+        raise HTTPException(status_code=exc.status_code, detail=exc.detail)
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"comfyui_workflow failed: {e}")
 
-    return {"status": "Got Prompt"}
+    if not st.ws:
+        open_websocket_connection()
+
+    return {
+        "status": "Queued",
+        "job_id": job.job_id,
+        "state": job.state,
+        "workflow": workflow_name,
+        "queue_position": job.queue_position,
+        "queue_length": job.queue_length,
+    }
 
 
 @app.post('/comfyui_runflow')
 async def comfyui_runflow_handler(request: Request):
+    """Multipart entry point: the web form's target and the agent video/audio route.
+
+    Every submission is its own job. The default response is the HTML progress
+    page; a request that sends ``Accept: application/json`` gets the same job
+    envelope as POST /comfyui_workflow instead.
+    """
     form_data = await request.form()
 
     if not comfyui_process.comfyui_process:
@@ -502,12 +619,25 @@ async def comfyui_runflow_handler(request: Request):
     if not workflow_name:
         raise HTTPException(status_code=400, detail="Workflow not specified")
 
-    workflow_config = load_workflow_config(workflow_name)
+    try:
+        workflow_config = load_workflow_config(workflow_name)
+    except KeyError:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Workflow '{workflow_name}' not found in any workflows.config.json",
+        )
 
+    if "inputs" not in workflow_config:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Workflow '{workflow_name}' has no inputs block - use POST /comfyui_workflow",
+        )
+
+    client_id = request.headers.get('X-Client-Id')
+    job = jobs.create_job(workflow_name, client_id)
     data = {}
-    session_id = str(random.randint(1, 1125899906842600))
 
-    if "inputs" in workflow_config:
+    try:
         for field_name, field in workflow_config["inputs"].items():
             field_type = field["type"]
 
@@ -518,14 +648,12 @@ async def comfyui_runflow_handler(request: Request):
                     existing_path = find_existing_file(field_name, file_content)
                     if existing_path:
                         data[field_name] = existing_path
+                        job.input_files.append(existing_path)
                     else:
-                        cleanup_images([field_name+"_"])
                         file_ext = os.path.splitext(file.filename)[1]
-                        save_path = os.path.join(COMFYUI_PATH, 'input', f"{field_name}_{session_id}{file_ext}")
-                        os.makedirs(os.path.dirname(save_path), exist_ok=True)
-                        with open(save_path, 'wb') as f:
-                            f.write(file_content)
+                        save_path = save_input_file(file_content, field_name, job.job_id, file_ext)
                         data[field_name] = save_path
+                        job.input_files.append(save_path)
             else:
                 value = form_data.get(field_name)
                 if value is not None:
@@ -538,44 +666,86 @@ async def comfyui_runflow_handler(request: Request):
                     else:
                         data[field_name] = value
 
-        st.promptID = comfyui_workflow(workflow_name, data)['prompt_id']
+        jobs.submit_job(job, data)
+    except WorkflowError as exc:
+        raise HTTPException(status_code=exc.status_code, detail=exc.detail)
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"comfyui_runflow failed: {e}")
 
     if not st.ws:
         open_websocket_connection()
 
+    accepts_json = "application/json" in (request.headers.get("accept") or "").lower()
+    if accepts_json:
+        return {
+            "status": "Queued",
+            "job_id": job.job_id,
+            "state": job.state,
+            "workflow": workflow_name,
+            "queue_position": job.queue_position,
+            "queue_length": job.queue_length,
+        }
+
     return templates.TemplateResponse(
         "workflow_progress.html",
-        {"request": request, "workflow": workflow_name, "start_time": st.workflow_start_time}
+        {
+            "request": request,
+            "workflow": workflow_name,
+            "job_id": job.job_id,
+            "start_time": job.submitted_at,
+        }
     )
 
 
 @app.post('/comfyui_caption')
 async def comfyui_caption(request: Request):
+    """Run a caption workflow and block until the caption file is written."""
     data = await request.json()
 
     if not comfyui_process.comfyui_process:
         return {"caption": ""}
 
-    session_id = str(random.randint(1, 1125899906842600))
-    cleanup_images(["background_"])
+    if "background" not in data:
+        return {"caption": ""}
 
-    if "background" in data:
-        data["background"] = save_base64_image(data['background'], "background", session_id)
+    workflow_name = _resolve_workflow_name(data['workflow'])
+    client_id = request.headers.get('X-Client-Id')
+    job = jobs.create_job(workflow_name, client_id)
 
-        caption_file = os.path.join(comfyui_output_dir, "caption.txt")
-        if os.path.exists(caption_file):
-            os.remove(caption_file)
+    caption_file = os.path.join(comfyui_output_dir, "caption.txt")
+    if os.path.exists(caption_file):
+        os.remove(caption_file)
 
-        workflow_name = _resolve_workflow_name(data['workflow'])
-        st.promptID = comfyui_workflow(workflow_name, data)['prompt_id']
+    try:
+        data["background"] = save_base64_image(data['background'], "background", job.job_id)
+        job.input_files.append(data["background"])
+        jobs.submit_job(job, data)
+    except WorkflowError as exc:
+        raise HTTPException(status_code=exc.status_code, detail=exc.detail)
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"comfyui_caption failed: {e}")
 
-        while not os.path.exists(caption_file):
-            time.sleep(0.5)
+    if not st.ws:
+        open_websocket_connection()
 
-        with open(caption_file, 'r', encoding='utf-8', errors='replace') as file:
-            return {"caption": file.read()}
+    deadline = time.time() + CAPTION_TIMEOUT
+    while time.time() < deadline:
+        if job.is_terminal:
+            if os.path.exists(caption_file):
+                with open(caption_file, 'r', encoding='utf-8', errors='replace') as file:
+                    return {"caption": file.read(), "job_id": job.job_id}
+            return {
+                "caption": "",
+                "error": job.error or "caption workflow finished without producing caption.txt",
+                "job_id": job.job_id,
+            }
+        time.sleep(0.5)
 
-    return {"caption": ""}
+    return {"caption": "", "error": "timeout", "job_id": job.job_id}
 
 
 @app.get("/mode_config")
@@ -652,10 +822,30 @@ async def list_workflows(request: Request, path: str = None):
 
 
 @app.get("/workflow_status", response_class=HTMLResponse)
-async def workflow_status_page(request: Request):
+async def workflow_status_page(request: Request, job_id: str = None):
+    """Standalone progress page.
+
+    With ?job_id= it follows that job. Without one it follows the single
+    active job, if there is exactly one - it never shows another job's data.
+    """
+    job = None
+    if job_id:
+        job = jobs.registry.get(job_id)
+        if job is None:
+            raise HTTPException(status_code=404, detail=f"Unknown job_id: {job_id}")
+    else:
+        active = jobs.registry.active()
+        if len(active) == 1:
+            job = active[0]
+
     return templates.TemplateResponse(
         "workflow_progress.html",
-        {"request": request}
+        {
+            "request": request,
+            "job_id": job.job_id if job else "",
+            "workflow": job.workflow if job else "",
+            "start_time": job.submitted_at if job else None,
+        }
     )
 
 

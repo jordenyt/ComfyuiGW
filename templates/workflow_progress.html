@@ -31,28 +31,81 @@
 
     <script>
         const workflow = "{{ workflow }}";
+        const jobId = "{{ job_id }}";
         const startTime = {{ start_time if start_time else 0 }};
-        let statusTimeout;
+        let statusTimeout = null;
+        let finished = false;
+
+        // Keep the job id in the address bar so a reload (or a reopened tab)
+        // re-attaches to the same job instead of re-submitting the form.
+        if (jobId) {
+            const params = new URLSearchParams(window.location.search);
+            if (!params.get('job_id')) {
+                params.set('job_id', jobId);
+                window.history.replaceState({}, '', '/workflow_status?' + params.toString());
+            }
+        }
+
+        function scheduleUpdate() {
+            clearTimeout(statusTimeout);
+            statusTimeout = setTimeout(updateStatus, 1000);
+        }
 
         function updateStatus() {
-            fetch('/comfyui_status')
+            if (!jobId) {
+                document.getElementById('status').innerHTML =
+                    '<strong>No job</strong><br>There is no job to follow. Submit a workflow, ' +
+                    'or open this page with <code>?job_id=&lt;id&gt;</code>.';
+                document.getElementById('interruptButton').style.display = 'none';
+                return;
+            }
+
+            fetch('/comfyui_status?job_id=' + encodeURIComponent(jobId))
                 .then(r => r.json())
                 .then(data => {
-                    document.getElementById('status').innerHTML =
-                        `<strong>Progress:</strong> ${data.progress}<br><strong>Step:</strong> ${data.step}`;
+                    const state = data.state || 'unknown';
+                    let html = '';
 
-                    if (data.progress === "Done") {
-                        document.getElementById('interruptButton').style.display = 'none';
-                        findWorkflowOutputs();
+                    if (state === 'queued') {
+                        const position = data.queue_position
+                            ? ` (position ${data.queue_position} of ${data.queue_length})`
+                            : '';
+                        html = `<strong>Queued</strong>${position}<br><strong>Job:</strong> ${data.job_id}`;
+                    } else if (state === 'running') {
+                        html = `<strong>Progress:</strong> ${data.progress}<br><strong>Step:</strong> ${data.step}`;
+                    } else if (state === 'done') {
+                        html = '<strong>Progress:</strong> Done';
+                    } else if (state === 'cancelled') {
+                        html = '<strong>Cancelled</strong>';
+                    } else if (state === 'error') {
+                        html = `<strong>Error</strong><br>${data.error || 'Unknown error'}`;
                     } else {
-                        setTimeout(updateStatus, 1000);
+                        html = `<strong>State:</strong> ${state}`;
                     }
+
+                    document.getElementById('status').innerHTML = html;
+
+                    if (state === 'done' || state === 'error' || state === 'cancelled') {
+                        finished = true;
+                        document.getElementById('interruptButton').style.display = 'none';
+                        if (state === 'done') {
+                            findWorkflowOutputs();
+                        }
+                        return;
+                    }
+                    scheduleUpdate();
+                })
+                .catch(err => {
+                    document.getElementById('status').innerHTML =
+                        `<strong>Error:</strong> ${err}`;
+                    scheduleUpdate();
                 });
         }
 
         function findWorkflowOutputs() {
             if (!workflow) return;
-            fetch(`/find_workflow_outputs/${workflow}`)
+            const jobQuery = jobId ? `?job_id=${encodeURIComponent(jobId)}` : '';
+            fetch(`/find_workflow_outputs/${encodeURIComponent(workflow)}${jobQuery}`)
                 .then(r => r.json())
                 .then(data => {
                     console.log('API response:', data);
@@ -82,7 +135,7 @@
 
                 html += `<div class="result-card">
                     <strong>${file.filename}</strong><br>
-                    <small>${new Date(file.mod_time * 1000).toLocaleString()}</small><br>`;
+                    <small>${file.mod_time ? new Date(file.mod_time * 1000).toLocaleString() : ''}</small><br>`;
 
                 if (['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp'].includes(ext)) {
                     html += `<img src="${url}" alt="${file.filename}"/>`;
@@ -170,14 +223,26 @@
             }, 2000);
         }
 
+        // Cancel this job only - never a global interrupt.
         function interruptWorkflow() {
-            fetch('/comfyui_interrupt')
-                .then(() => alert('Workflow interrupted'));
+            if (!jobId) return;
+            fetch('/comfyui_cancel/' + encodeURIComponent(jobId), { method: 'POST' })
+                .then(() => {
+                    document.getElementById('status').innerHTML = '<strong>Cancelling...</strong>';
+                    updateStatus();
+                })
+                .catch(err => {
+                    document.getElementById('status').innerHTML =
+                        `<strong>Error:</strong> ${err}`;
+                });
         }
 
         document.addEventListener('visibilitychange', () => {
-            if (document.hidden) clearTimeout(statusTimeout);
-            else updateStatus();
+            if (document.hidden) {
+                clearTimeout(statusTimeout);
+            } else if (!finished) {
+                updateStatus();
+            }
         });
 
         updateStatus();

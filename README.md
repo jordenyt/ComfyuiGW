@@ -8,8 +8,10 @@
 
 ## ✨ Key Features
 - **REST API Gateway** - Execute ComfyUI workflows via simple HTTP requests
+- **Job Queue** - Every submission returns a `job_id`; jobs are queued and run one at a time
 - **Web Interface** - User-friendly form-based workflow execution (`/runflow`)
 - **Real-time Progress Tracking** - Monitor workflow execution with live updates
+- **Scoped Cancellation** - Cancel one job without touching the others
 - **File Management** - Automatic handling of images, videos, and audio files
 - **Workflow Configuration** - Simple JSON-based workflow definition
 - **Preset Management** - Create reusable configurations with json files
@@ -84,8 +86,10 @@ Access `http://localhost:5000/runflow` to execute workflows through a convenient
 
 1. **Select Workflow** - Choose from available workflows
 2. **Fill Parameters** - Provide inputs via text fields and file uploads
-3. **Submit & Monitor** - Track real-time progress with step-by-step updates
-4. **Retrieve Results** - Find output in `ComfyUI/output` directory
+3. **Submit & Monitor** - Track real-time progress with step-by-step updates. The page follows
+   *your* job: while it waits behind another job it shows `Queued (position N of M)`
+4. **Cancel** - The Interrupt button cancels that job only; other queued jobs keep running
+5. **Retrieve Results** - Find output in `ComfyUI/output` directory
 
 
 ## 🤖 Agent / Programmatic Access
@@ -103,9 +107,10 @@ Start at `http://<host>:5000/`, which indexes every entry point. In particular:
 | `/api/endpoints` | JSON inventory of all routes |
 | `/openapi.json`, `/docs` | FastAPI-generated schema and Swagger UI |
 
-The guide documents the full lifecycle (submit → poll `/comfyui_status` until `progress == "Done"`
-→ fetch outputs → download), the JSON and multipart entry points, and the non-obvious behaviours
-that commonly break clients: a single global job slot, the exact `_api` suffix rules, raw (non-`data:`)
+The guide documents the full lifecycle (submit → keep the returned `job_id` → poll
+`/comfyui_status?job_id=…` until `state` is `done` → fetch outputs → download), the JSON and
+multipart entry points, and the non-obvious behaviours that commonly break clients: jobs are
+queued and must be addressed by id, the exact `_api` suffix rules, raw (non-`data:`)
 base64 for image fields, and the `file_url` field that is emitted but not routable.
 
 A ready-to-use Python client is included in the guide (see its §8).
