@@ -16,7 +16,12 @@ import uuid
 import requests
 
 from comfyui_config import comfyui_output_dir, comfyui_server
-from comfyui_images import INPUT_EXTENSIONS, delete_input_file, inputs_dir
+from comfyui_images import (
+    INPUT_EXTENSIONS,
+    delete_input_file,
+    inputs_dir,
+    is_cache_path,
+)
 from comfyui_workflow import build_prompt, load_workflow_config, queue_prompt
 
 STATE_QUEUED = "queued"
@@ -38,6 +43,12 @@ LOST_GRACE_SECONDS = 5.0
 SWEEP_EVERY_TICKS = 30
 # Age after which unreferenced input and output files are removed.
 ORPHAN_MAX_AGE = 3600.0
+# A content-addressed input file (the cache) is removed this many seconds
+# after the last job that used it finished. The file name is derived from the
+# content, so the same upload always resolves to the same name and ComfyUI
+# can reuse its cached node output - the file itself only has to outlive the
+# workflows that use it.
+CACHE_MAX_AGE = 3600.0
 # The websocket "executing" message arrives a moment after the job actually
 # started, so the estimated start time is backdated by this much when no
 # authoritative execution start time is known yet.
@@ -68,6 +79,8 @@ class Job:
         self.queue_length = 0
         self.outputs = []
         self.input_files = []
+        # Whether the cache files of this job have been timestamped already.
+        self.cache_recorded = False
         # Per-job progress bookkeeping (the websocket handler needs the prompt
         # to resolve node titles and the node count for the progress text).
         self.prompt = None
@@ -485,6 +498,7 @@ def _reconciler_loop():
     while not _reconciler_stop.is_set():
         try:
             reconcile_once()
+            _record_finished_cache_usage()
             ticks += 1
             if ticks % SWEEP_EVERY_TICKS == 0:
                 gc_input_files()
@@ -499,8 +513,34 @@ def _reconciler_loop():
 # Garbage collection of input and output files
 # ---------------------------------------------------------------------------
 
+# Cache file -> the time the last job that used it finished. A cache file is
+# removed CACHE_MAX_AGE seconds after that moment.
+_CACHE_LAST_USED = {}
+
+
+def _record_finished_cache_usage():
+    """Remember when each cache file was last needed by a finished job."""
+    now = time.time()
+    for job in registry.all():
+        if job.is_active or job.cache_recorded:
+            continue
+        job.cache_recorded = True
+        timestamp = job.ended_at or now
+        for path in job.input_files:
+            if not is_cache_path(path):
+                continue
+            previous = _CACHE_LAST_USED.get(path)
+            if previous is None or timestamp > previous:
+                _CACHE_LAST_USED[path] = timestamp
+
+
 def gc_input_files():
-    """Delete the input files of finished jobs that no running job needs."""
+    """Delete the input files of finished jobs that no running job needs.
+
+    Content-addressed cache files are shared by every job that sent the same
+    bytes, so they are not deleted here - :func:`sweep_orphan_inputs` removes
+    them once they are older than the cache TTL.
+    """
     active_paths = set()
     for job in registry.active():
         for path in job.input_files:
@@ -512,16 +552,30 @@ def gc_input_files():
         for path in list(job.input_files):
             if os.path.normcase(path) in active_paths:
                 continue
+            if is_cache_path(path):
+                continue
             if delete_input_file(path):
+                job.input_files.remove(path)
+            elif not os.path.isfile(path):
                 job.input_files.remove(path)
 
 
-def sweep_orphan_inputs(max_age=ORPHAN_MAX_AGE):
-    """Delete input files that belong to no known job and are old enough."""
+def sweep_orphan_inputs(max_age=ORPHAN_MAX_AGE, cache_max_age=CACHE_MAX_AGE):
+    """Delete input files that no running job needs.
+
+    Legacy per-job files go once no job owns them and they are older than
+    ``max_age``. Content-addressed cache files are shared between jobs and are
+    removed ``cache_max_age`` seconds after the last job that used them
+    finished, so a repeated upload finds the file already there.
+    """
     known = set()
+    active_paths = set()
     for job in registry.all():
         for path in job.input_files:
-            known.add(os.path.normcase(path))
+            key = os.path.normcase(path)
+            known.add(key)
+            if job.is_active:
+                active_paths.add(key)
 
     directory = inputs_dir()
     if not os.path.exists(directory):
@@ -529,17 +583,56 @@ def sweep_orphan_inputs(max_age=ORPHAN_MAX_AGE):
 
     now = time.time()
     for filename in os.listdir(directory):
+        path = os.path.join(directory, filename)
+
+        # Leftovers from an interrupted write.
+        if filename.endswith(".part"):
+            try:
+                if now - os.path.getmtime(path) > max_age:
+                    delete_input_file(path)
+            except OSError:
+                pass
+            continue
+
         if not filename.endswith(INPUT_EXTENSIONS):
             continue
-        path = os.path.join(directory, filename)
-        if os.path.normcase(path) in known:
-            continue
-        try:
-            mod_time = os.path.getmtime(path)
-        except OSError:
-            continue
-        if now - mod_time > max_age:
-            delete_input_file(path)
+        key = os.path.normcase(path)
+
+        if is_cache_path(path):
+            if key in active_paths:
+                continue
+            last_used = _CACHE_LAST_USED.get(path)
+            if last_used is None:
+                # No job in this run ever used it (e.g. the gateway was
+                # restarted) - fall back to the age of the file itself.
+                try:
+                    last_used = os.path.getmtime(path)
+                except OSError:
+                    continue
+            if now - last_used <= cache_max_age:
+                continue
+        else:
+            if key in known:
+                continue
+            try:
+                mod_time = os.path.getmtime(path)
+            except OSError:
+                continue
+            if now - mod_time <= max_age:
+                continue
+
+        if delete_input_file(path):
+            _forget_input_path(path)
+
+
+def _forget_input_path(path):
+    """Drop a deleted input file from every job that referenced it."""
+    key = os.path.normcase(path)
+    for job in registry.all():
+        for job_path in list(job.input_files):
+            if os.path.normcase(job_path) == key:
+                job.input_files.remove(job_path)
+    _CACHE_LAST_USED.pop(path, None)
 
 
 def sweep_old_outputs(max_age=ORPHAN_MAX_AGE):

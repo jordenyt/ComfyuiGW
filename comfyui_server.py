@@ -572,12 +572,15 @@ async def comfyui_workflow_handler(request: Request):
         for key, value in data.items():
             if isinstance(value, str) and is_valid_base64_image(value):
                 image_bytes = base64.b64decode(value)
+                # Input files are content-addressed: the same bytes always map
+                # to the same file name, so ComfyUI reuses its cached node
+                # output instead of decoding the image again.
                 existing_path = find_existing_file(key, image_bytes)
                 if existing_path:
                     data[key] = existing_path
                     job.input_files.append(existing_path)
                 else:
-                    saved_path = save_base64_image(value, key, job.job_id)
+                    saved_path = save_base64_image(value, key)
                     data[key] = saved_path
                     job.input_files.append(saved_path)
 
@@ -651,7 +654,7 @@ async def comfyui_runflow_handler(request: Request):
                         job.input_files.append(existing_path)
                     else:
                         file_ext = os.path.splitext(file.filename)[1]
-                        save_path = save_input_file(file_content, field_name, job.job_id, file_ext)
+                        save_path = save_input_file(file_content, field_name, extension=file_ext)
                         data[field_name] = save_path
                         job.input_files.append(save_path)
             else:
@@ -719,7 +722,7 @@ async def comfyui_caption(request: Request):
         os.remove(caption_file)
 
     try:
-        data["background"] = save_base64_image(data['background'], "background", job.job_id)
+        data["background"] = save_base64_image(data['background'], "background")
         job.input_files.append(data["background"])
         jobs.submit_job(job, data)
     except WorkflowError as exc:
