@@ -18,25 +18,89 @@ class WorkflowError(RuntimeError):
         self.status_code = status_code
 
 
+def _resolve_dotted_target(container, path):
+    """Find where the last element of ``path`` lives inside ``container``.
+
+    Some ComfyUI nodes name an input literally, for example
+    "sampling_mode.seed" (TextGenerateV2). The dotted path notation of the
+    config cannot express that, so the longest literal key that matches the
+    remaining path wins. Returns ``(container, key)`` or ``None``.
+    """
+    if not path or not isinstance(container, dict):
+        return None
+
+    current = container
+    index = 0
+    while index < len(path) - 1:
+        if not isinstance(current, dict):
+            return None
+        matched = False
+        # Longest literal match first, e.g. "sampling_mode.seed".
+        for end in range(len(path) - 1, index, -1):
+            literal = ".".join(path[index:end + 1])
+            if literal in current:
+                if end == len(path) - 1:
+                    return current, literal
+                value = current[literal]
+                if not isinstance(value, dict):
+                    return None
+                current = value
+                index = end
+                matched = True
+                break
+        if matched:
+            continue
+        key = path[index]
+        if key not in current:
+            return None
+        value = current[key]
+        if not isinstance(value, dict):
+            return None
+        current = value
+        index += 1
+
+    if not isinstance(current, dict):
+        return None
+    return current, path[-1]
+
+
 def set_workflow_value(d, path, key, data):
     # Skip fields whose target node isn't in the prompt. Without this guard,
-    # the setdefault loop below would CREATE an empty node entry (e.g., for
+    # the setdefault loop below would CREATE an empty node entry (e.g. for
     # audio loaders that haven't been added to the workflow JSON yet), which
     # ComfyUI rejects with "Node has no class_type".
     if path[0] not in d:
         return
 
-    for k in path[:-1]:
-        d = d.setdefault(k, {})
+    node = d[path[0]]
+    rest = path[1:]
+    if not rest:
+        container, final_key = node, path[-1]
+        target = (container, final_key)
+    else:
+        target = _resolve_dotted_target(node, rest)
+    if target is not None:
+        container, final_key = target
+    else:
+        # Fall back to the plain nested notation, creating the missing
+        # intermediate dictionaries on the way.
+        container = node
+        for k in rest[:-1]:
+            if not isinstance(container, dict):
+                return
+            container = container.setdefault(k, {})
+        if not isinstance(container, dict):
+            return
+        final_key = rest[-1]
 
     if key == "seed":
         # 2**31-1 is the smallest max any seed input declares (e.g. the
         # OpenAI API "Seed" option node), so it is valid everywhere. A larger
         # random value makes ComfyUI reject the whole prompt with
         # "value_bigger_than_max".
-        d[path[-1]] = random.randint(1, 2**31 - 1)
+        container[final_key] = random.randint(1, 2**31 - 1)
     elif key in data:
-        d[path[-1]] = data[key]
+        container[final_key] = data[key]
 
 
 def apply_settings(prompt_workflow, settings, data):
