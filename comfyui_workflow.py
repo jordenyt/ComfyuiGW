@@ -30,7 +30,11 @@ def set_workflow_value(d, path, key, data):
         d = d.setdefault(k, {})
 
     if key == "seed":
-        d[path[-1]] = random.randint(1, 4294967295)
+        # 2**31-1 is the smallest max any seed input declares (e.g. the
+        # OpenAI API "Seed" option node), so it is valid everywhere. A larger
+        # random value makes ComfyUI reject the whole prompt with
+        # "value_bigger_than_max".
+        d[path[-1]] = random.randint(1, 2**31 - 1)
     elif key in data:
         d[path[-1]] = data[key]
 

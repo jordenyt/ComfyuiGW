@@ -22,7 +22,12 @@ from comfyui_images import (
     inputs_dir,
     is_cache_path,
 )
-from comfyui_workflow import build_prompt, load_workflow_config, queue_prompt
+from comfyui_workflow import (
+    WorkflowError,
+    build_prompt,
+    load_workflow_config,
+    queue_prompt,
+)
 
 STATE_QUEUED = "queued"
 STATE_RUNNING = "running"
@@ -342,6 +347,10 @@ def create_job(workflow, client_id=None):
 
 def submit_job(job, data):
     """Build the prompt for ``job`` and hand it to ComfyUI's queue."""
+    # The reconciler must run even when the submission is rejected, otherwise
+    # the job stays in "queued" forever (ComfyUI never heard about it).
+    ensure_reconciler()
+
     try:
         prompt, _config = build_prompt(job.workflow, data)
     except KeyError as exc:
@@ -350,7 +359,17 @@ def submit_job(job, data):
         job.ended_at = time.time()
         raise
 
-    queue_prompt(prompt, job_id=job.job_id)
+    try:
+        queue_prompt(prompt, job_id=job.job_id)
+    except WorkflowError as exc:
+        # ComfyUI rejected the prompt: the job never reaches the queue, so it
+        # has to be marked failed here instead of waiting for the reconciler.
+        job.state = STATE_ERROR
+        job.error = exc.detail
+        job.progress = "Done"
+        job.step = ""
+        job.ended_at = time.time()
+        raise
 
     job.prompt = prompt
     job.node_ids = list(prompt.keys())
@@ -358,7 +377,6 @@ def submit_job(job, data):
     job.progress = "Queued"
     job.state = STATE_QUEUED
     job.submitted_at = job.submitted_at or time.time()
-    ensure_reconciler()
     return job
 
 

@@ -21,7 +21,7 @@ Everything below is derived from the actual implementation in `comfyui_server.py
 | 4 | **Base64 images must be raw base64 — no `data:` prefix.** | `/comfyui_workflow` sniffs each string with a Pillow decode. A `data:image/jpeg;base64,` prefix fails the sniff, so the value is passed through verbatim as a filename and the job fails. |
 | 5 | **Images only on the JSON endpoint.** Video and audio must use the multipart endpoint. | Only image payloads are auto-decoded and written to ComfyUI's input dir. |
 | 6 | **Resolve `$placeholders` yourself before POSTing.** | The gateway does no `$` substitution. A literal `"$positive"` is written into the prompt as-is. See §4. |
-| 7 | **`seed` is always randomised.** | Any `seed` you send is overwritten with a fresh random value. Send it only for readability. |
+| 7 | **`seed` is always randomised.** | Any `seed` you send is overwritten with a fresh random value in `1 .. 2^31-1`. Send it only for readability. The upper bound is the smallest max any seed input declares (the OpenAI API `Seed` option node), so the value is accepted by every workflow. |
 | 8 | **Use the exact `<name>_api` key where exactness is required.** | `/find_workflow_outputs` and `/comfyui_runflow` do **no** `_api` fallback. See §3. |
 | 9 | **Cancel with `POST /comfyui_cancel/{job_id}`, never with a global kill.** | The cancel is scoped to that job: a running job is interrupted, a queued job is dequeued. `POST /comfyui_interrupt_all` kills whatever ComfyUI runs — including jobs started from the ComfyUI web UI. |
 
@@ -291,15 +291,45 @@ lets prompts refer to attachments positionally. You do not add the tags yourself
 ### 4.5 Captioning (blocking)
 
 `POST /comfyui_caption` with `{"workflow": ..., "background": "<base64 image>"}` runs a caption
-workflow and **blocks inside the request** until `output/caption.txt` appears, then returns
-`{"caption": "...", "job_id": "..."}`. The caption job is queued like every other job, so it may
-wait behind a running workflow.
+workflow and **blocks inside the request** until the caption file of *that job* appears, then
+returns `{"caption": "...", "job_id": "..."}`. The caption is read from the job's own output
+files, so two caption jobs running at the same time never mix their text up.
 
 The wait is bounded: after **900 seconds** the request returns
 `{"caption": "", "error": "timeout", "job_id": "..."}`. If the workflow fails, the response carries
 an `error` string instead of a caption. Use a client timeout of at least 900 s.
 
-> Prefer `/comfyui_workflow` + `/find_workflow_outputs` when you can — it does not block.
+> Prefer the job flow below — it does not block and the job can be stopped.
+
+### 4.6 Text output (image + text → text)
+
+Workflows that write a text file (captions, tags, generated video prompts) are marked with
+`"produces_text": true` in `/api/workflows`. They are driven like any other workflow:
+
+```
+POST /comfyui_workflow   {"workflow": "caption_api", "image1": "<base64>", "prompt": "..."}
+   → {"job_id": "…"}
+GET  /comfyui_status?job_id=…          → poll until "state": "done"
+GET  /comfyui_text?job_id=…             → {"job_id", "state", "text", "error", "files"}
+```
+
+The text workflows share one key convention, so a client can fill them in without knowing the
+workflow:
+
+| Key | Meaning |
+|---|---|
+| `image1` | the background image |
+| `image2` | the reference image |
+| `image3`…`image9` | further reference images |
+| `prompt` | the positive prompt |
+
+A workflow only receives the keys it declares in its `fields` — `caption_api` asks for `image1`
+and `prompt`, `video_prompt_MiniMax_H3_3i_api` for `image1`…`image3` and `prompt`, and
+`video_prompt_MiniMax_H3_ref_api` for `prompt` only. Keys that are not declared are ignored, and
+optional keys that are left out are stripped from the prompt (§4.3).
+
+`GET /comfyui_text` returns the text the job produced, read from that job's own output files. Use
+`POST /comfyui_cancel/{job_id}` to stop the job while it runs.
 
 ---
 
@@ -477,7 +507,7 @@ Pass `?job_id=…` to restrict the search to the files of one job.
 | GET | `/` | HTML index linking every entry point |
 | GET | `/agent_guide` | This guide, rendered HTML |
 | GET | `/agent_guide.md` | This guide, raw Markdown |
-| GET | `/api/workflows` | JSON map of workflow name → fields / inputs / output metadata |
+| GET | `/api/workflows` | JSON map of workflow name → fields / inputs / output metadata (`produces_text` marks text workflows) |
 | GET | `/api/endpoints` | JSON inventory of routes with purpose notes |
 | GET | `/openapi.json`, `/docs`, `/redoc` | FastAPI's generated schema and Swagger UI |
 
@@ -488,6 +518,7 @@ Pass `?job_id=…` to restrict the search to the files of one job.
 | POST | `/comfyui_workflow` | JSON: `{"workflow": str, ...fields}` | `{"status":"Queued","job_id": str, "state": str, …}` |
 | POST | `/comfyui_runflow` | multipart: `workflow` + declared `inputs` | HTML progress page, or the job envelope with `Accept: application/json` |
 | POST | `/comfyui_caption` | JSON: `{"workflow": str, "background": base64}` | `{"caption": str, "job_id": str}` (blocking, 900 s cap) |
+| GET | `/comfyui_text?job_id=` | `{"job_id", "state", "text", "error", "files"}` — the text a job produced |
 
 ### Status, control, results
 
@@ -764,7 +795,8 @@ call at the bottom of `comfyui_server.py` when debugging.
   that owns them has finished.
 - **`/comfyui_interrupt_all` is global.** It stops whatever ComfyUI runs, including jobs from the
   ComfyUI web UI. `/comfyui_cancel/{job_id}` is the scoped alternative.
-- **`/comfyui_caption` blocks** until the caption workflow finishes (900 s cap).
+- **`/comfyui_caption` blocks** until the caption workflow finishes (900 s cap). The job flow
+  (`/comfyui_workflow` → `/comfyui_status` → `/comfyui_text`) does not block and can be cancelled.
 - **`/download_file` is filesystem-scoped.** Pass only paths the server returned.
 - **ComfyUI caches node outputs.** Re-running an identical prompt can reuse a cached node and
   therefore not rewrite the output file, so the output listing of the second run can be empty.

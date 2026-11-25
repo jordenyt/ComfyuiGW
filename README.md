@@ -25,7 +25,6 @@
    ```bash
    cd ComfyUI/custom_nodes
    git clone https://github.com/ltdrdata/ComfyUI-Manager
-   git clone https://github.com/kijai/ComfyUI-Florence2
    git clone https://github.com/pythongosssss/ComfyUI-Custom-Scripts
    git clone https://github.com/kijai/ComfyUI-KJNodes
    git clone https://github.com/WASasquatch/was-node-suite-comfyui

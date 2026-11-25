@@ -50,6 +50,9 @@ AGENT_GUIDE_PATH = os.path.join(local_path, "docs", "AGENT_API_GUIDE.md")
 # How long /comfyui_caption waits for the caption workflow before giving up.
 CAPTION_TIMEOUT = 900.0
 
+# File extensions that count as "text output" of a workflow.
+TEXT_EXTENSIONS = ("txt", "text", "md", "json", "csv")
+
 # Landing-page sections. Also serves as the description source for
 # GET /api/endpoints, which merges these notes onto the live route table.
 INDEX_GROUPS = [
@@ -87,6 +90,9 @@ INDEX_GROUPS = [
             {'method': 'POST', 'url': '/comfyui_caption', 'path': '/comfyui_caption',
              'description': 'Runs a caption workflow and blocks until the caption is written '
                             '(bounded by a 900 s timeout).'},
+            {'method': 'GET', 'url': '/comfyui_text', 'path': '/comfyui_text',
+             'description': 'The text output of one job (captions, tags, generated prompts). '
+                            'Pass ?job_id= to address a specific job.'},
         ],
     },
     {
@@ -225,6 +231,12 @@ def api_workflows():
         if prompt_workflow and not os.path.isabs(prompt_workflow):
             prompt_workflow = os.path.normpath(os.path.join(local_path, prompt_workflow))
 
+        output_cfg = cfg.get('output') or {}
+        produces_text = any(
+            (spec.get('extension') or '').lower() in TEXT_EXTENSIONS
+            for spec in (output_cfg.get('files') or [])
+        )
+
         out[name] = {
             'prompt_workflow': prompt_workflow,
             'folder': os.path.basename(os.path.dirname(prompt_workflow)) if prompt_workflow else None,
@@ -232,9 +244,10 @@ def api_workflows():
             'inputs': cfg.get('inputs') or {},
             'auto_image_tags': bool(cfg.get('auto_image_tags')),
             'descriptions': cfg.get('descriptions'),
-            'output': cfg.get('output'),
+            'output': output_cfg,
+            'produces_text': produces_text,
             'has_inputs': 'inputs' in cfg,
-            'has_output_config': 'files' in (cfg.get('output') or {}),
+            'has_output_config': 'files' in output_cfg,
         }
     return out
 
@@ -396,6 +409,47 @@ def comfyui_result(job_id: str = None):
     }
 
 
+@app.get('/comfyui_text')
+def comfyui_text(job_id: str = None):
+    """The text output of one job.
+
+    Workflows that write a text file (captions, tags, generated prompts) expose
+    their result here, so a client can read it without downloading the file.
+    The text is taken from the job's own output files, so two jobs writing
+    ``caption.txt`` at the same time never mix their results up.
+    """
+    job = _resolve_job_for_request(job_id)
+    text, error = _read_job_text(job)
+    return {
+        "job_id": job.job_id,
+        "state": job.state,
+        "text": text or "",
+        "error": job.error or error,
+        "files": jobs.resolve_outputs(job),
+    }
+
+
+def _job_text_files(job):
+    """The text files a job produced."""
+    files = jobs.resolve_outputs(job)
+    return [f for f in files if (f.get("extension") or "").lower() in TEXT_EXTENSIONS]
+
+
+def _read_job_text(job):
+    """Read the text output of a job.
+
+    Returns ``(text, error)``. ``text`` is None when the job has no text file
+    (yet); ``error`` describes why a file could not be read.
+    """
+    for entry in _job_text_files(job):
+        try:
+            with open(entry["filepath"], "r", encoding="utf-8", errors="replace") as handle:
+                return handle.read(), None
+        except OSError as exc:
+            return None, f"Cannot read {entry['filepath']}: {exc}"
+    return None, None
+
+
 @app.get('/api/jobs')
 def api_jobs(client_id: str = None, state: str = None):
     """Every job the gateway knows about."""
@@ -546,6 +600,14 @@ def _resolve_workflow_name(requested):
         return requested + '_api'
     except KeyError:
         return requested
+
+
+def _workflow_fields(workflow_name):
+    """The field map of a workflow, empty when it cannot be read."""
+    try:
+        return load_workflow_config(workflow_name).get('fields') or {}
+    except Exception:
+        return {}
 
 
 @app.post('/comfyui_workflow')
@@ -704,26 +766,30 @@ async def comfyui_runflow_handler(request: Request):
 
 @app.post('/comfyui_caption')
 async def comfyui_caption(request: Request):
-    """Run a caption workflow and block until the caption file is written."""
+    """Run a caption workflow and block until the caption is written.
+
+    The caption is read from the job's own output files, so two caption jobs
+    running at the same time cannot pick up each other's text.
+    """
     data = await request.json()
 
     if not comfyui_process.comfyui_process:
-        return {"caption": ""}
+        return {"caption": "", "error": "ComfyUI is not started."}
 
     if "background" not in data:
-        return {"caption": ""}
+        return {"caption": "", "error": "Missing 'background' in request body"}
 
     workflow_name = _resolve_workflow_name(data['workflow'])
     client_id = request.headers.get('X-Client-Id')
     job = jobs.create_job(workflow_name, client_id)
 
-    caption_file = os.path.join(comfyui_output_dir, "caption.txt")
-    if os.path.exists(caption_file):
-        os.remove(caption_file)
-
     try:
         data["background"] = save_base64_image(data['background'], "background")
         job.input_files.append(data["background"])
+        # The text workflows take their image as "image1"; this endpoint keeps
+        # its old "background" name.
+        if "image1" in _workflow_fields(workflow_name):
+            data["image1"] = data["background"]
         jobs.submit_job(job, data)
     except WorkflowError as exc:
         raise HTTPException(status_code=exc.status_code, detail=exc.detail)
@@ -738,12 +804,20 @@ async def comfyui_caption(request: Request):
     deadline = time.time() + CAPTION_TIMEOUT
     while time.time() < deadline:
         if job.is_terminal:
-            if os.path.exists(caption_file):
-                with open(caption_file, 'r', encoding='utf-8', errors='replace') as file:
-                    return {"caption": file.read(), "job_id": job.job_id}
+            # The job is done, but the file may still be on its way to disk:
+            # give it a moment before giving up.
+            file_deadline = time.time() + 10.0
+            read_error = None
+            while time.time() < file_deadline:
+                text, read_error = _read_job_text(job)
+                if text is not None:
+                    return {"caption": text, "job_id": job.job_id}
+                if job.state == jobs.STATE_ERROR:
+                    break
+                time.sleep(0.5)
             return {
                 "caption": "",
-                "error": job.error or "caption workflow finished without producing caption.txt",
+                "error": job.error or read_error or "caption workflow finished without producing a caption",
                 "job_id": job.job_id,
             }
         time.sleep(0.5)
