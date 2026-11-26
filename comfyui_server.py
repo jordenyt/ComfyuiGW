@@ -78,6 +78,20 @@ INDEX_GROUPS = [
         ],
     },
     {
+        'title': 'Writing a workflow',
+        'entries': [
+            {'method': 'GET', 'url': '/docs/CREATE_WORKFLOW.md', 'path': '/docs/CREATE_WORKFLOW.md',
+             'description': 'How to create a ComfyUI workflow for the gateway: API format, stock nodes only, '
+                            'autogrow keys, model names, validation, registration.'},
+            {'method': 'GET', 'url': '/docs/WORKFLOWS_CONFIG.md', 'path': '/docs/WORKFLOWS_CONFIG.md',
+             'description': 'Reference of workflows.config.json: fields, inputs, output, auto_image_tags.'},
+            {'method': 'GET', 'url': '/docs/MODE_CONFIG.md', 'path': '/docs/MODE_CONFIG.md',
+             'description': 'Reference of mode.config.json: presets for the app and the $placeholders.'},
+            {'method': 'GET', 'url': '/docs/RUNFLOW_WORKFLOW.md', 'path': '/docs/RUNFLOW_WORKFLOW.md',
+             'description': 'How to publish a workflow to the runflow web UI and drive it by multipart form.'},
+        ],
+    },
+    {
         'title': 'Running a workflow',
         'entries': [
             {'method': 'POST', 'url': '/comfyui_workflow', 'path': '/comfyui_workflow',
@@ -187,6 +201,23 @@ async def agent_guide_markdown():
     if not os.path.exists(AGENT_GUIDE_PATH):
         raise HTTPException(status_code=404, detail="Agent guide not found on disk")
     with open(AGENT_GUIDE_PATH, 'r', encoding='utf-8') as f:
+        return PlainTextResponse(f.read(), media_type="text/markdown; charset=utf-8")
+
+
+@app.get("/docs/{name}.md")
+async def docs_markdown(name: str):
+    """One of the instruction documents in ``docs/`` as raw Markdown.
+
+    The documents describe how to create a workflow, how to configure it, how to
+    publish it to the runflow UI and how to add a mode preset. They are served
+    so an agent on the LAN can read them without access to the repository.
+    """
+    if not name or not name.replace("_", "").replace("-", "").isalnum():
+        raise HTTPException(status_code=400, detail="Invalid document name")
+    path = os.path.join(local_path, "docs", f"{name}.md")
+    if not os.path.isfile(path):
+        raise HTTPException(status_code=404, detail=f"Document '{name}.md' not found")
+    with open(path, 'r', encoding='utf-8') as f:
         return PlainTextResponse(f.read(), media_type="text/markdown; charset=utf-8")
 
 

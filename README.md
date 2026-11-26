@@ -25,12 +25,8 @@
    ```bash
    cd ComfyUI/custom_nodes
    git clone https://github.com/ltdrdata/ComfyUI-Manager
-   git clone https://github.com/pythongosssss/ComfyUI-Custom-Scripts
    git clone https://github.com/kijai/ComfyUI-KJNodes
-   git clone https://github.com/WASasquatch/was-node-suite-comfyui
-   git clone https://github.com/BlenderNeko/ComfyUI_ADV_CLIP_emb
-   git clone https://github.com/jamesWalker55/comfyui-various
-   git clone https://github.com/Fannovel16/comfyui_controlnet_aux
+
    ```
 3. Clone this repository:
    ```bash
@@ -44,41 +40,59 @@
    ```
 
 ## 📦 Adding a Workflow
+
 1. Create or download a ComfyUI workflow JSON file
 2. Place it in a subdirectory under `workflows/` (e.g., `workflows/my_workflow/`)
 3. Create `workflows.config.json`:
    ```json
    { 
-    "workflow_name_api": {
-      "prompt_workflow": "your_workflow.json",
-      "fields": {
-        "param1": "15.inputs.param1",
-        "param2": ["16.inputs.input1", "16.inputs.input2"]
-      },
-      "inputs": {
-        "param1": {"type": "text", "default": "value"},
-        "param2": {"type": "integer", "default": 10}
-      }
-    }
+     "workflow_name_api": {
+       "prompt_workflow": "your_workflow.json",
+       "fields": {
+         "param1": "15.inputs.param1",
+         "param2": ["16.inputs.input1", "16.inputs.input2"]
+       },
+       "inputs": {
+         "param1": {"type": "text", "default": "value"},
+         "param2": {"type": "integer", "default": 10}
+       }
+     }
    }
    ```
 4. Create `mode.config.json` for preset configurations (in [Stable Diffusion Sketch](https://github.com/jordenyt/stable_diffusion_sketch/tree/comfyui) app):
    ```json
    [
      {
-      "name": "ModeName",
-      "title": "Display Name",
-      "showT2I": true,
-      "show": true,
-      "configurable": true,
-      "default": {"param1": "value"},
-      "fields": {
-        "workflow": "workflow_name",
-        "param1": "fixed_value"
-      }
-    }
+       "name": "ModeName",
+       "title": "Display Name",
+       "showT2I": true,
+       "show": true,
+       "configurable": true,
+       "default": {"param1": "value"},
+       "fields": {
+         "workflow": "workflow_name",
+         "param1": "fixed_value"
+       }
+     }
    ]
    ```
+
+**The step-by-step instructions for an agent are in [docs/CREATE_WORKFLOW.md](docs/CREATE_WORKFLOW.md)
+(and served by the gateway at [`/docs/CREATE_WORKFLOW.md`](http://localhost:5000/docs/CREATE_WORKFLOW.md)).**
+It covers the API prompt format, the "stock ComfyUI nodes only" rule, autogrow and
+dynamic-combo keys, exact model names, validation against ComfyUI, registration,
+runflow publication and mode presets.
+
+| Instruction | What it tells you | Repository | Gateway |
+|---|---|---|---|
+| **Create a workflow** | Write the prompt workflow JSON (API format), use stock nodes only, validate it, register it | [`docs/CREATE_WORKFLOW.md`](docs/CREATE_WORKFLOW.md) | [`/docs/CREATE_WORKFLOW.md`](http://localhost:5000/docs/CREATE_WORKFLOW.md) |
+| **Configure a workflow** | `workflows.config.json`: `fields`, `inputs`, `output`, `auto_image_tags` | [`docs/WORKFLOWS_CONFIG.md`](docs/WORKFLOWS_CONFIG.md) | [`/docs/WORKFLOWS_CONFIG.md`](http://localhost:5000/docs/WORKFLOWS_CONFIG.md) |
+| **Add a mode preset** | `mode.config.json`: names, titles, `$placeholders`, app defaults | [`docs/MODE_CONFIG.md`](docs/MODE_CONFIG.md) | [`/docs/MODE_CONFIG.md`](http://localhost:5000/docs/MODE_CONFIG.md) |
+| **Publish to runflow** | Make a workflow appear in `/runflow`, drive it from the form or by multipart | [`docs/RUNFLOW_WORKFLOW.md`](docs/RUNFLOW_WORKFLOW.md) | [`/docs/RUNFLOW_WORKFLOW.md`](http://localhost:5000/docs/RUNFLOW_WORKFLOW.md) |
+| **Run a workflow (API)** | Job lifecycle, payload rules, result retrieval, the reference client | [`docs/AGENT_API_GUIDE.md`](docs/AGENT_API_GUIDE.md) | [`/agent_guide.md`](http://localhost:5000/agent_guide.md) |
+
+The same documents are reachable on a remote host: replace `localhost` with the address of
+the gateway (`http://<host>:5000/...`).
 
 ## 🌐 Using the Web Interface
 Access `http://localhost:5000/runflow` to execute workflows through a convenient form-based interface:
@@ -102,6 +116,10 @@ Start at `http://<host>:5000/`, which indexes every entry point. In particular:
 |---|---|
 | `/agent_guide` | **[Agent Integration Guide](docs/AGENT_API_GUIDE.md)** rendered as HTML |
 | `/agent_guide.md` | The same guide as raw Markdown |
+| `/docs/CREATE_WORKFLOW.md` | **[Create a workflow](docs/CREATE_WORKFLOW.md)** - API format, stock nodes only, validation, registration |
+| `/docs/WORKFLOWS_CONFIG.md` | **[workflows.config.json reference](docs/WORKFLOWS_CONFIG.md)** - fields, inputs, output |
+| `/docs/MODE_CONFIG.md` | **[mode.config.json reference](docs/MODE_CONFIG.md)** - app presets and placeholders |
+| `/docs/RUNFLOW_WORKFLOW.md` | **[Runflow workflows](docs/RUNFLOW_WORKFLOW.md)** - publishing to the web UI and multipart submission |
 | `/api/workflows` | JSON map of every workflow → accepted payload keys, input/output flags |
 | `/api/endpoints` | JSON inventory of all routes |
 | `/openapi.json`, `/docs` | FastAPI-generated schema and Swagger UI |
@@ -119,15 +137,23 @@ A ready-to-use Python client is included in the guide (see its §8).
 ```
 ComfyuiGW/
 ├── comfyui_server.py            # Main server implementation
+├── comfyui_workflow.py          # Config loading, field overrides, prompt submission
+├── comfyui_jobs.py              # Job registry, output resolution
+├── comfyui_converter.py         # UI workflow -> API prompt conversion
 ├── docs/
-│   └── AGENT_API_GUIDE.md       # Agent integration guide (served at /agent_guide.md)
+│   ├── AGENT_API_GUIDE.md       # Agent integration guide (served at /agent_guide.md)
+│   ├── CREATE_WORKFLOW.md       # How to create a workflow (served at /docs/CREATE_WORKFLOW.md)
+│   ├── WORKFLOWS_CONFIG.md      # workflows.config.json reference
+│   ├── MODE_CONFIG.md           # mode.config.json reference
+│   └── RUNFLOW_WORKFLOW.md      # Publishing to the runflow web UI
 ├── run.bat                      # Windows launch script
 ├── run.sh                       # Linux launch script
 ├── requirements.txt             # Python dependencies
-├── workflows/                   # Workflow configurations
-│   ├── workflows.config.json    # Workflow form template
-│   ├── mode.config.json         # Workflow list template
-│   └── my_ComfyUI_workflow.json # Your custom ComfyUI workfiles API json
+├── workflows/                   # One folder per model family
+│   └── <family>/                # e.g. MiniMaxH3, krea2, prompt, flux, qwen, wan
+│       ├── <workflow>_api.json  # The prompt workflow (API format)
+│       ├── workflows.config.json# Payload keys, form fields, output files
+│       └── mode.config.json     # Optional app presets for this family
 ├── inputs/                      # Uploaded input files
 ├── templates/                   # Web interface templates
 │   ├── index.html               # Landing page
@@ -141,7 +167,8 @@ ComfyuiGW/
 ## 📚 Configuration Files
 
 ### workflows.config.json
-Defines workflow mappings and API parameters with the following structure:
+Defines workflow mappings and API parameters with the following structure (full reference:
+[docs/WORKFLOWS_CONFIG.md](docs/WORKFLOWS_CONFIG.md)):
 
 ```json
 {
@@ -171,7 +198,8 @@ Defines workflow mappings and API parameters with the following structure:
   - **default**: Default value if not provided
 
 ### mode.config.json
-Defines preset configurations for workflows:
+Defines preset configurations for workflows (full reference:
+[docs/MODE_CONFIG.md](docs/MODE_CONFIG.md)):
 
 ```json
 {
