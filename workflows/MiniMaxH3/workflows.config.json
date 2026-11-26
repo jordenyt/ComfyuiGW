@@ -1,0 +1,32 @@
+{
+    "ref2va_h3_api": {
+        "prompt_workflow": "h3_ref2va_api.json",
+        "descriptions": "Reference Images to Video with Minimax-H3 ref2va Model",
+        "auto_image_tags": true,
+        "fields": {
+            "seed": "10.inputs.noise_seed",
+            "image1": "6.inputs.image",
+            "image2": "7.inputs.image",
+            "positive": "9.inputs.value",
+            "duration": "19.inputs.value",
+            "steps": "13.inputs.steps",
+            "width": "8.inputs.width",
+            "height": "8.inputs.height"
+        },
+        "inputs": {
+            "image1": {"type": "image", "default": null},
+            "image2": {"type": "image", "default": null, "optional": true},
+            "positive": {"type": "text", "default": ""},
+            "duration": {"type": "integer", "default": 5},
+            "steps": {"type": "integer", "default": 4},
+            "width": {"type": "integer", "default": 864},
+            "height": {"type": "integer", "default": 480}
+        },
+        "output": {
+            "files": [
+                { "prefix": "video/MiniMax_H3", "extension": "webm" },
+                { "prefix": "video/MiniMax_H3", "extension": "mp4" }
+            ]
+        }
+    }
+}

@@ -1,0 +1,56 @@
+[
+    {
+        "name": "Krea2",
+        "title": "Krea2 txt2img",
+        "showT2I": true,
+        "show": true,
+        "configurable": true,
+        "default": {"type": "txt2img", "cfgScale": 1, "steps": 8, "sdSize": 1024},
+        "fields": {
+            "workflow": "krea2_txt2img",
+            "positive": "$positive",
+            "negative": "$negative",
+            "batch_size": "$batchSize",
+            "width": "$width",
+            "height": "$height",
+            "steps": "$steps",
+            "cfg": "$cfg"
+        }
+    },
+    {
+        "name": "Krea2Img2img",
+        "title": "Krea2 img2img (Sketch)",
+        "showT2I": false,
+        "show": true,
+        "configurable": true,
+        "default": {"type": "img2img", "denoise": 0.7, "cfgScale": 1, "steps": 8, "baseImage": "sketch", "sdSize": 1024},
+        "fields": {
+            "workflow": "krea2_img2img",
+            "background": "$background",
+            "positive": "$positive",
+            "negative": "$negative",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "denoise": "$denoise"
+        }
+    },
+    {
+        "name": "Krea2Refine",
+        "title": "Krea2 Refine (Inpaint)",
+        "showT2I": false,
+        "show": true,
+        "configurable": true,
+        "default": {"type": "inpaint", "inpaintPartial": 1, "denoise": 0.8, "cfgScale": 1, "steps": 8, "maskBlur": 5, "baseImage": "background", "sdSize": 1024},
+        "fields": {
+            "workflow": "krea2_refine",
+            "paint": "$mask",
+            "background": "$background",
+            "positive": "$positive",
+            "negative": "$negative",
+            "steps": "$steps",
+            "cfg": "$cfg",
+            "denoise": "$denoise",
+            "maskBlur": "$maskBlur"
+        }
+    }
+]

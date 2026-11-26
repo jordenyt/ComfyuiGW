@@ -1,0 +1,74 @@
+{
+  "1": {
+    "inputs": {
+      "clip_name": "qwen3.5_9b_w4a8_gptq.safetensors",
+      "type": "stable_diffusion",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "2": {
+    "inputs": {
+      "image": "man_with_red_hat.png",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "3": {
+    "inputs": {
+      "clip": [
+        "1",
+        0
+      ],
+      "image": [
+        "2",
+        0
+      ],
+      "prompt": "Describe this image in extreme detail, including subject appearance, clothing, pose, expression, background elements, lighting, camera angle, composition, color palette, and overall aesthetic style. Use precise, descriptive language suitable for AI image generation prompts. Do not use vague terms. Only return the prompt itself.",
+      "max_length": 512,
+      "sampling_mode": "on",
+      "sampling_mode.temperature": 0.7,
+      "sampling_mode.top_k": 64,
+      "sampling_mode.top_p": 0.95,
+      "sampling_mode.min_p": 0.05,
+      "sampling_mode.repetition_penalty": 1.05,
+      "sampling_mode.presence_penalty": 0,
+      "sampling_mode.seed": 0,
+      "thinking": false,
+      "use_default_template": true,
+      "mtp": "auto"
+    },
+    "class_type": "TextGenerate",
+    "_meta": {
+      "title": "Generate Text",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "4": {
+    "inputs": {
+      "text": [
+        "3",
+        0
+      ],
+      "filename_prefix": "caption",
+      "format": "txt"
+    },
+    "class_type": "SaveText",
+    "_meta": {
+      "title": "Save Text",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  }
+}

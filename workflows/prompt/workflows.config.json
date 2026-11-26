@@ -1,0 +1,34 @@
+{
+    "caption_api": {
+        "prompt_workflow": "caption_qwen35_api.json",
+        "descriptions": "Image captioning with Qwen3.5 9B (W4A8 GPTQ)",
+        "fields": {
+            "seed": "3.inputs.sampling_mode.seed",
+            "image1": "2.inputs.image"
+        },
+        "inputs": {
+            "image1": {"type": "image", "default": null}
+        },
+        "output": {
+            "files": [
+                { "prefix": "caption", "extension": "txt" }
+            ]
+        }
+    },
+    "PE_Krea2_t2i_api": {
+        "prompt_workflow": "PE_Krea2_txt2img_api.json",
+        "descriptions": "Expand a short request into a detailed Krea2 image prompt",
+        "fields": {
+            "seed": "1.inputs.sampling_mode.seed",
+            "prompt": "7.inputs.value"
+        },
+        "inputs": {
+            "prompt": {"type": "text", "default": ""}
+        },
+        "output": {
+            "files": [
+                { "prefix": "caption", "extension": "txt" }
+            ]
+        }
+    }
+}

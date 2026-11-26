@@ -1,0 +1,64 @@
+{
+    "krea2_txt2img_api": {
+        "prompt_workflow": "krea2_txt2img_api.json",
+        "descriptions": "Krea2 text to image",
+        "fields": {
+            "positive": "4.inputs.text",
+            "negative": "5.inputs.text",
+            "width": "8.inputs.width",
+            "height": "8.inputs.height",
+            "batch_size": "11.inputs.batch_size",
+            "steps": "12.inputs.steps",
+            "cfg": "12.inputs.cfg",
+            "seed": "12.inputs.seed"
+        },
+        "output": {
+            "files": [
+                { "prefix": "api", "extension": "png" }
+            ]
+        }
+    },
+    "krea2_img2img_api": {
+        "prompt_workflow": "krea2_img2img_api.json",
+        "descriptions": "Krea2 image to image",
+        "fields": {
+            "background": "9.inputs.image",
+            "positive": "4.inputs.text",
+            "negative": "5.inputs.text",
+            "steps": "12.inputs.steps",
+            "cfg": "12.inputs.cfg",
+            "denoise": "12.inputs.denoise",
+            "seed": "12.inputs.seed"
+        },
+        "output": {
+            "files": [
+                { "prefix": "api", "extension": "png" }
+            ]
+        }
+    },
+    "krea2_refine_api": {
+        "prompt_workflow": "krea2_refine_api.json",
+        "descriptions": "Krea2 refine (inpaint the painted area)",
+        "fields": {
+            "background": "9.inputs.image",
+            "paint": "11.inputs.image",
+            "positive": "4.inputs.text",
+            "negative": "5.inputs.text",
+            "steps": "16.inputs.steps",
+            "cfg": "16.inputs.cfg",
+            "denoise": "16.inputs.denoise",
+            "seed": "16.inputs.seed",
+            "maskBlur": [
+                "14.inputs.left",
+                "14.inputs.top",
+                "14.inputs.right",
+                "14.inputs.bottom"
+            ]
+        },
+        "output": {
+            "files": [
+                { "prefix": "api", "extension": "png" }
+            ]
+        }
+    }
+}

@@ -1,0 +1,326 @@
+{
+  "1": {
+    "inputs": {
+      "unet_name": "MiniMax\\minimax_h3_ref2va_pruned_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load MiniMax H3 ref2va",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "2": {
+    "inputs": {
+      "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+      "type": "minimax",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "3": {
+    "inputs": {
+      "vae_name": "minimax_h3_video_vae_int8_convrot.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load Video VAE",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "4": {
+    "inputs": {
+      "vae_name": "minimax_h3_audio_vae_fp32.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load Audio VAE",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "5": {
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "lora_name": "MinimaxH3\\minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors",
+      "strength_model": 1.0,
+      "strength_clip": 1.0
+    },
+    "class_type": "LoraLoaderModelOnly",
+    "_meta": {
+      "title": "Load H3 Ref2V Turbo LoRA",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "6": {
+    "inputs": {
+      "image": "background_6fb58eb3d737b599.png",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Reference Image 1",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "7": {
+    "inputs": {
+      "image": "man_with_red_hat.png",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Reference Image 2",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "8": {
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ],
+      "audio_vae": [
+        "4",
+        0
+      ],
+      "prompt": [
+        "9",
+        0
+      ],
+      "width": 864,
+      "height": 480,
+      "length": [
+        "20",
+        1
+      ],
+      "ref_image_size": "match",
+      "ref_images.ref_image_0": [
+        "6",
+        0
+      ],
+      "ref_images.ref_image_1": [
+        "7",
+        0
+      ]
+    },
+    "class_type": "MiniMaxH3ReferenceToVideo",
+    "_meta": {
+      "title": "MiniMax H3 Reference to Video",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "9": {
+    "inputs": {
+      "value": "A cinematic shot that uses the reference frames as identity and style anchors. The camera slowly pushes in while the subject moves naturally. Film grain, natural light, high detail."
+    },
+    "class_type": "PrimitiveStringMultiline",
+    "_meta": {
+      "title": "Prompt",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "10": {
+    "inputs": {
+      "noise_seed": 0
+    },
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "Random Noise",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "11": {
+    "inputs": {
+      "model": [
+        "5",
+        0
+      ],
+      "conditioning": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "BasicGuider",
+    "_meta": {
+      "title": "Basic Guider",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "12": {
+    "inputs": {
+      "sampler_name": "res_multistep"
+    },
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "KSampler Select",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "13": {
+    "inputs": {
+      "model": [
+        "5",
+        0
+      ],
+      "scheduler": "simple",
+      "steps": 4,
+      "denoise": 1.0
+    },
+    "class_type": "BasicScheduler",
+    "_meta": {
+      "title": "Basic Scheduler",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "14": {
+    "inputs": {
+      "noise": [
+        "10",
+        0
+      ],
+      "guider": [
+        "11",
+        0
+      ],
+      "sampler": [
+        "12",
+        0
+      ],
+      "sigmas": [
+        "13",
+        0
+      ],
+      "latent_image": [
+        "8",
+        1
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "Sampler Custom Advanced",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "15": {
+    "inputs": {
+      "samples": [
+        "14",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "16": {
+    "inputs": {
+      "samples": [
+        "14",
+        0
+      ],
+      "vae": [
+        "4",
+        0
+      ]
+    },
+    "class_type": "VAEDecodeAudio",
+    "_meta": {
+      "title": "VAE Decode Audio",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "17": {
+    "inputs": {
+      "images": [
+        "15",
+        0
+      ],
+      "audio": [
+        "16",
+        0
+      ],
+      "fps": 24
+    },
+    "class_type": "CreateVideo",
+    "_meta": {
+      "title": "Create Video",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "18": {
+    "inputs": {
+      "video": [
+        "17",
+        0
+      ],
+      "filename_prefix": "video/MiniMax_H3",
+      "format": "auto"
+    },
+    "class_type": "SaveVideo",
+    "_meta": {
+      "title": "Save Video",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "19": {
+    "inputs": {
+      "value": 5.0
+    },
+    "class_type": "PrimitiveFloat",
+    "_meta": {
+      "title": "Duration (seconds)",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  },
+  "20": {
+    "inputs": {
+      "expression": "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17",
+      "values.a": [
+        "19",
+        0
+      ]
+    },
+    "class_type": "ComfyMathExpression",
+    "_meta": {
+      "title": "Frames from Duration",
+      "cnr_id": "comfy-core",
+      "ver": "0.46.0"
+    }
+  }
+}

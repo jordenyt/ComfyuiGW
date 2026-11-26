@@ -1,0 +1,264 @@
+{
+    "1": {
+        "inputs": {
+            "unet_name": "krea2\\Krea2-Turbo-int8-ConvRot.safetensors",
+            "weight_dtype": "default"
+        },
+        "class_type": "UNETLoader",
+        "_meta": {
+            "title": "Load Diffusion Model"
+        }
+    },
+    "2": {
+        "inputs": {
+            "clip_name": "qwen3vl_4b_fp8_scaled.safetensors",
+            "type": "krea2",
+            "device": "default"
+        },
+        "class_type": "CLIPLoader",
+        "_meta": {
+            "title": "Load CLIP"
+        }
+    },
+    "3": {
+        "inputs": {
+            "lora_name": "Krea2\\krea2filterbypass.safetensors",
+            "strength_model": 5,
+            "model": [
+                "1",
+                0
+            ]
+        },
+        "class_type": "LoraLoaderModelOnly",
+        "_meta": {
+            "title": "Load LoRA"
+        }
+    },
+    "4": {
+        "inputs": {
+            "text": "",
+            "clip": [
+                "2",
+                0
+            ]
+        },
+        "class_type": "CLIPTextEncode",
+        "_meta": {
+            "title": "CLIP Text Encode (Positive Prompt)"
+        }
+    },
+    "5": {
+        "inputs": {
+            "text": "fat, makeup, freckles",
+            "clip": [
+                "2",
+                0
+            ]
+        },
+        "class_type": "CLIPTextEncode",
+        "_meta": {
+            "title": "CLIP Text Encode (Negative Prompt)"
+        }
+    },
+    "6": {
+        "inputs": {
+            "conditioning": [
+                "4",
+                0
+            ]
+        },
+        "class_type": "ConditioningZeroOut",
+        "_meta": {
+            "title": "Conditioning Zero Out"
+        }
+    },
+    "7": {
+        "inputs": {
+            "conditioning_1": [
+                "6",
+                0
+            ],
+            "conditioning_2": [
+                "5",
+                0
+            ]
+        },
+        "class_type": "ConditioningCombine",
+        "_meta": {
+            "title": "Conditioning (Combine)"
+        }
+    },
+    "8": {
+        "inputs": {
+            "vae_name": "krea2RealVae_v10.safetensors"
+        },
+        "class_type": "VAELoader",
+        "_meta": {
+            "title": "Load VAE"
+        }
+    },
+    "9": {
+        "inputs": {
+            "image": "input.png"
+        },
+        "class_type": "LoadImage",
+        "_meta": {
+            "title": "Load Image (Background)"
+        }
+    },
+    "10": {
+        "inputs": {
+            "upscale_method": "lanczos",
+            "megapixels": 1,
+            "resolution_steps": 8,
+            "image": [
+                "9",
+                0
+            ]
+        },
+        "class_type": "ImageScaleToTotalPixels",
+        "_meta": {
+            "title": "ImageScaleToTotalPixels"
+        }
+    },
+    "11": {
+        "inputs": {
+            "image": "mask.png"
+        },
+        "class_type": "LoadImage",
+        "_meta": {
+            "title": "Load Image (Mask)"
+        }
+    },
+    "12": {
+        "inputs": {
+            "image": [
+                "11",
+                0
+            ],
+            "channel": "red"
+        },
+        "class_type": "ImageToMask",
+        "_meta": {
+            "title": "Image to Mask"
+        }
+    },
+    "13": {
+        "inputs": {
+            "mask": [
+                "12",
+                0
+            ],
+            "expand": 0,
+            "tapered_corners": false
+        },
+        "class_type": "GrowMask",
+        "_meta": {
+            "title": "Grow Mask"
+        }
+    },
+    "14": {
+        "inputs": {
+            "mask": [
+                "13",
+                0
+            ],
+            "left": 5,
+            "top": 5,
+            "right": 5,
+            "bottom": 5
+        },
+        "class_type": "FeatherMask",
+        "_meta": {
+            "title": "Feather Mask"
+        }
+    },
+    "15": {
+        "inputs": {
+            "positive": [
+                "4",
+                0
+            ],
+            "negative": [
+                "7",
+                0
+            ],
+            "vae": [
+                "8",
+                0
+            ],
+            "pixels": [
+                "10",
+                0
+            ],
+            "mask": [
+                "14",
+                0
+            ],
+            "noise_mask": true
+        },
+        "class_type": "InpaintModelConditioning",
+        "_meta": {
+            "title": "Inpaint Model Conditioning"
+        }
+    },
+    "16": {
+        "inputs": {
+            "seed": 951374288457606,
+            "steps": 8,
+            "cfg": 1,
+            "sampler_name": "euler",
+            "scheduler": "simple",
+            "denoise": 0.8,
+            "model": [
+                "3",
+                0
+            ],
+            "positive": [
+                "15",
+                0
+            ],
+            "negative": [
+                "15",
+                1
+            ],
+            "latent_image": [
+                "15",
+                2
+            ]
+        },
+        "class_type": "KSampler",
+        "_meta": {
+            "title": "KSampler"
+        }
+    },
+    "17": {
+        "inputs": {
+            "samples": [
+                "16",
+                0
+            ],
+            "vae": [
+                "8",
+                0
+            ]
+        },
+        "class_type": "VAEDecode",
+        "_meta": {
+            "title": "VAE Decode"
+        }
+    },
+    "18": {
+        "inputs": {
+            "images": [
+                "17",
+                0
+            ],
+            "filename_prefix": "api"
+        },
+        "class_type": "SaveImage",
+        "_meta": {
+            "title": "Save Image"
+        }
+    }
+}
