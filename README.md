@@ -4,7 +4,7 @@
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)]()
 [![ComfyUI Compatible](https://img.shields.io/badge/ComfyUI-compatible-brightgreen.svg)](https://github.com/comfyanonymous/ComfyUI)
 
-**ComfyuiGW** is a RESTful API Gateway designed specifically for running [ComfyUI version of Stable Diffusion Sketch](https://github.com/jordenyt/stable_diffusion_sketch/tree/comfyui). It provides a robust interface for executing complex workflows through both API endpoints and a user-friendly web interface.
+**ComfyuiGW** is a RESTful API Gateway designed specifically for running [Stable Diffusion Sketch](https://github.com/jordenyt/stable_diffusion_sketch/tree/main). It provides a robust interface for executing complex workflows through both API endpoints and a user-friendly web interface.
 
 ## ✨ Key Features
 - **REST API Gateway** - Execute ComfyUI workflows via simple HTTP requests
