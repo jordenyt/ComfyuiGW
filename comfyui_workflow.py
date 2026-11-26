@@ -198,7 +198,12 @@ def _strip_optional_unset_nodes(api_prompt, fields, inputs_cfg, data):
         return
 
     def find_consumers(src):
-        """Return [(consumer_node_id, slot_name)] of every slot referencing src."""
+        """Return [(consumer_node_id, slot_name)] of every slot referencing src.
+
+        A plain slot holds ``[source, output]``. An autogrow slot (e.g.
+        ``ref_images``) holds a name -> ``[source, output]`` mapping, so its
+        slots are reported as ``"slot.name"``.
+        """
         out = []
         for nid, node in api_prompt.items():
             if not isinstance(node, dict):
@@ -211,6 +216,15 @@ def _strip_optional_unset_nodes(api_prompt, fields, inputs_cfg, data):
                     and value[0] == src
                 ):
                     out.append((nid, slot))
+                elif isinstance(value, dict):
+                    for name, link in value.items():
+                        if (
+                            isinstance(link, list)
+                            and len(link) == 2
+                            and isinstance(link[0], str)
+                            and link[0] == src
+                        ):
+                            out.append((nid, f"{slot}.{name}"))
         return out
 
     def is_orphaned(nid):
@@ -225,7 +239,32 @@ def _strip_optional_unset_nodes(api_prompt, fields, inputs_cfg, data):
                 and isinstance(value[0], str)
             ):
                 return False
+            if isinstance(value, dict):
+                for link in value.values():
+                    if (
+                        isinstance(link, list)
+                        and len(link) == 2
+                        and isinstance(link[0], str)
+                    ):
+                        return False
         return True
+
+    def disconnect(consumer_id, slot):
+        """Remove one connection from a consumer.
+
+        An autogrow slot can be written flat (``ref_images.ref_image_0``) or
+        as a mapping (``ref_images: {"ref_image_0": [...]}``). Both forms are
+        removed when the source node is stripped.
+        """
+        consumer_inputs = api_prompt.get(consumer_id, {}).get("inputs") or {}
+        if slot in consumer_inputs:
+            consumer_inputs.pop(slot, None)
+            return
+        if "." in slot:
+            slot_name, _, entry = slot.partition(".")
+            container = consumer_inputs.get(slot_name)
+            if isinstance(container, dict):
+                container.pop(entry, None)
 
     to_remove = set(strippable_sources)
 
@@ -242,8 +281,7 @@ def _strip_optional_unset_nodes(api_prompt, fields, inputs_cfg, data):
 
             for consumer_id, slot in find_consumers(current):
                 # Disconnect the slot from this consumer.
-                consumer_inputs = api_prompt.get(consumer_id, {}).get("inputs") or {}
-                consumer_inputs.pop(slot, None)
+                disconnect(consumer_id, slot)
 
                 # If the consumer is now orphaned (no remaining list-typed
                 # inputs), remove it and cascade through its own consumers.

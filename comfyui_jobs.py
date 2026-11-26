@@ -38,6 +38,11 @@ STATE_CANCELLED = "cancelled"
 ACTIVE_STATES = (STATE_QUEUED, STATE_RUNNING)
 TERMINAL_STATES = (STATE_DONE, STATE_ERROR, STATE_CANCELLED)
 
+# The image formats a result file may have. Workflows that use only stock
+# ComfyUI nodes write PNG (the core SaveImage node), while workflows that use
+# the "Image Save" node of was-node-suite write JPG, so both are accepted.
+OUTPUT_IMAGE_EXTENSIONS = (".jpg", ".jpeg", ".png", ".webp")
+
 COMFYUI_BASE = f"http://{comfyui_server}"
 REQUEST_TIMEOUT = 15
 RECONCILE_INTERVAL = 1.0
@@ -654,7 +659,7 @@ def _forget_input_path(path):
 
 
 def sweep_old_outputs(max_age=ORPHAN_MAX_AGE):
-    """Delete old ``api*.jpg`` outputs that no running job can still claim."""
+    """Delete old ``api*`` image outputs that no running job can still claim."""
     if not os.path.exists(comfyui_output_dir):
         return
 
@@ -665,7 +670,7 @@ def sweep_old_outputs(max_age=ORPHAN_MAX_AGE):
 
     now = time.time()
     for filename in os.listdir(comfyui_output_dir):
-        if not (filename.startswith("api") and filename.endswith(".jpg")):
+        if not (filename.startswith("api") and filename.lower().endswith(OUTPUT_IMAGE_EXTENSIONS)):
             continue
         path = os.path.join(comfyui_output_dir, filename)
         try:
@@ -778,7 +783,7 @@ def resolve_outputs(job):
 
 
 def resolve_processed_images(job):
-    """The legacy ``api*.jpg`` images produced by a job."""
+    """The legacy ``api*`` images produced by a job."""
     ensure_history(job)
     images = []
     start, end = job.window()
@@ -786,7 +791,7 @@ def resolve_processed_images(job):
         return images
 
     for filename in os.listdir(comfyui_output_dir):
-        if not (filename.startswith("api") and filename.endswith(".jpg")):
+        if not (filename.startswith("api") and filename.lower().endswith(OUTPUT_IMAGE_EXTENSIONS)):
             continue
         jpg_path = os.path.join(comfyui_output_dir, filename)
         try:

@@ -223,7 +223,7 @@ def api_workflows():
     POST /comfyui_workflow. ``has_inputs`` marks workflows that can be driven
     from the web form / multipart endpoint. ``has_output_config`` marks
     workflows whose results are retrievable via /find_workflow_outputs;
-    without it, fall back to /comfyui_result (api*.jpg in the output root).
+    without it, fall back to /comfyui_result (api* images in the output root).
     """
     out = {}
     for name, cfg in get_workflow_config(None, show_sub=True).items():
